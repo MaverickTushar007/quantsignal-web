@@ -53,8 +53,13 @@ export default function TutorialModal() {
   const [step, setStep] = useState(0);
 
   useEffect(() => {
+    const handleOpen = () => { setStep(0); setVisible(true); };
+    window.addEventListener("open-tutorial", handleOpen);
+    
     const seen = localStorage.getItem("qs_tutorial_seen");
     if (!seen) setVisible(true);
+    
+    return () => window.removeEventListener("open-tutorial", handleOpen);
   }, []);
 
   const dismiss = () => {
