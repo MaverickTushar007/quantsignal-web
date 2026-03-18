@@ -4,7 +4,9 @@ import { fetchAllSignals, fetchMarketMood, fetchSignal } from "../lib/api";
 import TradingChart from "../components/TradingChart";
 import TutorialModal from "../components/TutorialModal";
 import AgentChat from "../components/AgentChat";
-import { Terminal, Brain, Cpu, Database } from "lucide-react";
+import { Terminal, Brain, Cpu, Database, LayoutDashboard, MessageSquare, Calendar } from "lucide-react";
+import EconomicCalendar from "../components/EconomicCalendar";
+
 
 const TYPE_FILTERS = ["ALL", "CRYPTO", "STOCK", "ETF", "INDEX", "COMMOD", "FOREX"];
 
@@ -27,6 +29,27 @@ export default function Dashboard() {
   const [detailLoading, setDetailLoading] = useState(false);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState("SIGNAL"); // SIGNAL, CHAT, CALENDAR
+  const [livePrice, setLivePrice] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!selected) return;
+    setLivePrice(selected.current_price);
+
+    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+    const host = window.location.host.includes("3000") ? "localhost:8000" : window.location.host;
+    const wsUrl = `${protocol}//${host}/api/v1/ws/prices/${selected.symbol}`;
+    
+    const ws = new WebSocket(wsUrl);
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.price) setLivePrice(data.price);
+    };
+
+    return () => ws.close();
+  }, [selected?.symbol]);
+
+
 
   useEffect(() => {
     setLoading(true);
@@ -132,45 +155,53 @@ export default function Dashboard() {
                   </div>
                </div>
                <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 24, fontWeight: 800, color: "#fff" }}>${selected.current_price?.toLocaleString()}</div>
+                  <div style={{ fontSize: 24, fontWeight: 800, color: "#fff", transition: "all 0.3s" }}>${(livePrice || selected.current_price)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
                   <div style={{ ...badge(selected.direction), display: "inline-block", marginTop: 4 }}>{selected.direction.toUpperCase()} SIGNAL · {(selected.probability*100).toFixed(1)}%</div>
                </div>
+
             </div>
 
-            {/* Split Screen Chat + Chart */}
-            <div style={{ flex: 1, display: "grid", gridTemplateColumns: "1fr 1fr", overflow: "hidden" }}>
-              
-              {/* Left Column: Chat Interface */}
-              <div style={{ padding: "0 20px 20px 24px", overflow: "hidden", display: "flex", flexDirection: "column" }}>
-                 <AgentChat symbol={selected.symbol} />
-              </div>
+            {/* Tab Bar Content */}
+            <div style={{ display: "flex", background: "#0c0c0f", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "0 24px" }}>
+              {[
+                { id: "SIGNAL", label: "SIGNAL ANALYSIS", icon: LayoutDashboard },
+                { id: "CHAT", label: "PERSEUS CHAT", icon: MessageSquare },
+                { id: "CALENDAR", label: "ECONOMIC CALENDAR", icon: Calendar },
+              ].map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 8, padding: "14px 20px",
+                    background: "transparent", border: "none", borderBottom: `2px solid ${activeTab === tab.id ? "#00ff88" : "transparent"}`,
+                    color: activeTab === tab.id ? "#fff" : "rgba(255,255,255,0.4)",
+                    fontSize: 10, fontWeight: 700, cursor: "pointer", transition: "all 0.2s"
+                  }}
+                >
+                  <tab.icon size={12} color={activeTab === tab.id ? "#00ff88" : "rgba(255,255,255,0.4)"} />
+                  {tab.label}
+                </button>
+              ))}
+            </div>
 
-              {/* Right Column: Mini Chart + Exec logs */}
-              <div style={{ borderLeft: "1px solid rgba(255,255,255,0.06)", overflowY: "auto", padding: "0 24px 24px 20px" }}>
-                 <div style={{ marginBottom: 20 }}>
-                    <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 12, marginTop: 20 }}>REALTIME PRICE ACTION</div>
-                    <div style={{ height: 320, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.06)" }}>
-                      <TradingChart symbol={selected.symbol} />
-                    </div>
+            {/* Main Content Area */}
+            <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              {activeTab === "SIGNAL" && (
+                <div style={{ padding: "24px", height: "100%", overflowY: "auto" }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 16 }}>REALTIME PRICE ACTION</div>
+                  <div style={{ height: 500, borderRadius: 12, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", background: "#000" }}>
+                    <TradingChart symbol={selected.symbol} />
+                  </div>
+                </div>
+              )}
+              {activeTab === "CHAT" && (
+                 <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", padding: "0 24px 24px" }}>
+                    <AgentChat symbol={selected.symbol} />
                  </div>
-
-                 {/* Signal Context */}
-                 {detail && (
-                   <>
-                    <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 12 }}>QUANT CONTEXT BLOCKS</div>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 20 }}>
-                      <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 6, padding: 12 }}>
-                        <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>KELLY SIZE</div>
-                        <div style={{ fontSize: 18, fontWeight: 700, color: "#00ff88" }}>{detail.kelly_size}%</div>
-                      </div>
-                      <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 6, padding: 12 }}>
-                        <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>CONFLUENCE</div>
-                        <div style={{ fontSize: 18, fontWeight: 700, color: "#e2e8f0" }}>{detail.confluence_score}</div>
-                      </div>
-                    </div>
-                   </>
-                 )}
-              </div>
+              )}
+              {activeTab === "CALENDAR" && (
+                 <EconomicCalendar />
+              )}
             </div>
           </div>
         )}
@@ -179,6 +210,18 @@ export default function Dashboard() {
         {detail && (
           <div style={{ width: 320, background: "#0a0a0c", overflowY: "auto", padding: 20, flexShrink: 0 }}>
              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 20 }}>ANALYST SIDEBAR</div>
+
+             {/* Kelly + Confluence Scorecard */}
+             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 24 }}>
+                <div style={{ background: "rgba(0,170,255,0.05)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 8, padding: 12 }}>
+                  <div style={{ fontSize: 8, fontWeight: 800, color: "#00aaff", marginBottom: 4 }}>KELLY CRITERION</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: "#fff" }}>{detail.kelly_size}%</div>
+                </div>
+                <div style={{ background: "rgba(0,255,136,0.05)", border: "1px solid rgba(0,255,136,0.15)", borderRadius: 8, padding: 12 }}>
+                  <div style={{ fontSize: 8, fontWeight: 800, color: "#00ff88", marginBottom: 4 }}>CONFLUENCE</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: "#fff" }}>{detail.confluence_score}<span style={{ fontSize: 10, opacity: 0.4 }}>/10</span></div>
+                </div>
+             </div>
              
              {/* Levels */}
              <div style={{ marginBottom: 24 }}>
