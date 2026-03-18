@@ -32,7 +32,8 @@ export default function AgentChat({ symbol }: { symbol: string }) {
     setCurrentStatus([]);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/chat/${symbol}`, {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://web-production-80553.up.railway.app/api/v1";
+      const response = await fetch(`${API_URL}/chat/${symbol}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

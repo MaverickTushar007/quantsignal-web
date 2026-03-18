@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://web-production-80553.up.railway.app/api/v1";
 
 export async function fetchSignal(symbol: string) {
   const res = await fetch(`${API_BASE}/signals/${symbol}?reason=false`);
