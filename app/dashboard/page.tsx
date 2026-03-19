@@ -63,18 +63,18 @@ export default function Dashboard() {
     const type = filter === "ALL" ? undefined : filter === "COMMOD" ? "COMMODITY" : filter;
     fetchAllSignals(type).then(s => {
       setSignals(s);
-      if (s.length > 0 && !selected) selectAsset(s[0]);
+      if (s.length > 0 && !selected) selectAsset(s[0], false);
     }).finally(() => setLoading(false));
     fetchMarketMood().then(setMood);
   }, [filter]);
 
-  const selectAsset = (sig: any) => {
+  const selectAsset = (sig: any, switchPanel = true) => {
     setSelected(sig);
     setLivePrice(sig.current_price);
     setDetail(null);
     setDetailLoading(true);
     fetchSignal(sig.symbol).then(setDetail).finally(() => setDetailLoading(false));
-    if (isMobile) setMobilePanel("SIGNAL");
+    if (isMobile && switchPanel) setMobilePanel("SIGNAL");
   };
 
   const filtered = signals.filter(s =>
