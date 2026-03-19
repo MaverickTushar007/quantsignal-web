@@ -96,7 +96,7 @@ export default function AgentChat({ symbol }: { symbol: string }) {
       {/* Header */}
       <div style={{ padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", gap: 10 }}>
         <Brain size={16} color="#00ff88" />
-        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: "#e2e8f0" }}>PERSEUS ENGINE 1.0</span>
+        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", color: "#e2e8f0" }}>FINSIGHT ENGINE 1.0</span>
         <span style={{ marginLeft: "auto", fontSize: 9, color: "rgba(0,255,136,0.5)", background: "rgba(0,255,136,0.05)", padding: "2px 6px", borderRadius: 4 }}>AGENTIC CLOUD</span>
       </div>
 
