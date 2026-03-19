@@ -250,7 +250,7 @@ export default function Dashboard() {
                 <div key={l.label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", background: "rgba(255,255,255,0.02)", borderRadius: 5, border: "1px solid rgba(255,255,255,0.05)", marginBottom: 6 }}>
                   <div>
                     <div style={{ fontSize: 9, fontWeight: 800, color: l.color }}>{l.label}</div>
-                    <div style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", marginTop: 2 }}>{l.pct !== "0.0" ? `${Number(l.pct) > 0 ? "+" : ""}${l.pct}%` : "current"}</div>
+                    <div style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", marginTop: 2 }}>{l.pct !== "0.0" ? `${Number(l.pct) > 0 ? "+" : ""}${l.pct}%` : "ENTRY"}</div>
                   </div>
                   <span style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>${l.value?.toLocaleString()}</span>
                 </div>

@@ -8,7 +8,7 @@ const STEPS = [
   {
     icon: Sparkles,
     color: "#3b82f6",
-    title: "Welcome to FinSight Elite",
+    title: "Welcome to QuantSignal",
     subtitle: "Next-Gen Quantitative Intelligence",
     body: "QuantSignal is now powered by the FinSight Neural Engine. We scan 86 markets in real-time, blending XGBoost ensembles with institutional RAG data to give you high-probability signals.",
     cta: "Show Me the Neural Edge",
