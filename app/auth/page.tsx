@@ -31,7 +31,7 @@ export default function AuthPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#060608", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'IBM Plex Mono', monospace" }}>
-      <div style={{ width: 400, background: "#0a0a0c", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 32 }}>
+      <div style={{ width: "min(400px, 90vw)", background: "#0a0a0c", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 32 }}>
         
         {/* Logo */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 32 }}>
