@@ -243,14 +243,14 @@ export default function Dashboard() {
             <div style={{ marginBottom: 20 }}>
               <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", marginBottom: 10, letterSpacing: "0.1em" }}>V1 TRADE LEVELS</div>
               {[
-                { label: "TP", value: detail.take_profit, color: "#00ff88", pct: (((detail.take_profit - detail.current_price) / detail.current_price) * 100).toFixed(1) },
+                { label: "TP", value: detail.take_profit, color: "#00ff88", pct: "+" + Math.abs(((detail.take_profit - detail.current_price) / detail.current_price) * 100).toFixed(1) },
                 { label: "ENTRY", value: detail.current_price, color: "#fff", pct: "0.0" },
-                { label: "SL", value: detail.stop_loss, color: "#ff4466", pct: (((detail.stop_loss - detail.current_price) / detail.current_price) * 100).toFixed(1) },
+                { label: "SL", value: detail.stop_loss, color: "#ff4466", pct: "-" + Math.abs(((detail.stop_loss - detail.current_price) / detail.current_price) * 100).toFixed(1) },
               ].map(l => (
                 <div key={l.label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", background: "rgba(255,255,255,0.02)", borderRadius: 5, border: "1px solid rgba(255,255,255,0.05)", marginBottom: 6 }}>
                   <div>
                     <div style={{ fontSize: 9, fontWeight: 800, color: l.color }}>{l.label}</div>
-                    <div style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", marginTop: 2 }}>{l.pct !== "0.0" ? `${Number(l.pct) > 0 ? "+" : ""}${l.pct}%` : "ENTRY"}</div>
+                    <div style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", marginTop: 2 }}>{l.pct !== "0.0" ? `${l.pct}%` : "ENTRY"}</div>
                   </div>
                   <span style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>${l.value?.toLocaleString()}</span>
                 </div>
