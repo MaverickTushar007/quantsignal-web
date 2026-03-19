@@ -69,6 +69,8 @@ export default function TradingChart({ symbol }: { symbol: string }) {
   useEffect(() => {
     if (!ref.current) return;
     ref.current.innerHTML = "";
+    // Show loading placeholder while chart script loads
+    ref.current.style.background = "#0c0c0f";
 
     const container = document.createElement("div");
     container.className = "tradingview-widget-container";

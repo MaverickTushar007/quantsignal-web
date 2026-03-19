@@ -141,9 +141,15 @@ export default function Dashboard() {
         </div>
       </div>
       <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 10 }}>REALTIME PRICE ACTION</div>
-      <div style={{ height: isMobile ? 280 : 420, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", marginBottom: 20 }}>
-        <TradingChart symbol={selected.symbol} />
-      </div>
+      {!isMobile ? (
+        <div style={{ height: 420, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", marginBottom: 20 }}>
+          <TradingChart symbol={selected.symbol} />
+        </div>
+      ) : (
+        <div style={{ height: 260, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", marginBottom: 20, position: "relative" }}>
+          <TradingChart symbol={selected.symbol} />
+        </div>
+      )}
       {detail && (
         <>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 20 }}>
