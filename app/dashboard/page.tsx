@@ -236,7 +236,7 @@ export default function Dashboard() {
 
         {/* Right sidebar */}
         {detail && (
-          <div style={{ width: 280, background: "#0a0a0c", overflowY: "auto", padding: "16px", flexShrink: 0 }}>
+          <div style={{ width: 300, background: "#0a0a0c", overflowY: "auto", padding: "16px", flexShrink: 0 }}>
             <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 16 }}>ANALYST SIDEBAR</div>
 
             {/* Trade levels */}

@@ -1,7 +1,7 @@
 const API_BASE = "https://web-production-1a093.up.railway.app/api/v1";
 
 export async function fetchSignal(symbol: string) {
-  const res = await fetch(`${API_BASE}/signals/${symbol}?reason=false`);
+  const res = await fetch(`${API_BASE}/signals/${symbol}?reason=true`);
   if (!res.ok) throw new Error("Failed to fetch signal");
   return res.json();
 }
