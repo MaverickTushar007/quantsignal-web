@@ -52,7 +52,6 @@ export default function Dashboard() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  if (!mounted) return null;
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -228,6 +227,7 @@ export default function Dashboard() {
   );
 
   // ── MOBILE LAYOUT ──────────────────────────────────────────────
+  if (!mounted) return <div style={{ background: "#060608", height: "100dvh" }} />;
   if (isMobile) {
     return (
       <div style={{ display: "flex", flexDirection: "column", height: "100dvh", background: "#060608", fontFamily: "'IBM Plex Mono', monospace", color: "#e2e8f0", overflow: "hidden" }}>
