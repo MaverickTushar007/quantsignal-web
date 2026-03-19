@@ -1,107 +1,200 @@
 "use client";
-import React from "react";
-import { Calendar, AlertCircle, TrendingUp, TrendingDown } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Calendar, TrendingUp, TrendingDown, AlertCircle, RefreshCw } from "lucide-react";
 
-const events = [
-  {
-    id: 1,
-    time: "Tomorrow, 8:30 AM EST",
-    event: "Core CPI (MoM)",
-    impact: "HIGH",
-    playbook: "BULLISH SCENARIO: If CPI is < 0.2%, ETH and BTC likely break HTF resistance. BEARISH SCENARIO: If > 0.4%, expect immediate liquidity sweep below $2,400.",
-    sentiment: "MIXED"
-  },
-  {
-    id: 2,
-    time: "Mar 20, 2:00 PM EST",
-    event: "FOMC Interest Rate Decision",
-    impact: "CRITICAL",
-    playbook: "BULLISH SCENARIO: Rate pause + Dovish presser fuels continuation. BEARISH SCENARIO: Unexpected hike or Hawkish shift triggers 5-8% drawdown on RISK-ON assets.",
-    sentiment: "BULLISH"
-  },
-  {
-    id: 3,
-    time: "Apr 5, 8:30 AM EST",
-    event: "Non-Farm Payrolls (NFP)",
-    impact: "HIGH",
-    playbook: "BULLISH SCENARIO: Employment cooling supports rate cuts. BEARISH SCENARIO: Strong labor market maintains 'Higher for Longer' narrative.",
-    sentiment: "BEARISH"
+const API_BASE = "https://web-production-1a093.up.railway.app/api/v1";
+
+function formatDate(dateStr: string) {
+  try {
+    const d = new Date(dateStr);
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const eventDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+    const time = d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" });
+
+    if (eventDay.getTime() === today.getTime()) return `Today, ${time}`;
+    if (eventDay.getTime() === tomorrow.getTime()) return `Tomorrow, ${time}`;
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + `, ${time}`;
+  } catch {
+    return dateStr;
   }
-];
+}
+
+function isPast(dateStr: string) {
+  try {
+    return new Date(dateStr) < new Date();
+  } catch {
+    return false;
+  }
+}
 
 export default function EconomicCalendar() {
+  const [events, setEvents] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [expanded, setExpanded] = useState<number | null>(0);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`${API_BASE}/calendar/events`)
+      .then(r => r.json())
+      .then(d => {
+        setEvents(d.events || []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError("Failed to load calendar");
+        setLoading(false);
+      });
+  }, []);
+
+  const impactColor = (impact: string) => {
+    if (impact === "High") return "#ff4466";
+    if (impact === "Medium") return "#ffd700";
+    return "rgba(255,255,255,0.3)";
+  };
+
+  const impactBg = (impact: string) => {
+    if (impact === "High") return "rgba(255,68,102,0.1)";
+    if (impact === "Medium") return "rgba(255,215,0,0.1)";
+    return "rgba(255,255,255,0.05)";
+  };
+
   return (
-    <div style={{ padding: "24px", color: "#e2e8f0", height: "100%", overflowY: "auto" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-        <Calendar size={20} color="#00ff88" />
-        <h3 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>AI Economic Playbook</h3>
+    <div style={{ padding: "20px 24px", color: "#e2e8f0", height: "100%", overflowY: "auto", fontFamily: "'IBM Plex Mono', monospace" }}>
+      
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <Calendar size={16} color="#00ff88" />
+          <span style={{ fontSize: 13, fontWeight: 700, color: "#fff", letterSpacing: "0.05em" }}>AI ECONOMIC PLAYBOOK</span>
+          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.05)", padding: "2px 6px", borderRadius: 3 }}>LIVE · FOREXFACTORY</span>
+        </div>
+        {!loading && (
+          <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>{events.length} EVENTS</span>
+        )}
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        {events.map(event => (
-          <div key={event.id} style={{ 
-            background: "rgba(255,255,255,0.02)", 
-            border: "1px solid rgba(255,255,255,0.06)", 
-            borderRadius: 12, 
-            padding: 20,
-            position: "relative",
-            overflow: "hidden"
-          }}>
-            <div style={{ 
-              position: "absolute", 
-              top: 0, 
-              left: 0, 
-              width: 3, 
-              height: "100%", 
-              background: event.impact === "CRITICAL" ? "#ff4466" : "#ffd700" 
-            }} />
-            
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
-              <div>
-                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", fontWeight: 600, letterSpacing: "0.05em", marginBottom: 4 }}>{event.time}</div>
-                <div style={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>{event.event}</div>
-              </div>
-              <div style={{ 
-                fontSize: 9, 
-                fontWeight: 800, 
-                padding: "4px 8px", 
-                borderRadius: 4, 
-                background: event.impact === "CRITICAL" ? "rgba(255,68,102,0.1)" : "rgba(255,215,0,0.1)",
-                color: event.impact === "CRITICAL" ? "#ff4466" : "#ffd700",
-                border: `1px solid ${event.impact === "CRITICAL" ? "rgba(255,68,102,0.2)" : "rgba(255,215,0,0.2)"}`
-              }}>
-                {event.impact} IMPACT
-              </div>
-            </div>
+      {/* Loading */}
+      {loading && (
+        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "40px 0", justifyContent: "center" }}>
+          <RefreshCw size={14} color="#00ff88" style={{ animation: "spin 1s linear infinite" }} />
+          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>FETCHING LIVE CALENDAR...</span>
+          <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
 
-            <div style={{ display: "flex", gap: 12, alignItems: "flex-start", background: "rgba(0,0,0,0.2)", padding: 16, borderRadius: 8, border: "1px solid rgba(255,255,255,0.03)" }}>
-              <div style={{ background: "rgba(0,255,136,0.1)", padding: 8, borderRadius: 6 }}>
-                <AlertCircle size={16} color="#00ff88" />
-              </div>
-              <div>
-                <div style={{ fontSize: 9, fontWeight: 800, color: "rgba(255,255,255,0.3)", marginBottom: 6, letterSpacing: "0.1em" }}>QUANT PLAYBOOK</div>
-                <div style={{ fontSize: 13, lineHeight: 1.6, color: "rgba(255,255,255,0.7)" }}>
-                  {event.playbook.split(": ").map((part, i) => (
-                    <span key={i}>
-                      {i > 0 && <br />}
-                      <span style={{ color: i === 1 ? "#00ff88" : i === 2 ? "#ff4466" : "inherit", fontWeight: i > 0 ? 600 : 400 }}>{part}</span>
-                    </span>
-                  ))}
+      {/* Error */}
+      {error && (
+        <div style={{ background: "rgba(255,68,102,0.08)", border: "1px solid rgba(255,68,102,0.2)", borderRadius: 8, padding: "12px 16px", fontSize: 11, color: "#ff6688" }}>
+          {error}
+        </div>
+      )}
+
+      {/* Events */}
+      {!loading && !error && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {events.map((event, i) => {
+            const past = isPast(event.date);
+            const isExpanded = expanded === i;
+            const forecastNum = parseFloat(event.forecast);
+            const prevNum = parseFloat(event.previous);
+            const beatsForecast = !isNaN(forecastNum) && !isNaN(prevNum) && forecastNum > prevNum;
+
+            return (
+              <div key={i}
+                onClick={() => setExpanded(isExpanded ? null : i)}
+                style={{
+                  background: past ? "rgba(255,255,255,0.01)" : "rgba(255,255,255,0.03)",
+                  border: `1px solid ${isExpanded ? "rgba(0,255,136,0.2)" : "rgba(255,255,255,0.06)"}`,
+                  borderRadius: 10,
+                  padding: "14px 16px",
+                  cursor: "pointer",
+                  opacity: past ? 0.5 : 1,
+                  transition: "all 0.15s",
+                }}>
+
+                {/* Event header */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: isExpanded ? 14 : 0 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
+                    <span style={{ fontSize: 16, flexShrink: 0 }}>{event.flag}</span>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: past ? "rgba(255,255,255,0.4)" : "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                        {event.title}
+                      </div>
+                      <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>
+                        {formatDate(event.date)} · {event.country}
+                      </div>
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, marginLeft: 10 }}>
+                    {/* Forecast vs Previous */}
+                    {event.forecast && (
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>FORECAST</div>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: beatsForecast ? "#00ff88" : "#ffd700" }}>{event.forecast}</div>
+                      </div>
+                    )}
+                    {event.previous && (
+                      <div style={{ textAlign: "right" }}>
+                        <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>PREV</div>
+                        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)" }}>{event.previous}</div>
+                      </div>
+                    )}
+                    <div style={{
+                      background: impactBg(event.impact),
+                      border: `1px solid ${impactColor(event.impact)}40`,
+                      borderRadius: 4,
+                      padding: "3px 8px",
+                      fontSize: 9,
+                      fontWeight: 700,
+                      color: impactColor(event.impact),
+                      letterSpacing: "0.05em",
+                    }}>
+                      {event.impact === "High" ? "HIGH IMPACT" : "MEDIUM"}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
-               <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>ASSETS AFFECTED: <span style={{ color: "#fff", fontWeight: 600 }}>BTC, ETH, SPY, QQQ</span></div>
-               <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 6, fontSize: 10, fontWeight: 600 }}>
-                  <span style={{ color: "rgba(255,255,255,0.3)" }}>PRE-EVENT BIAS:</span>
-                  {event.sentiment === "BULLISH" ? <TrendingUp size={12} color="#00ff88" /> : event.sentiment === "BEARISH" ? <TrendingDown size={12} color="#ff4466" /> : <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#ffd700" }} />}
-                  <span style={{ color: event.sentiment === "BULLISH" ? "#00ff88" : event.sentiment === "BEARISH" ? "#ff4466" : "#ffd700" }}>{event.sentiment}</span>
-               </div>
-            </div>
-          </div>
-        ))}
-      </div>
+                {/* Expanded playbook */}
+                {isExpanded && (
+                  <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 14 }}>
+                    <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 10 }}>QUANT PLAYBOOK</div>
+                    
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+                      <div style={{ background: "rgba(0,255,136,0.05)", border: "1px solid rgba(0,255,136,0.15)", borderRadius: 8, padding: "10px 12px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+                          <TrendingUp size={10} color="#00ff88" />
+                          <span style={{ fontSize: 9, fontWeight: 700, color: "#00ff88", letterSpacing: "0.08em" }}>BULLISH SCENARIO</span>
+                        </div>
+                        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}>{event.bullish_scenario}</div>
+                      </div>
+                      <div style={{ background: "rgba(255,68,102,0.05)", border: "1px solid rgba(255,68,102,0.15)", borderRadius: 8, padding: "10px 12px" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+                          <TrendingDown size={10} color="#ff4466" />
+                          <span style={{ fontSize: 9, fontWeight: 700, color: "#ff4466", letterSpacing: "0.08em" }}>BEARISH SCENARIO</span>
+                        </div>
+                        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}>{event.bearish_scenario}</div>
+                      </div>
+                    </div>
+
+                    {/* Affected assets */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.08em" }}>ASSETS AFFECTED:</span>
+                      {event.affected_assets?.map((a: string) => (
+                        <span key={a} style={{ fontSize: 9, fontWeight: 700, color: "#00aaff", background: "rgba(0,170,255,0.08)", border: "1px solid rgba(0,170,255,0.2)", borderRadius: 3, padding: "2px 6px" }}>{a}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
