@@ -27,6 +27,22 @@ function getExecutionWindows() {
   ];
 }
 
+function EstClock() {
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      const h = (now.getUTCHours() - 5 + 24) % 24;
+      const m = now.getUTCMinutes();
+      setTime(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")} EST`);
+    };
+    update();
+    const t = setInterval(update, 1000);
+    return () => clearInterval(t);
+  }, []);
+  return <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 10 }}>{time}</span>;
+}
+
 export default function Dashboard() {
   const [signals, setSignals] = useState<any[]>([]);
   const [mood, setMood] = useState<any>(null);
@@ -38,7 +54,6 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState("SIGNAL");
   const [livePrice, setLivePrice] = useState<number | null>(null);
-  const [currentTime, setCurrentTime] = useState(new Date());
   // Mobile: "LIST" | "SIGNAL" | "CHAT" | "CALENDAR" | "SIDEBAR"
   const [mobilePanel, setMobilePanel] = useState("LIST");
   const [isMobile, setIsMobile] = useState(false);
@@ -52,11 +67,6 @@ export default function Dashboard() {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     setLoading(true);
@@ -84,9 +94,7 @@ export default function Dashboard() {
 
   const windows = getExecutionWindows();
   const activeWindow = windows.find(w => w.active);
-  const estHour = (currentTime.getUTCHours() - 5 + 24) % 24;
-  const estMin = currentTime.getUTCMinutes();
-  const estTime = `${String(estHour).padStart(2, "0")}:${String(estMin).padStart(2, "0")} EST`;
+  const estTime = "";  // rendered by EstClock component
 
   // ── SHARED COMPONENTS ──────────────────────────────────────────
 
@@ -130,7 +138,7 @@ export default function Dashboard() {
   const SignalTab = () => (
     <div style={{ flex: 1, overflowY: "auto", padding: isMobile ? "16px" : "20px 24px" }}>
       <div style={{ marginBottom: 20 }}>
-        <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 10 }}>EXECUTION WINDOWS · {estTime}</div>
+        <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 10 }}>EXECUTION WINDOWS</div>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: 8 }}>
           {windows.map(w => (
             <div key={w.label} style={{ background: w.active ? `${w.color}15` : "rgba(255,255,255,0.02)", border: `1px solid ${w.active ? `${w.color}40` : "rgba(255,255,255,0.06)"}`, borderRadius: 6, padding: "8px 10px" }}>
@@ -251,7 +259,7 @@ export default function Dashboard() {
             <span style={{ color: activeWindow ? activeWindow.color : "rgba(255,255,255,0.2)", fontWeight: 600 }}>
               {activeWindow ? `● ${activeWindow.label.split(" ")[0]}` : "● CLOSED"}
             </span>
-            <span style={{ color: "rgba(255,255,255,0.3)" }}>{estTime}</span>
+            <EstClock />
           </div>
         </div>
 
@@ -333,7 +341,7 @@ export default function Dashboard() {
           </span>
         </div>
         <div style={{ display: "flex", gap: 24, fontSize: 11, alignItems: "center" }}>
-          <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 10 }}>{estTime}</span>
+          <EstClock />
           {mood && <>
             <span>SIGNALS <span style={{ color: "#00ff88", fontWeight: 600 }}>86</span></span>
             <span>BUY / SELL <span style={{ color: "#00ff88" }}>{mood.buy_count}</span> / <span style={{ color: "#ff4466" }}>{mood.sell_count}</span></span>
