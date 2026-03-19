@@ -154,9 +154,9 @@ export default function FinSightDrawer({ symbol }: { symbol: string }) {
                           : "bg-white/[0.03] border border-white/10"
                       } max-w-[85%] rounded-2xl p-4 text-[13px] leading-relaxed transition-all hover:bg-opacity-100 backdrop-blur-sm`}
                     >
-                      <ReactMarkdown className={`prose prose-invert prose-xs max-w-none ${m.role === "assistant" ? "text-white/80 font-medium" : "text-white"}`}>
+                      <div className={`prose prose-invert prose-xs max-w-none ${m.role === "assistant" ? "text-white/80 font-medium" : "text-white"}`}><ReactMarkdown>
                         {m.content}
-                      </ReactMarkdown>
+                      </ReactMarkdown></div>
                     </div>
                   </div>
                 ))}

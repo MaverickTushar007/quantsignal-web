@@ -18,7 +18,8 @@ export default function Landing() {
         <div className="flex items-center gap-4">
           <a href="/dashboard" className="text-sm text-white/50 hover:text-white transition-colors">Dashboard</a>
           <a href="#pricing" className="text-sm text-white/50 hover:text-white transition-colors">Pricing</a>
-          <a href="/dashboard" className="px-4 py-2 bg-violet-600 hover:bg-violet-500 rounded-lg text-sm font-medium transition-colors">
+          <a href="/auth" className="text-sm text-white/50 hover:text-white transition-colors">Sign In</a>
+          <a href="/auth" className="px-4 py-2 bg-violet-600 hover:bg-violet-500 rounded-lg text-sm font-medium transition-colors">
             Try Free
           </a>
         </div>
