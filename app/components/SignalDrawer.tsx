@@ -1,11 +1,144 @@
 "use client";
 import { useEffect, useState } from "react";
-import { X, TrendingUp, TrendingDown, Minus, ExternalLink } from "lucide-react";
+import { X, TrendingUp, TrendingDown, Minus, ExternalLink, Zap, RefreshCw } from "lucide-react";
 import { fetchSignal } from "../lib/api";
 import TradingChart from "./TradingChart";
 
+const API_BASE = "https://web-production-1a093.up.railway.app/api/v1";
+
 const dirColor = (d: string) =>
   d === "BUY" ? "text-emerald-400" : d === "SELL" ? "text-red-400" : "text-yellow-400";
+
+function LiquidityCard({ symbol }: { symbol: string }) {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+
+  const fetchLiquidity = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/liquidity/${symbol}`);
+      if (!res.ok) return;
+      const json = await res.json();
+      setData(json);
+      setLastUpdated(new Date());
+    } catch {}
+    finally { setLoading(false); }
+  };
+
+  useEffect(() => {
+    // Only fetch for crypto symbols that have OKX support
+    const supported = ["BTC-USD","ETH-USD","SOL-USD","BNB-USD","XRP-USD","DOGE-USD","ADA-USD","AVAX-USD","DOT-USD","LINK-USD","LTC-USD","ATOM-USD","NEAR-USD","OP-USD","INJ-USD"];
+    if (!supported.includes(symbol)) return;
+
+    fetchLiquidity();
+    const interval = setInterval(fetchLiquidity, 30000); // poll every 30s
+    return () => clearInterval(interval);
+  }, [symbol]);
+
+  if (!data && !loading) return null;
+
+  const oiColor = data?.oi_change_24h_pct > 0 ? "#00ff88" : "#ff4466";
+  const fundingColor = data?.funding_color || "rgba(255,255,255,0.4)";
+
+  return (
+    <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 16 }}>
+      
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <Zap size={13} color="#ffd700" />
+          <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.5)", letterSpacing: "0.1em" }}>LIQUIDITY LEVELS</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          {loading && <RefreshCw size={10} color="rgba(255,255,255,0.3)" style={{ animation: "spin 1s linear infinite" }} />}
+          {lastUpdated && <span style={{ fontSize: 9, color: "rgba(255,255,255,0.2)" }}>LIVE · {lastUpdated.toLocaleTimeString()}</span>}
+        </div>
+      </div>
+
+      {loading && !data ? (
+        <div style={{ height: 80, background: "rgba(255,255,255,0.03)", borderRadius: 8, animation: "pulse 1.5s infinite" }} />
+      ) : data ? (
+        <>
+          {/* Bias banner */}
+          <div style={{ background: `${data.bias_color}15`, border: `1px solid ${data.bias_color}30`, borderRadius: 8, padding: "8px 12px", marginBottom: 12 }}>
+            <div style={{ fontSize: 9, fontWeight: 700, color: data.bias_color, letterSpacing: "0.1em", marginBottom: 3 }}>{data.bias.replace(/_/g, " ")}</div>
+            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", lineHeight: 1.5 }}>{data.bias_desc}</div>
+          </div>
+
+          {/* OI + Funding row */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 12 }}>
+            <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "8px 10px" }}>
+              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>OPEN INTEREST</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>{data.open_interest.toLocaleString()}</div>
+              <div style={{ fontSize: 9, fontWeight: 700, color: oiColor, marginTop: 2 }}>
+                {data.oi_change_24h_pct > 0 ? "▲" : "▼"} {Math.abs(data.oi_change_24h_pct)}% 24h
+              </div>
+            </div>
+            <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "8px 10px" }}>
+              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>FUNDING</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: fundingColor }}>{data.funding_rate.toFixed(4)}%</div>
+              <div style={{ fontSize: 9, color: fundingColor, marginTop: 2 }}>{data.funding_trend.replace(/_/g, " ")}</div>
+            </div>
+            <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "8px 10px" }}>
+              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>L/S RATIO</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: data.long_ratio > 60 ? "#ff4466" : data.long_ratio < 40 ? "#00ff88" : "#fff" }}>
+                {data.long_ratio}% L
+              </div>
+              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>{data.short_ratio}% SHORT</div>
+            </div>
+          </div>
+
+          {/* Liquidation clusters */}
+          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 8 }}>LIQUIDATION CLUSTERS</div>
+          
+          {/* Above clusters */}
+          <div style={{ marginBottom: 6 }}>
+            {data.clusters_above.map((c: any, i: number) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "5px 8px", marginBottom: 3, background: "rgba(0,255,136,0.04)", border: "1px solid rgba(0,255,136,0.1)", borderRadius: 6 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ fontSize: 9, color: "#00ff88" }}>▲</span>
+                  <span style={{ fontSize: 10, color: "rgba(255,255,255,0.6)" }}>${c.price.toLocaleString()}</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{c.label}</span>
+                  <span style={{ fontSize: 8, fontWeight: 700, color: "#00ff88", background: "rgba(0,255,136,0.1)", padding: "1px 5px", borderRadius: 3 }}>{c.weight}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Current price marker */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 8px", background: "rgba(255,255,255,0.06)", borderRadius: 6, marginBottom: 6 }}>
+            <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#ffd700", flexShrink: 0 }} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#ffd700" }}>${data.current_price.toLocaleString()}</span>
+            <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>CURRENT PRICE</span>
+          </div>
+
+          {/* Below clusters */}
+          <div>
+            {data.clusters_below.map((c: any, i: number) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "5px 8px", marginBottom: 3, background: "rgba(255,68,102,0.04)", border: "1px solid rgba(255,68,102,0.1)", borderRadius: 6 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ fontSize: 9, color: "#ff4466" }}>▼</span>
+                  <span style={{ fontSize: 10, color: "rgba(255,255,255,0.6)" }}>${c.price.toLocaleString()}</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{c.label}</span>
+                  <span style={{ fontSize: 8, fontWeight: 700, color: "#ff4466", background: "rgba(255,68,102,0.1)", padding: "1px 5px", borderRadius: 3 }}>{c.weight}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : null}
+
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+      `}</style>
+    </div>
+  );
+}
 
 export default function SignalDrawer({ symbol, onClose }: { symbol: string; onClose: () => void }) {
   const [signal, setSignal] = useState<any>(null);
@@ -99,6 +232,10 @@ export default function SignalDrawer({ symbol, onClose }: { symbol: string; onCl
                 ))}
               </div>
             </div>
+
+            {/* Liquidity Levels Card — real-time, crypto only */}
+            <LiquidityCard symbol={symbol} />
+
             {signal.news?.length > 0 && (
               <div className="bg-white/5 rounded-2xl p-4">
                 <div className="text-sm text-white/50 mb-3">Latest News</div>
