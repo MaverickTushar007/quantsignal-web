@@ -4,8 +4,9 @@ import { fetchAllSignals, fetchMarketMood, fetchSignal } from "../lib/api";
 import TradingChart from "../components/TradingChart";
 import TutorialModal from "../components/TutorialModal";
 import AgentChat from "../components/AgentChat";
-import { LayoutDashboard, MessageSquare, Calendar, Database, List, ChevronLeft } from "lucide-react";
+import { LayoutDashboard, MessageSquare, Calendar, Database, List, ChevronLeft, Newspaper } from "lucide-react";
 import EconomicCalendar from "../components/EconomicCalendar";
+import NewsTab from "../components/NewsTab";
 import MarketSentiment from "../components/MarketSentiment";
 
 const TYPE_FILTERS = ["ALL", "CRYPTO", "STOCK", "ETF", "INDEX", "COMMOD", "FOREX"];
@@ -288,6 +289,7 @@ export default function Dashboard() {
               {/* Tab content */}
               <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
                 {mobilePanel === "SIGNAL" && <SignalTab />}
+                {mobilePanel === "NEWS" && selected && <NewsTab symbol={selected.symbol} />}
                 {mobilePanel === "CHAT" && (
                   <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", padding: "0 16px 16px" }}>
                     <AgentChat symbol={selected.symbol} />
@@ -304,6 +306,7 @@ export default function Dashboard() {
           {[
             { id: "LIST", icon: List, label: "SIGNALS" },
             { id: "SIGNAL", icon: LayoutDashboard, label: "ANALYSIS" },
+            { id: "NEWS", icon: Newspaper, label: "NEWS" },
             { id: "CHAT", icon: MessageSquare, label: "PERSEUS" },
             { id: "CALENDAR", icon: Calendar, label: "CALENDAR" },
           ].map(tab => {
@@ -391,6 +394,7 @@ export default function Dashboard() {
             <div style={{ display: "flex", background: "#0c0c0f", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "0 24px" }}>
               {[
                 { id: "SIGNAL", label: "SIGNAL ANALYSIS", icon: LayoutDashboard },
+                { id: "NEWS", label: "NEWS", icon: Newspaper },
                 { id: "CHAT", label: "PERSEUS ENGINE", icon: MessageSquare },
                 { id: "CALENDAR", label: "ECON CALENDAR", icon: Calendar },
               ].map(tab => (
@@ -411,6 +415,7 @@ export default function Dashboard() {
                 </div>
               )}
               {activeTab === "CALENDAR" && <EconomicCalendar />}
+              {activeTab === "NEWS" && selected && <NewsTab symbol={selected.symbol} />}
             </div>
           </div>
         )}
