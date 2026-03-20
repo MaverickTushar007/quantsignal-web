@@ -210,8 +210,53 @@ export default function Dashboard() {
     </div>
   );
 
+  const [replayMode, setReplayMode] = useState(false);
+  const [replayDate, setReplayDate] = useState("");
+  const [replayData, setReplayData] = useState<any>(null);
+  const [replayLoading, setReplayLoading] = useState(false);
+
+  const fetchReplay = async (d: string) => {
+    if (!selected || !d) return;
+    setReplayLoading(true);
+    setReplayData(null);
+    try {
+      const res = await fetch(`https://web-production-1a093.up.railway.app/api/v1/signals/${selected.symbol}/replay?replay_date=${d}`);
+      if (res.ok) setReplayData(await res.json());
+    } catch {}
+    finally { setReplayLoading(false); }
+  };
+
+  const activeDetail = replayMode && replayData ? replayData : detail;
+
   const SignalTab = () => (
     <div style={{ flex: 1, overflowY: "auto", padding: isMobile ? "16px" : "20px 24px" }}>
+      {/* LIVE / REPLAY toggle */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+        <button onClick={() => { setReplayMode(false); setReplayData(null); }} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "none", background: !replayMode ? "#00ff88" : "rgba(255,255,255,0.06)", color: !replayMode ? "#000" : "rgba(255,255,255,0.4)" }}>● LIVE</button>
+        <button onClick={() => setReplayMode(true)} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "none", background: replayMode ? "#ffd700" : "rgba(255,255,255,0.06)", color: replayMode ? "#000" : "rgba(255,255,255,0.4)" }}>⏪ REPLAY</button>
+        {replayMode && (
+          <input type="date" value={replayDate}
+            max={new Date(Date.now() - 86400000).toISOString().split("T")[0]}
+            min={new Date(Date.now() - 175 * 86400000).toISOString().split("T")[0]}
+            onChange={e => { setReplayDate(e.target.value); fetchReplay(e.target.value); }}
+            style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 6, padding: "4px 10px", fontSize: 10, color: "#ffd700", outline: "none", fontFamily: "inherit" }} />
+        )}
+        {replayLoading && <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>Loading...</span>}
+        {replayMode && replayData && (
+          <span style={{ fontSize: 9, fontWeight: 700, color: replayData.was_correct ? "#00ff88" : "#ff4466", marginLeft: "auto" }}>
+            {replayData.was_correct ? "✓ CORRECT" : "✗ WRONG"} · 5d return: {replayData.actual_return_5d > 0 ? "+" : ""}{replayData.actual_return_5d}%
+          </span>
+        )}
+      </div>
+
+      {/* Historical badge */}
+      {replayMode && replayData && (
+        <div style={{ background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.2)", borderRadius: 6, padding: "6px 12px", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 9, fontWeight: 700, color: "#ffd700" }}>⏪ HISTORICAL SIGNAL — {replayDate}</span>
+          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)" }}>Price was ${replayData.current_price.toLocaleString()} · 5d later: ${replayData.actual_price_5d?.toLocaleString()}</span>
+        </div>
+      )}
+
       <div style={{ marginBottom: 20 }}>
         <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 10 }}>EXECUTION WINDOWS</div>
         <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)", gap: 8 }}>
@@ -233,13 +278,13 @@ export default function Dashboard() {
           <TradingChart symbol={selected.symbol} />
         </div>
       )}
-      {detail && (
+      {activeDetail && (
         <>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 20 }}>
             {[
-              { label: "KELLY SIZE", value: `${detail.kelly_size}%`, color: "#00aaff" },
-              { label: "CONFLUENCE", value: detail.confluence_score, color: "#00ff88" },
-              { label: "RISK/REWARD", value: `${detail.risk_reward}:1`, color: "#ffd700" },
+              { label: "KELLY SIZE", value: `${activeDetail.kelly_size}%`, color: "#00aaff" },
+              { label: "CONFLUENCE", value: activeDetail.confluence_score, color: "#00ff88" },
+              { label: "RISK/REWARD", value: `${activeDetail.risk_reward}:1`, color: "#ffd700" },
             ].map(b => (
               <div key={b.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 6, padding: "12px 10px" }}>
                 <div style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", marginBottom: 6, letterSpacing: "0.1em" }}>{b.label}</div>
