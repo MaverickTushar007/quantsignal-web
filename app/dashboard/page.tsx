@@ -530,7 +530,7 @@ export default function Dashboard() {
             </div>
 
             {/* Tab content */}
-            <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
               {activeTab === "SIGNAL" && (
                 <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
                   {/* LIVE / REPLAY toggle */}
