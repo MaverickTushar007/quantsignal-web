@@ -234,17 +234,25 @@ Top indicators at the time: ${replayData.confluence?.map((c: any) => c.name + ':
 
 Give a punchy, honest explanation of why the model made this call, what the market was doing, and what a trader should learn from this.`;
 
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("https://web-production-1a093.up.railway.app/api/v1/replay/explain", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          messages: [{ role: "user", content: prompt }]
+          symbol: replayData.symbol,
+          replay_date: replayData.replay_date,
+          direction: replayData.direction,
+          confidence: replayData.confidence,
+          probability: replayData.probability,
+          current_price: replayData.current_price,
+          actual_price_5d: replayData.actual_price_5d,
+          actual_return_5d: replayData.actual_return_5d,
+          was_correct: replayData.was_correct,
+          confluence_score: replayData.confluence_score,
+          confluence: replayData.confluence,
         })
       });
       const data = await res.json();
-      const text = data.content?.[0]?.text || "Could not generate explanation.";
+      const text = data.explanation || "Could not generate explanation.";
       // Typewriter effect
       let i = 0;
       const interval = setInterval(() => {
