@@ -4,23 +4,13 @@ import { Calendar, TrendingUp, TrendingDown, AlertCircle, RefreshCw } from "luci
 
 const API_BASE = "https://web-production-1a093.up.railway.app/api/v1";
 
-function formatDate(dateStr: string) {
-  try {
-    const d = new Date(dateStr);
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-    const eventDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-
-    const time = d.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", timeZoneName: "short" });
-
-    if (eventDay.getTime() === today.getTime()) return `Today, ${time}`;
-    if (eventDay.getTime() === tomorrow.getTime()) return `Tomorrow, ${time}`;
-    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + `, ${time}`;
-  } catch {
-    return dateStr;
+function formatDate(event: any) {
+  const date = event.date_display || "";
+  const time = event.time_display || "";
+  if (time && time !== "Tentative" && time !== "All Day" && time !== "") {
+    return `${date} ${time} EST`;
   }
+  return date || "TBA";
 }
 
 function isPast(dateStr: string) {
