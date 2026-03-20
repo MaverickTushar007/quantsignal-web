@@ -129,7 +129,7 @@ export default function EconomicCalendar() {
                         {event.title}
                       </div>
                       <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>
-                        {formatDate(event.date)} · {event.country}
+                        {formatDate(event)} · {event.country}
                       </div>
                     </div>
                   </div>
@@ -211,7 +211,7 @@ export default function EconomicCalendar() {
                         <span style={{ fontSize: 16, flexShrink: 0 }}>{event.flag}</span>
                         <div style={{ minWidth: 0 }}>
                           <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.65)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{event.title}</div>
-                          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.2)", marginTop: 2 }}>{formatDate(event.date)} · {event.country}</div>
+                          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.2)", marginTop: 2 }}>{formatDate(event)} · {event.country}</div>
                         </div>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, marginLeft: 10 }}>
