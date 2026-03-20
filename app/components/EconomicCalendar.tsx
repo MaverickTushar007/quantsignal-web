@@ -108,12 +108,12 @@ export default function EconomicCalendar() {
               <div key={i}
                 onClick={() => setExpanded(isExpanded ? null : i)}
                 style={{
-                  background: past ? "rgba(255,255,255,0.01)" : "rgba(255,255,255,0.03)",
-                  border: `1px solid ${isExpanded ? "rgba(0,255,136,0.2)" : "rgba(255,255,255,0.06)"}`,
+                  background: "rgba(255,255,255,0.02)",
+                  border: `1px solid ${isExpanded ? "rgba(0,255,136,0.25)" : "rgba(255,255,255,0.07)"}`,
                   borderRadius: 10,
                   padding: "14px 16px",
                   cursor: "pointer",
-                  opacity: past ? 0.5 : 1,
+                  opacity: 1,
                   transition: "all 0.15s",
                 }}>
 
@@ -122,7 +122,7 @@ export default function EconomicCalendar() {
                   <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
                     <span style={{ fontSize: 16, flexShrink: 0 }}>{event.flag}</span>
                     <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: 12, fontWeight: 700, color: past ? "rgba(255,255,255,0.4)" : "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: "#e2e8f0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                         {event.title}
                       </div>
                       <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>
