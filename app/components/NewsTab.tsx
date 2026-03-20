@@ -95,7 +95,7 @@ export default function NewsTab({ symbol }: { symbol: string }) {
           {news.map((item, i) => {
             const cfg = SENTIMENT_CONFIG[item.sentiment as keyof typeof SENTIMENT_CONFIG] || SENTIMENT_CONFIG.NEUTRAL;
             return (
-              
+              <a
                 key={i}
                 href={item.url}
                 target="_blank"
