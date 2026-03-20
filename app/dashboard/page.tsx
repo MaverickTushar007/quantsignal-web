@@ -253,13 +253,8 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       });
       const data = await res.json();
       const text = data.explanation || "Could not generate explanation.";
-      // Typewriter effect
-      let i = 0;
-      const interval = setInterval(() => {
-        setReplayAIText(text.slice(0, i));
-        i += 3;
-        if (i > text.length) { setReplayAIText(text); clearInterval(interval); }
-      }, 16);
+      // Smooth reveal — just set text directly, no typewriter flicker
+      setReplayAIText(text);
     } catch {
       setReplayAIText("Failed to generate explanation. Please try again.");
     } finally {
@@ -353,7 +348,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                   <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginLeft: 4 }}>Analyzing signal...</span>
                 </div>
               ) : (
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.8, fontFamily: "inherit" }}>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.8, fontFamily: "inherit", animation: "fadeIn 0.4s ease" }}>
                   {replayAIText}
                   {replayAILoading && <span style={{ animation: "pulse 1s infinite", opacity: 0.6 }}>▊</span>}
                 </div>
