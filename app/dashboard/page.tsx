@@ -531,7 +531,35 @@ export default function Dashboard() {
 
             {/* Tab content */}
             <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
-              {activeTab === "SIGNAL" && <SignalTab />}
+              {activeTab === "SIGNAL" && (
+                <div style={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
+                  {/* LIVE / REPLAY toggle */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)", flexShrink: 0 }}>
+                    <button onClick={() => { setReplayMode(false); setReplayData(null); }} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "none", background: !replayMode ? "#00ff88" : "rgba(255,255,255,0.06)", color: !replayMode ? "#000" : "rgba(255,255,255,0.4)" }}>● LIVE</button>
+                    <button onClick={() => setReplayMode(true)} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "none", background: replayMode ? "#ffd700" : "rgba(255,255,255,0.06)", color: replayMode ? "#000" : "rgba(255,255,255,0.4)" }}>⏪ REPLAY</button>
+                    {replayMode && (
+                      <input type="date" value={replayDate}
+                        max={new Date(Date.now() - 86400000).toISOString().split("T")[0]}
+                        min={new Date(Date.now() - 175 * 86400000).toISOString().split("T")[0]}
+                        onChange={e => { setReplayDate(e.target.value); fetchReplay(e.target.value); }}
+                        style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 6, padding: "4px 10px", fontSize: 10, color: "#ffd700", outline: "none", fontFamily: "inherit" }} />
+                    )}
+                    {replayLoading && <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>Loading...</span>}
+                    {replayMode && replayData && (
+                      <span style={{ fontSize: 9, fontWeight: 700, color: replayData.was_correct ? "#00ff88" : "#ff4466", marginLeft: "auto" }}>
+                        {replayData.was_correct ? "✓ CORRECT" : "✗ WRONG"} · 5d return: {replayData.actual_return_5d > 0 ? "+" : ""}{replayData.actual_return_5d}%
+                      </span>
+                    )}
+                  </div>
+                  {replayMode && replayData && (
+                    <div style={{ background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.2)", borderRadius: 6, padding: "6px 16px", margin: "8px 24px 0", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                      <span style={{ fontSize: 9, fontWeight: 700, color: "#ffd700" }}>⏪ HISTORICAL — {replayDate}</span>
+                      <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)" }}>Price was ${replayData.current_price.toLocaleString()} · 5d later: ${replayData.actual_price_5d?.toLocaleString()}</span>
+                    </div>
+                  )}
+                  <SignalTab />
+                </div>
+              )}
               {activeTab === "CHAT" && (
                 <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", padding: "0 24px 24px" }}>
                   <AgentChat symbol={selected.symbol} />
