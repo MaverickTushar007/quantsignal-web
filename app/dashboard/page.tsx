@@ -6,6 +6,7 @@ import TutorialModal from "../components/TutorialModal";
 import AgentChat from "../components/AgentChat";
 import { LayoutDashboard, MessageSquare, Calendar, Database, List, ChevronLeft } from "lucide-react";
 import EconomicCalendar from "../components/EconomicCalendar";
+import MarketSentiment from "../components/MarketSentiment";
 
 const TYPE_FILTERS = ["ALL", "CRYPTO", "STOCK", "ETF", "INDEX", "COMMOD", "FOREX"];
 const dirColor = (d: string) => d === "BUY" ? "#00ff88" : d === "SELL" ? "#ff4466" : "#ffd700";
@@ -351,6 +352,7 @@ export default function Dashboard() {
         </div>
       </div>
 
+      <MarketSentiment />
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
         {/* Left panel */}
         <div style={{ width: 240, borderRight: "1px solid rgba(255,255,255,0.06)", display: "flex", flexDirection: "column", flexShrink: 0, background: "#0a0a0c" }}>
