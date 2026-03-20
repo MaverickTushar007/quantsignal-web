@@ -6,6 +6,7 @@ import TutorialModal from "../components/TutorialModal";
 import AgentChat from "../components/AgentChat";
 import { LayoutDashboard, MessageSquare, Calendar, Database, List, ChevronLeft, Newspaper } from "lucide-react";
 import EconomicCalendar from "../components/EconomicCalendar";
+import TradeGuardian from "../components/TradeGuardian";
 import NewsTab from "../components/NewsTab";
 import MarketSentiment from "../components/MarketSentiment";
 
@@ -200,9 +201,15 @@ export default function Dashboard() {
               <span style={{ fontSize: 12, fontWeight: 600, color: selected?.symbol === sig.symbol ? "#00ff88" : "#e2e8f0" }}>{sig.display}</span>
               <span style={badge(sig.direction)}>{sig.direction}</span>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "rgba(255,255,255,0.3)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "rgba(255,255,255,0.3)", alignItems: "center" }}>
               <span>${sig.current_price?.toLocaleString()}</span>
-              <span style={{ color: dirColor(sig.direction) }}>{(sig.probability * 100).toFixed(0)}%</span>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ color: dirColor(sig.direction) }}>{(sig.probability * 100).toFixed(0)}%</span>
+                <button onClick={e => { e.stopPropagation(); setGuardianSignal(sig); }}
+                  style={{ background: "rgba(0,255,136,0.08)", border: "1px solid rgba(0,255,136,0.2)", borderRadius: 4, padding: "2px 6px", fontSize: 8, fontWeight: 700, color: "#00ff88", cursor: "pointer", fontFamily: "inherit", letterSpacing: "0.05em" }}>
+                  🛡️
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -211,6 +218,7 @@ export default function Dashboard() {
   );
 
   const [replayMode, setReplayMode] = useState(false);
+  const [guardianSignal, setGuardianSignal] = useState<any>(null);
   const [showReplayAI, setShowReplayAI] = useState(false);
   const [replayAIText, setReplayAIText] = useState("");
   const [replayAILoading, setReplayAILoading] = useState(false);
