@@ -211,6 +211,53 @@ export default function Dashboard() {
   );
 
   const [replayMode, setReplayMode] = useState(false);
+  const [showReplayAI, setShowReplayAI] = useState(false);
+  const [replayAIText, setReplayAIText] = useState("");
+  const [replayAILoading, setReplayAILoading] = useState(false);
+
+  const fetchReplayAI = async () => {
+    if (!replayData) return;
+    setShowReplayAI(true);
+    setReplayAILoading(true);
+    setReplayAIText("");
+    try {
+      const prompt = `You are a sharp trading analyst. Explain this historical signal in 4-5 conversational sentences like you're talking to a trader friend. Be direct, specific, insightful. No fluff.
+
+Asset: ${replayData.symbol}
+Date: ${replayData.replay_date}
+Price then: $${replayData.current_price.toLocaleString()}
+Signal: ${replayData.direction} (${replayData.confidence} confidence, ${(replayData.probability * 100).toFixed(1)}% probability)
+Confluence: ${replayData.confluence_score}
+What happened 5 days later: price went to $${replayData.actual_price_5d?.toLocaleString()} (${replayData.actual_return_5d > 0 ? '+' : ''}${replayData.actual_return_5d}%)
+Was the signal correct: ${replayData.was_correct ? 'YES' : 'NO'}
+Top indicators at the time: ${replayData.confluence?.map((c: any) => c.name + ': ' + c.signal).join(', ')}
+
+Give a punchy, honest explanation of why the model made this call, what the market was doing, and what a trader should learn from this.`;
+
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
+      const data = await res.json();
+      const text = data.content?.[0]?.text || "Could not generate explanation.";
+      // Typewriter effect
+      let i = 0;
+      const interval = setInterval(() => {
+        setReplayAIText(text.slice(0, i));
+        i += 3;
+        if (i > text.length) { setReplayAIText(text); clearInterval(interval); }
+      }, 16);
+    } catch {
+      setReplayAIText("Failed to generate explanation. Please try again.");
+    } finally {
+      setReplayAILoading(false);
+    }
+  };
   const [replayDate, setReplayDate] = useState("");
   const [replayData, setReplayData] = useState<any>(null);
   const [replayLoading, setReplayLoading] = useState(false);
@@ -256,7 +303,64 @@ export default function Dashboard() {
         <div style={{ background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.2)", borderRadius: 6, padding: "6px 12px", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ fontSize: 9, fontWeight: 700, color: "#ffd700" }}>⏪ HISTORICAL SIGNAL — {replayDate}</span>
           <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)" }}>Price was ${replayData.current_price.toLocaleString()} · 5d later: ${replayData.actual_price_5d?.toLocaleString()}</span>
+          <button onClick={fetchReplayAI} style={{ marginLeft: "auto", background: "rgba(255,215,0,0.15)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 5, padding: "3px 10px", fontSize: 9, fontWeight: 700, color: "#ffd700", cursor: "pointer", fontFamily: "inherit" }}>🤖 Explain</button>
         </div>
+      )}
+
+      {/* AI Explanation Modal */}
+      {showReplayAI && (
+        <>
+          <div onClick={() => setShowReplayAI(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", backdropFilter: "blur(8px)", zIndex: 200, animation: "fadeIn 0.2s ease" }} />
+          <div style={{
+            position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+            width: "min(520px, 90vw)",
+            background: "rgba(12,14,20,0.85)",
+            backdropFilter: "blur(24px)",
+            border: "1px solid rgba(255,215,0,0.2)",
+            borderRadius: 16,
+            padding: 24,
+            zIndex: 201,
+            boxShadow: "0 0 60px rgba(255,215,0,0.08), 0 24px 80px rgba(0,0,0,0.6)",
+            animation: "slideUp 0.25s cubic-bezier(0.34,1.56,0.64,1)",
+          }}>
+            <style>{`
+              @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+              @keyframes slideUp { from { opacity: 0; transform: translate(-50%, calc(-50% + 20px)); } to { opacity: 1; transform: translate(-50%, -50%); } }
+              @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+            `}</style>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: "rgba(255,215,0,0.1)", border: "1px solid rgba(255,215,0,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🤖</div>
+                <div>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: "#ffd700", letterSpacing: "0.08em" }}>AI REPLAY ANALYSIS</div>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{replayData.symbol} · {replayDate} · {replayData.direction}</div>
+                </div>
+              </div>
+              <button onClick={() => setShowReplayAI(false)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer", fontSize: 16, padding: 4 }}>✕</button>
+            </div>
+            <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 16 }}>
+              {replayAILoading && !replayAIText ? (
+                <div style={{ display: "flex", gap: 6, alignItems: "center", padding: "20px 0" }}>
+                  {[0,1,2].map(i => <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: "#ffd700", animation: `pulse 1.2s ease ${i*0.2}s infinite` }} />)}
+                  <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginLeft: 4 }}>Analyzing signal...</span>
+                </div>
+              ) : (
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.8, fontFamily: "inherit" }}>
+                  {replayAIText}
+                  {replayAILoading && <span style={{ animation: "pulse 1s infinite", opacity: 0.6 }}>▊</span>}
+                </div>
+              )}
+            </div>
+            {!replayAILoading && replayAIText && (
+              <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ fontSize: 9, color: replayData.was_correct ? "#00ff88" : "#ff4466", fontWeight: 700 }}>
+                  {replayData.was_correct ? "✓ SIGNAL WAS CORRECT" : "✗ SIGNAL WAS WRONG"} · {replayData.actual_return_5d > 0 ? "+" : ""}{replayData.actual_return_5d}% in 5 days
+                </span>
+                <button onClick={() => setShowReplayAI(false)} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, padding: "4px 12px", fontSize: 9, color: "rgba(255,255,255,0.5)", cursor: "pointer", fontFamily: "inherit" }}>Close</button>
+              </div>
+            )}
+          </div>
+        </>
       )}
 
       <div style={{ marginBottom: 20 }}>
