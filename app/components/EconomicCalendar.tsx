@@ -32,7 +32,8 @@ function isPast(dateStr: string) {
 }
 
 export default function EconomicCalendar() {
-  const [events, setEvents] = useState<any[]>([]);
+  const [upcoming, setUpcoming] = useState<any[]>([]);
+  const [past, setPast] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [expanded, setExpanded] = useState<number | null>(0);
@@ -42,7 +43,8 @@ export default function EconomicCalendar() {
     fetch(`${API_BASE}/calendar/events`)
       .then(r => r.json())
       .then(d => {
-        setEvents(d.events || []);
+        setUpcoming(d.upcoming || []);
+        setPast(d.past || []);
         setLoading(false);
       })
       .catch(() => {
@@ -74,7 +76,7 @@ export default function EconomicCalendar() {
           <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", background: "rgba(255,255,255,0.05)", padding: "2px 6px", borderRadius: 3 }}>LIVE · FOREXFACTORY</span>
         </div>
         {!loading && (
-          <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>{events.length} EVENTS</span>
+          <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>{upcoming.length + past.length} EVENTS</span>
         )}
       </div>
 
@@ -97,7 +99,8 @@ export default function EconomicCalendar() {
       {/* Events */}
       {!loading && !error && (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {events.map((event, i) => {
+          {upcoming.length > 0 && <div style={{ fontSize: 9, color: "#00ff88", letterSpacing: "0.15em", fontWeight: 700, padding: "4px 0 8px" }}>▶ UPCOMING EVENTS</div>}
+          {upcoming.map((event, i) => {
             const past = isPast(event.date);
             const isExpanded = expanded === i;
             const forecastNum = parseFloat(event.forecast);
@@ -193,6 +196,35 @@ export default function EconomicCalendar() {
               </div>
             );
           })}
+
+          {past.length > 0 && (
+            <>
+              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", fontWeight: 700, padding: "16px 0 8px", borderTop: "1px solid rgba(255,255,255,0.06)", marginTop: 8 }}>◀ RECENT EVENTS — PAST 5 DAYS</div>
+              {past.map((event, i) => {
+                const isExpanded = expanded === (1000 + i);
+                return (
+                  <div key={1000+i}
+                    onClick={() => setExpanded(isExpanded ? null : 1000 + i)}
+                    style={{ background: "rgba(255,255,255,0.01)", border: `1px solid ${isExpanded ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.04)"}`, borderRadius: 10, padding: "12px 16px", cursor: "pointer", opacity: 0.55 }}>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
+                        <span style={{ fontSize: 16, flexShrink: 0 }}>{event.flag}</span>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.45)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{event.title}</div>
+                          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.2)", marginTop: 2 }}>{formatDate(event.date)} · {event.country}</div>
+                        </div>
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, marginLeft: 10 }}>
+                        {event.forecast && <div style={{ textAlign: "right" }}><div style={{ fontSize: 9, color: "rgba(255,255,255,0.2)" }}>FORECAST</div><div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.35)" }}>{event.forecast}</div></div>}
+                        {event.previous && <div style={{ textAlign: "right" }}><div style={{ fontSize: 9, color: "rgba(255,255,255,0.2)" }}>PREV</div><div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)" }}>{event.previous}</div></div>}
+                        <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 4, padding: "3px 8px", fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.25)" }}>{event.impact.toUpperCase()}</div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </>
+          )}
         </div>
       )}
     </div>
