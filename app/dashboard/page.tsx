@@ -532,7 +532,7 @@ export default function Dashboard() {
             {/* Tab content */}
             <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
               {activeTab === "SIGNAL" && (
-                <div style={{ display: "flex", flexDirection: "column", flex: 1, overflow: "hidden" }}>
+                <div style={{ display: "flex", flexDirection: "column", flex: 1, minHeight: 0 }}>
                   {/* LIVE / REPLAY toggle */}
                   <div style={{ display: "flex", alignItems: "center", gap: 8, padding: "10px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)", flexShrink: 0 }}>
                     <button onClick={() => { setReplayMode(false); setReplayData(null); }} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "none", background: !replayMode ? "#00ff88" : "rgba(255,255,255,0.06)", color: !replayMode ? "#000" : "rgba(255,255,255,0.4)" }}>● LIVE</button>
