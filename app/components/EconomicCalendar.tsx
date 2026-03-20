@@ -205,12 +205,12 @@ export default function EconomicCalendar() {
                 return (
                   <div key={1000+i}
                     onClick={() => setExpanded(isExpanded ? null : 1000 + i)}
-                    style={{ background: "rgba(255,255,255,0.01)", border: `1px solid ${isExpanded ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.04)"}`, borderRadius: 10, padding: "12px 16px", cursor: "pointer", opacity: 0.55 }}>
+                    style={{ background: "rgba(255,255,255,0.01)", border: `1px solid ${isExpanded ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.04)"}`, borderRadius: 10, padding: "12px 16px", cursor: "pointer", opacity: 0.75 }}>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
                         <span style={{ fontSize: 16, flexShrink: 0 }}>{event.flag}</span>
                         <div style={{ minWidth: 0 }}>
-                          <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.45)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{event.title}</div>
+                          <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.65)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{event.title}</div>
                           <div style={{ fontSize: 9, color: "rgba(255,255,255,0.2)", marginTop: 2 }}>{formatDate(event.date)} · {event.country}</div>
                         </div>
                       </div>
