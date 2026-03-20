@@ -304,9 +304,9 @@ export default function Dashboard() {
       <div style={{ marginBottom: 20 }}>
         <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", marginBottom: 10, letterSpacing: "0.1em" }}>V1 TRADE LEVELS</div>
         {[
-          { label: "TP", value: detail.take_profit, color: "#00ff88", pct: "+" + Math.abs(((detail.take_profit - detail.current_price) / detail.current_price) * 100).toFixed(1) },
-          { label: "ENTRY", value: detail.current_price, color: "#fff", pct: "0.0" },
-          { label: "SL", value: detail.stop_loss, color: "#ff4466", pct: "-" + Math.abs(((detail.stop_loss - detail.current_price) / detail.current_price) * 100).toFixed(1) },
+          { label: "TP", value: activeDetail.take_profit, color: "#00ff88", pct: "+" + Math.abs(((activeDetail.take_profit - activeDetail.current_price) / activeDetail.current_price) * 100).toFixed(1) },
+          { label: "ENTRY", value: activeDetail.current_price, color: "#fff", pct: "0.0" },
+          { label: "SL", value: activeDetail.stop_loss, color: "#ff4466", pct: "-" + Math.abs(((activeDetail.stop_loss - activeDetail.current_price) / activeDetail.current_price) * 100).toFixed(1) },
         ].map(l => (
           <div key={l.label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", background: "rgba(255,255,255,0.02)", borderRadius: 5, border: "1px solid rgba(255,255,255,0.05)", marginBottom: 6 }}>
             <div>
@@ -320,9 +320,9 @@ export default function Dashboard() {
       <div style={{ marginBottom: 20 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
           <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", letterSpacing: "0.1em" }}>9-FACTOR CONFLUENCE</div>
-          <span style={{ fontSize: 9, fontWeight: 800, color: "#00ff88", background: "rgba(0,255,136,0.1)", padding: "2px 6px", borderRadius: 3 }}>{detail.confluence_score}</span>
+          <span style={{ fontSize: 9, fontWeight: 800, color: "#00ff88", background: "rgba(0,255,136,0.1)", padding: "2px 6px", borderRadius: 3 }}>{activeDetail.confluence_score}</span>
         </div>
-        {detail.confluence?.map((c: any) => (
+        {activeDetail.confluence?.map((c: any) => (
           <div key={c.name} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
             <div style={{ width: 5, height: 5, borderRadius: "50%", background: c.signal === "BULLISH" ? "#00ff88" : "#ff4466", flexShrink: 0 }} />
             <span style={{ flex: 1, color: "rgba(255,255,255,0.5)", fontSize: 9 }}>{c.name}</span>
@@ -338,27 +338,27 @@ export default function Dashboard() {
       <div style={{ marginBottom: 20 }}>
         <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", marginBottom: 10, letterSpacing: "0.1em" }}>ML PROBABILITY</div>
         <div style={{ height: 20, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden", display: "flex", marginBottom: 6 }}>
-          <div style={{ width: `${detail.probability * 100}%`, background: "linear-gradient(90deg, #00ff88, #00cc66)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: "#000" }}>
-            {(detail.probability * 100).toFixed(0)}%
+          <div style={{ width: `${activeDetail.probability * 100}%`, background: "linear-gradient(90deg, #00ff88, #00cc66)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: "#000" }}>
+            {(activeDetail.probability * 100).toFixed(0)}%
           </div>
           <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, color: "#ff4466", fontWeight: 700 }}>
-            {((1 - detail.probability) * 100).toFixed(0)}%
+            {((1 - activeDetail.probability) * 100).toFixed(0)}%
           </div>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: "rgba(255,255,255,0.3)" }}>
           <span>BUY</span>
-          <span>Agreement: {(detail.model_agreement * 100).toFixed(0)}%</span>
+          <span>Agreement: {(activeDetail.model_agreement * 100).toFixed(0)}%</span>
           <span>SELL</span>
         </div>
       </div>
-      {detail.reasoning && (
+      {activeDetail.reasoning && (
         <div style={{ background: "rgba(0,170,255,0.05)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 6, padding: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
             <Database size={10} color="#00aaff" />
             <span style={{ fontSize: 8, fontWeight: 800, color: "#00aaff", letterSpacing: "0.1em" }}>QUANT RAG REASONING</span>
           </div>
           <div style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", lineHeight: 1.7, fontStyle: "italic" }}>
-            "{detail.reasoning.slice(0, 180)}..."
+            "{activeDetail.reasoning.slice(0, 180)}..."
           </div>
         </div>
       )}
