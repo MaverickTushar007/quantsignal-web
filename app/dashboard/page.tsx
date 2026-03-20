@@ -216,12 +216,14 @@ export default function Dashboard() {
   const [replayLoading, setReplayLoading] = useState(false);
 
   const fetchReplay = async (d: string) => {
+    console.log("fetchReplay called", d, "selected:", selected?.symbol);
     if (!selected || !d) return;
     setReplayLoading(true);
     setReplayData(null);
     try {
       const res = await fetch(`https://web-production-1a093.up.railway.app/api/v1/signals/${selected.symbol}/replay?replay_date=${d}`);
-      if (res.ok) setReplayData(await res.json());
+      console.log("replay res status:", res.status);
+      if (res.ok) { const data = await res.json(); console.log("replay data:", data.direction); setReplayData(data); }
     } catch {}
     finally { setReplayLoading(false); }
   };
