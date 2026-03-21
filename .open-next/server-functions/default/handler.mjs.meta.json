@@ -3612,13 +3612,13 @@
       "imports": [],
       "format": "cjs"
     },
-    ".open-next/server-functions/default/.next/server/app/how-it-works/page_client-reference-manifest.js": {
-      "bytes": 5982,
+    ".open-next/server-functions/default/.next/server/app/landing/page_client-reference-manifest.js": {
+      "bytes": 6012,
       "imports": [],
       "format": "cjs"
     },
-    ".open-next/server-functions/default/.next/server/app/landing/page_client-reference-manifest.js": {
-      "bytes": 6012,
+    ".open-next/server-functions/default/.next/server/app/how-it-works/page_client-reference-manifest.js": {
+      "bytes": 5982,
       "imports": [],
       "format": "cjs"
     },
@@ -3632,8 +3632,8 @@
       "imports": [],
       "format": "cjs"
     },
-    ".open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js": {
-      "bytes": 6302,
+    ".open-next/server-functions/default/.next/server/app/_not-found/page_client-reference-manifest.js": {
+      "bytes": 5334,
       "imports": [],
       "format": "cjs"
     },
@@ -3642,8 +3642,8 @@
       "imports": [],
       "format": "cjs"
     },
-    ".open-next/server-functions/default/.next/server/app/_not-found/page_client-reference-manifest.js": {
-      "bytes": 5334,
+    ".open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js": {
+      "bytes": 6302,
       "imports": [],
       "format": "cjs"
     },
@@ -3681,14 +3681,14 @@
           "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/portfolio/page_client-reference-manifest.js"
         },
         {
-          "path": ".open-next/server-functions/default/.next/server/app/how-it-works/page_client-reference-manifest.js",
-          "kind": "require-call",
-          "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/how-it-works/page_client-reference-manifest.js"
-        },
-        {
           "path": ".open-next/server-functions/default/.next/server/app/landing/page_client-reference-manifest.js",
           "kind": "require-call",
           "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/landing/page_client-reference-manifest.js"
+        },
+        {
+          "path": ".open-next/server-functions/default/.next/server/app/how-it-works/page_client-reference-manifest.js",
+          "kind": "require-call",
+          "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/how-it-works/page_client-reference-manifest.js"
         },
         {
           "path": ".open-next/server-functions/default/.next/server/app/guardian/page_client-reference-manifest.js",
@@ -3701,9 +3701,9 @@
           "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/auth/page_client-reference-manifest.js"
         },
         {
-          "path": ".open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js",
+          "path": ".open-next/server-functions/default/.next/server/app/_not-found/page_client-reference-manifest.js",
           "kind": "require-call",
-          "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js"
+          "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/_not-found/page_client-reference-manifest.js"
         },
         {
           "path": ".open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js",
@@ -3711,9 +3711,9 @@
           "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js"
         },
         {
-          "path": ".open-next/server-functions/default/.next/server/app/_not-found/page_client-reference-manifest.js",
+          "path": ".open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js",
           "kind": "require-call",
-          "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/_not-found/page_client-reference-manifest.js"
+          "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js"
         }
       ],
       "format": "cjs"
@@ -8158,11 +8158,11 @@
         ".open-next/server-functions/default/.next/server/app/portfolio/page_client-reference-manifest.js": {
           "bytesInOutput": 5724
         },
-        ".open-next/server-functions/default/.next/server/app/how-it-works/page_client-reference-manifest.js": {
-          "bytesInOutput": 5685
-        },
         ".open-next/server-functions/default/.next/server/app/landing/page_client-reference-manifest.js": {
           "bytesInOutput": 5710
+        },
+        ".open-next/server-functions/default/.next/server/app/how-it-works/page_client-reference-manifest.js": {
+          "bytesInOutput": 5685
         },
         ".open-next/server-functions/default/.next/server/app/guardian/page_client-reference-manifest.js": {
           "bytesInOutput": 5660
@@ -8170,14 +8170,14 @@
         ".open-next/server-functions/default/.next/server/app/auth/page_client-reference-manifest.js": {
           "bytesInOutput": 5794
         },
-        ".open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js": {
-          "bytesInOutput": 6002
+        ".open-next/server-functions/default/.next/server/app/_not-found/page_client-reference-manifest.js": {
+          "bytesInOutput": 5090
         },
         ".open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js": {
           "bytesInOutput": 4990
         },
-        ".open-next/server-functions/default/.next/server/app/_not-found/page_client-reference-manifest.js": {
-          "bytesInOutput": 5090
+        ".open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js": {
+          "bytesInOutput": 6002
         },
         ".open-next/server-functions/default/node_modules/next/dist/server/load-manifest.external.js": {
           "bytesInOutput": 17890
