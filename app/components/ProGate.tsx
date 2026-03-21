@@ -1,3 +1,6 @@
+// Set to true to disable paywall during beta
+const BETA_MODE = true;
+
 "use client";
 import { useRouter } from "next/navigation";
 
@@ -34,7 +37,7 @@ export default function ProGate({
     }
   };
 
-  if (isPro) return <>{children}</>;
+  if (isPro || BETA_MODE) return <>{children}</>;
 
   return (
     <div style={{ position: "relative" }}>
