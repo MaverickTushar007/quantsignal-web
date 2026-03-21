@@ -7,37 +7,43 @@ export function useAuth() {
   const [isPro, setIsPro] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const fetchProfile = async (userId: string) => {
+    try {
+      const { data } = await supabase
+        .from("profiles")
+        .select("is_pro")
+        .eq("id", userId)
+        .single();
+      setIsPro((data as any)?.is_pro || false);
+    } catch {
+      setIsPro(false);
+    }
+  };
+
   useEffect(() => {
     const getUser = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
           setUser(session.user);
-          const { data: profile } = await supabase
-            .from("profiles")
-            .select("is_pro")
-            .eq("id", session.user.id)
-            .single();
-          setIsPro(profile?.is_pro || false);
+          await fetchProfile(session.user.id);
         }
       } catch {}
       finally { setLoading(false); }
     };
     getUser();
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
-        setUser(session.user);
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("is_pro")
-          .eq("id", session.user.id)
-          .single();
-        setIsPro(profile?.is_pro || false);
-      } else {
-        setUser(null);
-        setIsPro(false);
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (session?.user) {
+          setUser(session.user);
+          await fetchProfile(session.user.id);
+        } else {
+          setUser(null);
+          setIsPro(false);
+        }
       }
-    });
+    );
     return () => subscription.unsubscribe();
   }, []);
 
