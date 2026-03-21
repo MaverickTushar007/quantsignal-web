@@ -1,0 +1,12 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/auth/page": "/auth",
+  "/dashboard/page": "/dashboard",
+  "/favicon.ico/route": "/favicon.ico",
+  "/guardian/page": "/guardian",
+  "/how-it-works/page": "/how-it-works",
+  "/landing/page": "/landing",
+  "/page": "/",
+  "/portfolio/page": "/portfolio"
+}

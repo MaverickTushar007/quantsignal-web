@@ -85,7 +85,7 @@ function LiquidityCard({ symbol }: { symbol: string }) {
   );
 }
 
-const TYPE_FILTERS = ["ALL", "CRYPTO", "STOCK", "ETF", "INDEX", "COMMOD", "FOREX"];
+const TYPE_FILTERS = ["ALL", "CRYPTO", "STOCK", "ETF", "INDEX", "COMMOD", "FOREX", "INDIA"];
 const dirColor = (d: string) => d === "BUY" ? "#00ff88" : d === "SELL" ? "#ff4466" : "#ffd700";
 const badge = (d: string) => ({
   background: d === "BUY" ? "rgba(0,255,136,0.12)" : d === "SELL" ? "rgba(255,68,102,0.12)" : "rgba(255,215,0,0.12)",
@@ -149,7 +149,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     setLoading(true);
-    const type = filter === "ALL" ? undefined : filter === "COMMOD" ? "COMMODITY" : filter;
+    const type = filter === "ALL" ? undefined : filter === "COMMOD" ? "COMMODITY" : filter === "INDIA" ? "IN_STOCK" : filter;
     fetchAllSignals(type).then(s => {
       setSignals(s);
       if (s.length > 0 && !selected) selectAsset(s[0], false);
