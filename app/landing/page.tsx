@@ -89,7 +89,7 @@ export default function Landing() {
           <div className={`fade-in ${visible ? "visible" : ""}`}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(0,255,136,0.08)", border: "1px solid rgba(0,255,136,0.2)", borderRadius: 100, padding: "5px 14px", marginBottom: 28 }}>
               <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#00ff88", animation: "pulse-dot 2s infinite" }} />
-              <span style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.1em" }}>118 ASSETS · 67% WIN RATE</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.1em" }}>186 ASSETS · 67% WIN RATE</span>
             </div>
 
             <h1 className="hero-title" style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 58, fontWeight: 800, lineHeight: 1.05, marginBottom: 20, letterSpacing: "-0.02em" }}>
@@ -126,7 +126,7 @@ export default function Landing() {
             </div>
 
             <div className="hero-stats" style={{ display: "flex", gap: 32 }}>
-              {[["118", "Live Assets"], ["9", "Confluence Factors"], ["2yr", "Training Window"]].map(([val, label]) => (
+              {[["186", "Live Assets"], ["9", "Confluence Factors"], ["2yr", "Training Window"]].map(([val, label]) => (
                 <div key={label}>
                   <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 28, fontWeight: 800, color: "#00ff88" }}>{val}</div>
                   <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.08em", marginTop: 2 }}>{label}</div>
@@ -262,7 +262,7 @@ export default function Landing() {
             <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 16 }}>FREE</div>
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 40, fontWeight: 800, color: "#fff", marginBottom: 4 }}>₹0</div>
             <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginBottom: 28 }}>forever</div>
-            {["118 live signals — crypto, US stocks, Indian stocks, forex", "Direction + confidence", "News feed", "Economic calendar", "Perseus AI chat"].map(f => (
+            {["186 live signals — crypto, US stocks, Indian stocks, forex", "Direction + confidence", "News feed", "Economic calendar", "Perseus AI chat"].map(f => (
               <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
                 <div style={{ width: 16, height: 16, borderRadius: "50%", background: "rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, color: "rgba(255,255,255,0.4)" }}>✓</div>
                 <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>{f}</span>

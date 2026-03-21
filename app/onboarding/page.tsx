@@ -5,8 +5,8 @@ import { supabase } from "../lib/supabase";
 
 const MARKETS = [
   { id: "CRYPTO",    label: "Crypto",        icon: "₿", desc: "BTC, ETH, SOL and 17 more" },
-  { id: "IN_STOCK",  label: "Indian Stocks",  icon: "₹", desc: "Nifty, Reliance, TCS and 28 more" },
-  { id: "STOCK",     label: "US Stocks",      icon: "🇺🇸", desc: "AAPL, NVDA, TSLA and 28 more" },
+  { id: "IN_STOCK",  label: "Indian Stocks",  icon: "₹", desc: "Nifty, Reliance, TCS and 67 more" },
+  { id: "STOCK",     label: "US Stocks",      icon: "🇺🇸", desc: "AAPL, NVDA, TSLA and 67 more" },
   { id: "FOREX",     label: "Forex",          icon: "💱", desc: "EUR/USD, USD/INR and 5 more" },
   { id: "COMMODITY", label: "Commodities",    icon: "🥇", desc: "Gold, Oil, Silver and 3 more" },
   { id: "INDEX",     label: "Indices",        icon: "📊", desc: "S&P 500, Nifty 50 and 9 more" },
@@ -104,9 +104,9 @@ export default function Onboarding() {
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: 64, marginBottom: 24 }}>🚀</div>
             <h1 style={{ fontSize: 28, fontWeight: 800, color: "#fff", marginBottom: 12 }}>You are all set!</h1>
-            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.8, marginBottom: 40, maxWidth: 360, margin: "0 auto 40px" }}>118 live signals across crypto, Indian stocks, US stocks, forex and commodities.</p>
+            <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.8, marginBottom: 40, maxWidth: 360, margin: "0 auto 40px" }}>186 live signals across crypto, Indian stocks, US stocks, forex and commodities.</p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 40 }}>
-              {[["118", "Signals"], ["9", "Factors"], ["30", "Indian Stocks"]].map(([val, label]) => (
+              {[["186", "Signals"], ["9", "Factors"], ["98", "Indian Stocks"]].map(([val, label]) => (
                 <div key={label} style={{ background: "rgba(0,255,136,0.05)", border: "1px solid rgba(0,255,136,0.15)", borderRadius: 10, padding: "16px 8px" }}>
                   <div style={{ fontSize: 28, fontWeight: 800, color: "#00ff88" }}>{val}</div>
                   <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginTop: 4 }}>{label}</div>
