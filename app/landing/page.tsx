@@ -75,7 +75,7 @@ export default function Landing() {
           <div className={`fade-in ${visible ? "visible" : ""}`}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(0,255,136,0.08)", border: "1px solid rgba(0,255,136,0.2)", borderRadius: 100, padding: "5px 14px", marginBottom: 28 }}>
               <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#00ff88", animation: "pulse-dot 2s infinite" }} />
-              <span style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.1em" }}>86 ASSETS · LIVE NOW</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.1em" }}>118 ASSETS · LIVE NOW</span>
             </div>
 
             <h1 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 58, fontWeight: 800, lineHeight: 1.05, marginBottom: 20, letterSpacing: "-0.02em" }}>
@@ -112,7 +112,7 @@ export default function Landing() {
             </div>
 
             <div style={{ display: "flex", gap: 32 }}>
-              {[["86", "Live Assets"], ["9", "Confluence Factors"], ["180d", "Backtest Window"]].map(([val, label]) => (
+              {[["118", "Live Assets"], ["9", "Confluence Factors"], ["180d", "Backtest Window"]].map(([val, label]) => (
                 <div key={label}>
                   <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 28, fontWeight: 800, color: "#00ff88" }}>{val}</div>
                   <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.08em", marginTop: 2 }}>{label}</div>
@@ -223,7 +223,7 @@ export default function Landing() {
               { val: "62%", label: "Avg Win Rate", sub: "walk-forward tested" },
               { val: "1.84", label: "Sharpe Ratio", sub: "BTC 180d backtest" },
               { val: "2:1", label: "Risk/Reward", sub: "ATR-based targets" },
-              { val: "86", label: "Live Assets", sub: "crypto, stocks, forex" },
+              { val: "118", label: "Live Assets", sub: "crypto, stocks, forex" },
             ].map((s) => (
               <div key={s.label} style={{ textAlign: "center", padding: "32px 20px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14 }}>
                 <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 44, fontWeight: 800, color: "#00ff88", marginBottom: 6 }}>{s.val}</div>
@@ -248,7 +248,7 @@ export default function Landing() {
             <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 16 }}>FREE</div>
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 40, fontWeight: 800, color: "#fff", marginBottom: 4 }}>₹0</div>
             <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginBottom: 28 }}>forever</div>
-            {["86 live signals", "Direction + confidence", "News feed", "Economic calendar", "Perseus AI chat"].map(f => (
+            {["118 live signals", "Direction + confidence", "News feed", "Economic calendar", "Perseus AI chat"].map(f => (
               <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
                 <div style={{ width: 16, height: 16, borderRadius: "50%", background: "rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, color: "rgba(255,255,255,0.4)" }}>✓</div>
                 <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>{f}</span>
