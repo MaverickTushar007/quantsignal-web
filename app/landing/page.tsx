@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 
-const TICKERS = ["BTC/USD", "ETH/USD", "SOL/USD", "NASDAQ", "GOLD", "AAPL", "SPY", "XRP/USD"];
-const DIRECTIONS = ["BUY", "BUY", "SELL", "BUY", "HOLD", "BUY", "SELL", "BUY"];
-const PROBS = ["87%", "71%", "63%", "78%", "52%", "81%", "69%", "74%"];
+const TICKERS = ["BTC/USD", "ETH/USD", "SOL/USD", "NASDAQ", "GOLD", "AAPL", "RELIANCE", "TCS", "NIFTY50", "XRP/USD", "EUR/USD", "HDFC BANK"];
+const DIRECTIONS = ["BUY", "BUY", "SELL", "BUY", "HOLD", "BUY", "BUY", "BUY", "BUY", "SELL", "HOLD", "BUY"];
+const PROBS = ["87%", "71%", "63%", "78%", "52%", "81%", "73%", "82%", "69%", "61%", "55%", "70%"];
 
 export default function Landing() {
   const [tick, setTick] = useState(0);
@@ -88,7 +88,7 @@ export default function Landing() {
             </h1>
 
             <p style={{ fontSize: 16, color: "rgba(255,255,255,0.5)", lineHeight: 1.8, marginBottom: 36, maxWidth: 480 }}>
-              Every signal backed by an ML ensemble, 9-factor confluence score, walk-forward backtest, and plain-English AI explanation. Not a black box. Never.
+              Every signal backed by an ML ensemble, 9-factor confluence score, walk-forward backtest, and plain-English AI explanation. Covers crypto, US stocks, Indian NSE stocks, forex and commodities. Not a black box. Never.
             </p>
 
             <div style={{ display: "flex", gap: 12, marginBottom: 40, flexWrap: "wrap" }}>
@@ -223,7 +223,7 @@ export default function Landing() {
               { val: "62%", label: "Avg Win Rate", sub: "walk-forward tested" },
               { val: "1.84", label: "Sharpe Ratio", sub: "BTC 180d backtest" },
               { val: "2:1", label: "Risk/Reward", sub: "ATR-based targets" },
-              { val: "118", label: "Live Assets", sub: "crypto, stocks, forex" },
+              { val: "118", label: "Live Assets", sub: "crypto, US & Indian stocks, forex" },
             ].map((s) => (
               <div key={s.label} style={{ textAlign: "center", padding: "32px 20px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 14 }}>
                 <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 44, fontWeight: 800, color: "#00ff88", marginBottom: 6 }}>{s.val}</div>
@@ -248,7 +248,7 @@ export default function Landing() {
             <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 16 }}>FREE</div>
             <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 40, fontWeight: 800, color: "#fff", marginBottom: 4 }}>₹0</div>
             <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", marginBottom: 28 }}>forever</div>
-            {["118 live signals", "Direction + confidence", "News feed", "Economic calendar", "Perseus AI chat"].map(f => (
+            {["118 live signals — crypto, US stocks, Indian stocks, forex", "Direction + confidence", "News feed", "Economic calendar", "Perseus AI chat"].map(f => (
               <div key={f} style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
                 <div style={{ width: 16, height: 16, borderRadius: "50%", background: "rgba(255,255,255,0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, color: "rgba(255,255,255,0.4)" }}>✓</div>
                 <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)" }}>{f}</span>
