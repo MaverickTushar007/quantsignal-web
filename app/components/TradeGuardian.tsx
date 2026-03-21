@@ -48,7 +48,7 @@ export default function TradeGuardian({ signal, onClose }: { signal: any; onClos
         position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
         width: "min(480px, 92vw)",
         maxHeight: "90vh",
-        overflowY: "auto",
+        overflowY: "auto", WebkitOverflowScrolling: "touch",
         background: "rgba(10,12,18,0.95)",
         backdropFilter: "blur(32px)",
         border: "1px solid rgba(255,255,255,0.1)",
