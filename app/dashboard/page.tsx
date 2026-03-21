@@ -170,12 +170,34 @@ function EstClock() {
   );
 }
 
+
+// PWA Install prompt
+function usePWAInstall() {
+  const [prompt, setPrompt] = useState<any>(null);
+  const [installed, setInstalled] = useState(false);
+  useEffect(() => {
+    const handler = (e: any) => { e.preventDefault(); setPrompt(e); };
+    window.addEventListener('beforeinstallprompt', handler);
+    window.addEventListener('appinstalled', () => setInstalled(true));
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+  const install = async () => {
+    if (!prompt) return;
+    prompt.prompt();
+    const { outcome } = await prompt.userChoice;
+    if (outcome === 'accepted') setInstalled(true);
+    setPrompt(null);
+  };
+  return { canInstall: !!prompt && !installed, install, installed };
+}
+
 export default function Dashboard() {
   const [signals, setSignals] = useState<any[]>([]);
   const [mood, setMood] = useState<any>(null);
   const [filter, setFilter] = useState("ALL");
   const { user, isPro } = useAuth();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const { canInstall, install } = usePWAInstall();
   const [selected, setSelected] = useState<any>(null);
   const [detail, setDetail] = useState<any>(null);
   const [detailLoading, setDetailLoading] = useState(false);
@@ -597,6 +619,19 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             </>
           )}
         </div>
+
+        {/* PWA Install Banner */}
+        {canInstall && (
+          <div style={{ background: "rgba(0,255,136,0.08)", borderTop: "1px solid rgba(0,255,136,0.2)", padding: "8px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#00ff88" }}>📲 Install QuantSignal</div>
+              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.4)" }}>Add to home screen for instant access</div>
+            </div>
+            <button onClick={install} style={{ background: "#00ff88", border: "none", borderRadius: 6, padding: "6px 12px", fontSize: 10, fontWeight: 800, color: "#000", cursor: "pointer", fontFamily: "inherit" }}>
+              INSTALL
+            </button>
+          </div>
+        )}
 
         {/* Mobile bottom nav */}
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", background: "#0a0a0c", display: "flex", flexShrink: 0, paddingBottom: "env(safe-area-inset-bottom)", position: "relative" }}>
