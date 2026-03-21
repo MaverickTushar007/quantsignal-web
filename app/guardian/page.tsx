@@ -6,6 +6,24 @@ import TradeGuardian from "../components/TradeGuardian";
 export default function GuardianPage() {
   const [signals, setSignals] = useState<any[]>([]);
   const [selected, setSelected] = useState<any>(null);
+  const [loadingSignal, setLoadingSignal] = useState<string | null>(null);
+
+  const openGuardian = async (sig: any) => {
+    setLoadingSignal(sig.symbol);
+    try {
+      const res = await fetch(`https://web-production-1a093.up.railway.app/api/v1/signals/${sig.symbol}?reason=false`);
+      if (res.ok) {
+        const full = await res.json();
+        setSelected({ ...sig, ...full });
+      } else {
+        setSelected(sig);
+      }
+    } catch {
+      setSelected(sig);
+    } finally {
+      setLoadingSignal(null);
+    }
+  };
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("ALL");
 
@@ -69,7 +87,7 @@ export default function GuardianPage() {
         {/* Signal Grid */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12 }}>
           {filtered.map(sig => (
-            <button key={sig.symbol} onClick={() => setSelected(sig)}
+            <button key={sig.symbol} onClick={() => openGuardian(sig)}
               style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "16px", cursor: "pointer", textAlign: "left", fontFamily: "inherit", transition: "all 0.15s" }}
               onMouseEnter={e => (e.currentTarget.style.border = "1px solid rgba(0,255,136,0.3)")}
               onMouseLeave={e => (e.currentTarget.style.border = "1px solid rgba(255,255,255,0.07)")}>
@@ -83,7 +101,7 @@ export default function GuardianPage() {
                 <span style={{ color: dirColor(sig.direction) }}>{(sig.probability * 100).toFixed(0)}% confidence</span>
               </div>
               <div style={{ marginTop: 12, background: "rgba(0,255,136,0.08)", border: "1px solid rgba(0,255,136,0.15)", borderRadius: 6, padding: "6px 10px", fontSize: 10, fontWeight: 700, color: "#00ff88", textAlign: "center" }}>
-                🛡️ Run Guardian Check →
+                {loadingSignal === sig.symbol ? "⏳ Loading..." : "🛡️ Run Guardian Check →"}
               </div>
             </button>
           ))}
