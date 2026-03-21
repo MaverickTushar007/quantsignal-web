@@ -537,6 +537,10 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
         {/* Mobile bottom nav */}
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", background: "#0a0a0c", display: "flex", flexShrink: 0, paddingBottom: "env(safe-area-inset-bottom)" }}>
+          <a href="/guardian" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, padding: "8px 0", textDecoration: "none", gap: 3 }}>
+            <span style={{ fontSize: 14 }}>🛡️</span>
+            <span style={{ fontSize: 8, fontWeight: 700, color: "#00ff88", letterSpacing: "0.05em" }}>GUARDIAN</span>
+          </a>
           {[
             { id: "LIST", icon: List, label: "SIGNALS" },
             { id: "SIGNAL", icon: LayoutDashboard, label: "ANALYSIS" },
