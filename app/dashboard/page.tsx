@@ -15,6 +15,17 @@ import MarketSentiment from "../components/MarketSentiment";
 
 const API_BASE = "https://web-production-1a093.up.railway.app/api/v1";
 
+async function subscribeAlert(email: string, symbol: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_BASE}/alerts/subscribe`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, symbols: [symbol] }),
+    });
+    return res.ok;
+  } catch { return false; }
+}
+
 function formatPrice(price: number, type: string, symbol: string): string {
   if (type === "IN_STOCK" || symbol?.endsWith(".NS") || symbol?.endsWith(".BO")) {
     return "₹" + price?.toLocaleString("en-IN");
@@ -148,7 +159,7 @@ function EstClock() {
   const tz = TIMEZONES[tzIndex];
 
   return (
-    <div style={{ position: "relative" }}>
+    <div >
       <div onClick={() => setShowPicker(p => !p)} style={{ display: "flex", alignItems: "center", gap: 5, cursor: "pointer", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 6, padding: "3px 8px" }}>
         <span style={{ fontSize: 11 }}>{tz.flag}</span>
         <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", fontFamily: "'IBM Plex Mono', monospace" }}>{time}</span>
@@ -189,6 +200,63 @@ function usePWAInstall() {
     setPrompt(null);
   };
   return { canInstall: !!prompt && !installed, install, installed };
+}
+
+
+function AlertBell({ symbol }: { symbol: string }) {
+  const [state, setState] = useState<"idle"|"input"|"loading"|"done">("idle");
+  const [email, setEmail] = useState("");
+  const mono = "'IBM Plex Mono', monospace";
+
+  const submit = async () => {
+    if (!email || !email.includes("@")) return;
+    setState("loading");
+    const ok = await subscribeAlert(email, symbol);
+    setState(ok ? "done" : "idle");
+    if (ok) setTimeout(() => setState("idle"), 3000);
+  };
+
+  if (state === "done") return (
+    <span style={{ fontSize: 10, color: "#00ff88" }}>✓</span>
+  );
+
+  if (state === "input" || state === "loading") return (
+    <div style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", 
+      background: "#0e0f14", border: "1px solid rgba(0,255,136,0.3)", borderRadius: 8,
+      padding: "8px 10px", zIndex: 50, display: "flex", gap: 6, alignItems: "center",
+      boxShadow: "0 4px 20px rgba(0,0,0,0.6)" }}>
+      <input
+        autoFocus
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        onKeyDown={e => { if (e.key === "Enter") submit(); if (e.key === "Escape") setState("idle"); }}
+        placeholder="your@email.com"
+        style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)",
+          borderRadius: 5, padding: "5px 8px", color: "#fff", fontSize: 10, width: 150,
+          fontFamily: mono, outline: "none" }}
+      />
+      <button onClick={submit} disabled={state === "loading"} style={{
+        background: "#00ff88", border: "none", borderRadius: 5, padding: "5px 8px",
+        fontSize: 10, fontWeight: 700, color: "#000", cursor: "pointer", fontFamily: mono,
+      }}>
+        {state === "loading" ? "..." : "SET"}
+      </button>
+      <button onClick={() => setState("idle")} style={{
+        background: "transparent", border: "none", color: "rgba(255,255,255,0.3)",
+        cursor: "pointer", fontSize: 12, padding: "0 2px",
+      }}>✕</button>
+    </div>
+  );
+
+  return (
+    <button onClick={e => { e.stopPropagation(); setState("input"); }} style={{
+      background: "transparent", border: "none", cursor: "pointer",
+      color: "rgba(255,255,255,0.2)", fontSize: 12, padding: "0 2px",
+      transition: "color 0.15s", flexShrink: 0,
+    }} title="Get email alert for this signal">
+      🔔
+    </button>
+  );
 }
 
 export default function Dashboard() {
@@ -270,7 +338,7 @@ export default function Dashboard() {
             <div style={{ height: 8, background: "rgba(255,255,255,0.05)", borderRadius: 2, width: "60%" }} />
           </div>
         )) : filtered.map(sig => (
-          <div key={sig.symbol} onClick={() => selectAsset(sig)}
+          <div key={sig.symbol} onClick={() => selectAsset(sig)} 
             style={{ padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.03)", cursor: "pointer", background: selected?.symbol === sig.symbol ? "rgba(0,255,136,0.05)" : "transparent", borderLeft: selected?.symbol === sig.symbol ? "2px solid #00ff88" : "2px solid transparent" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3 }}>
               <span style={{ fontSize: 12, fontWeight: 600, color: selected?.symbol === sig.symbol ? "#00ff88" : "#e2e8f0" }}>{sig.display}</span>
@@ -278,6 +346,7 @@ export default function Dashboard() {
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "rgba(255,255,255,0.3)", alignItems: "center" }}>
               <span>{formatPrice(sig.current_price, sig.type, sig.symbol)}</span>
+              <AlertBell symbol={sig.symbol} />
               <span style={{ color: dirColor(sig.direction) }}>{(sig.probability * 100).toFixed(0)}%</span>
             </div>
           </div>
