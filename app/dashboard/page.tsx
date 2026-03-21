@@ -80,10 +80,6 @@ function LiquidityCard({ symbol }: { symbol: string }) {
         </div>
       ))}
     </div>
-      {guardianSignal && (
-        <TradeGuardian signal={guardianSignal} onClose={() => setGuardianSignal(null)} />
-      )}
-    </div>
   );
 }
 
@@ -674,7 +670,6 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         )}
       </div>
       <TutorialModal />
-    </div>
       {guardianSignal && (
         <TradeGuardian signal={guardianSignal} onClose={() => setGuardianSignal(null)} />
       )}
