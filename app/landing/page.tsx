@@ -89,7 +89,7 @@ export default function Landing() {
           <div className={`fade-in ${visible ? "visible" : ""}`}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(0,255,136,0.08)", border: "1px solid rgba(0,255,136,0.2)", borderRadius: 100, padding: "5px 14px", marginBottom: 28 }}>
               <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#00ff88", animation: "pulse-dot 2s infinite" }} />
-              <span style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.1em" }}>118 ASSETS · LIVE NOW</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.1em" }}>118 ASSETS · 67% WIN RATE</span>
             </div>
 
             <h1 className="hero-title" style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 58, fontWeight: 800, lineHeight: 1.05, marginBottom: 20, letterSpacing: "-0.02em" }}>
@@ -126,7 +126,7 @@ export default function Landing() {
             </div>
 
             <div className="hero-stats" style={{ display: "flex", gap: 32 }}>
-              {[["118", "Live Assets"], ["9", "Confluence Factors"], ["180d", "Backtest Window"]].map(([val, label]) => (
+              {[["118", "Live Assets"], ["9", "Confluence Factors"], ["2yr", "Training Window"]].map(([val, label]) => (
                 <div key={label}>
                   <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 28, fontWeight: 800, color: "#00ff88" }}>{val}</div>
                   <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.08em", marginTop: 2 }}>{label}</div>
@@ -234,8 +234,8 @@ export default function Landing() {
 
           <div className="proof-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
             {[
-              { val: "62%", label: "Avg Win Rate", sub: "walk-forward tested" },
-              { val: "1.84", label: "Sharpe Ratio", sub: "BTC 180d backtest" },
+              { val: "67%", label: "Avg Win Rate", sub: "across 11 assets tested" },
+              { val: "2.57", label: "Sharpe Ratio", sub: "stocks + forex + crypto" },
               { val: "2:1", label: "Risk/Reward", sub: "ATR-based targets" },
               { val: "118", label: "Live Assets", sub: "crypto, US & Indian stocks, forex" },
             ].map((s) => (
