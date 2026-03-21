@@ -126,12 +126,12 @@ export default function TradeGuardian({ signal, onClose }: { signal: any; onClos
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 16 }}>
               <div style={{ background: "rgba(255,68,102,0.08)", border: "1px solid rgba(255,68,102,0.15)", borderRadius: 10, padding: "12px 14px" }}>
                 <div style={{ fontSize: 9, color: "rgba(255,68,102,0.7)", marginBottom: 4, letterSpacing: "0.08em" }}>WORST CASE LOSS</div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: "#ff4466" }}>${result.max_loss_dollars.toLocaleString()}</div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: "#ff4466" }}>${(result.max_loss_dollars || 0).toLocaleString()}</div>
                 <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>{result.capital_at_risk}% of your capital</div>
               </div>
               <div style={{ background: "rgba(0,255,136,0.08)", border: "1px solid rgba(0,255,136,0.15)", borderRadius: 10, padding: "12px 14px" }}>
                 <div style={{ fontSize: 9, color: "rgba(0,255,136,0.7)", marginBottom: 4, letterSpacing: "0.08em" }}>BEST CASE GAIN</div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: "#00ff88" }}>${result.max_gain_dollars.toLocaleString()}</div>
+                <div style={{ fontSize: 20, fontWeight: 800, color: "#00ff88" }}>${(result.max_gain_dollars || 0).toLocaleString()}</div>
                 <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>{result.risk_reward}:1 reward/risk</div>
               </div>
             </div>
