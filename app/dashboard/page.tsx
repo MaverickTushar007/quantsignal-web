@@ -203,13 +203,7 @@ export default function Dashboard() {
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "rgba(255,255,255,0.3)", alignItems: "center" }}>
               <span>${sig.current_price?.toLocaleString()}</span>
-              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                <span style={{ color: dirColor(sig.direction) }}>{(sig.probability * 100).toFixed(0)}%</span>
-                <button onClick={e => { e.stopPropagation(); setGuardianSignal(sig); }}
-                  style={{ background: "rgba(0,255,136,0.08)", border: "1px solid rgba(0,255,136,0.2)", borderRadius: 4, padding: "2px 6px", fontSize: 8, fontWeight: 700, color: "#00ff88", cursor: "pointer", fontFamily: "inherit", letterSpacing: "0.05em" }}>
-                  🛡️
-                </button>
-              </div>
+              <span style={{ color: dirColor(sig.direction) }}>{(sig.probability * 100).toFixed(0)}%</span>
             </div>
           </div>
         ))}
