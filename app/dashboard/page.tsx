@@ -15,6 +15,19 @@ import MarketSentiment from "../components/MarketSentiment";
 
 const API_BASE = "https://web-production-1a093.up.railway.app/api/v1";
 
+function formatPrice(price: number, type: string, symbol: string): string {
+  if (type === "IN_STOCK" || symbol?.endsWith(".NS") || symbol?.endsWith(".BO")) {
+    return "₹" + price?.toLocaleString("en-IN");
+  }
+  if (type === "FOREX" || type === "CRYPTO") {
+    return "$" + price?.toLocaleString();
+  }
+  if (type === "COMMODITY" || type === "ETF" || type === "STOCK" || type === "INDEX") {
+    return "$" + price?.toLocaleString();
+  }
+  return "$" + price?.toLocaleString();
+}
+
 function LiquidityCard({ symbol }: { symbol: string }) {
   const [data, setData] = useState<any>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -205,7 +218,7 @@ export default function Dashboard() {
               <span style={badge(sig.direction)}>{sig.direction}</span>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "rgba(255,255,255,0.3)", alignItems: "center" }}>
-              <span>${sig.current_price?.toLocaleString()}</span>
+              <span>{formatPrice(sig.current_price, sig.type, sig.symbol)}</span>
               <span style={{ color: dirColor(sig.direction) }}>{(sig.probability * 100).toFixed(0)}%</span>
             </div>
           </div>
@@ -230,10 +243,10 @@ export default function Dashboard() {
 
 Asset: ${replayData.symbol}
 Date: ${replayData.replay_date}
-Price then: $${replayData.current_price.toLocaleString()}
+Price then: ${formatPrice(replayData.current_price, selected?.type, selected?.symbol)}
 Signal: ${replayData.direction} (${replayData.confidence} confidence, ${(replayData.probability * 100).toFixed(1)}% probability)
 Confluence: ${replayData.confluence_score}
-What happened 5 days later: price went to $${replayData.actual_price_5d?.toLocaleString()} (${replayData.actual_return_5d > 0 ? '+' : ''}${replayData.actual_return_5d}%)
+What happened 5 days later: price went to ${formatPrice(replayData.actual_price_5d, selected?.type, selected?.symbol)} (${replayData.actual_return_5d > 0 ? '+' : ''}${replayData.actual_return_5d}%)
 Was the signal correct: ${replayData.was_correct ? 'YES' : 'NO'}
 Top indicators at the time: ${replayData.confluence?.map((c: any) => c.name + ': ' + c.signal).join(', ')}
 
@@ -319,7 +332,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       {replayMode && replayData && (
         <div style={{ background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.2)", borderRadius: 6, padding: "6px 12px", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ fontSize: 9, fontWeight: 700, color: "#ffd700" }}>⏪ HISTORICAL SIGNAL — {replayDate}</span>
-          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)" }}>Price was ${replayData.current_price.toLocaleString()} · 5d later: ${replayData.actual_price_5d?.toLocaleString()}</span>
+          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)" }}>Price was {formatPrice(replayData.current_price, selected?.type, selected?.symbol)} · 5d later: {formatPrice(replayData.actual_price_5d, selected?.type, selected?.symbol)}</span>
           <button onClick={fetchReplayAI} style={{ marginLeft: "auto", background: "rgba(255,215,0,0.15)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 5, padding: "3px 10px", fontSize: 9, fontWeight: 700, color: "#ffd700", cursor: "pointer", fontFamily: "inherit" }}>🤖 Explain</button>
         </div>
       )}
@@ -528,7 +541,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                   </div>
                 </div>
                 <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>${(livePrice || selected.current_price)?.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>{formatPrice(livePrice || selected.current_price, selected.type, selected.symbol)}</div>
                   <div style={{ ...badge(selected.direction), display: "inline-block", marginTop: 2 }}>{selected.direction} · {(selected.probability * 100).toFixed(0)}%</div>
                 </div>
               </div>
@@ -649,7 +662,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                 </div>
               </div>
               <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: 22, fontWeight: 800, color: "#fff" }}>${(livePrice || selected.current_price)?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                <div style={{ fontSize: 22, fontWeight: 800, color: "#fff" }}>{formatPrice(livePrice || selected.current_price, selected.type, selected.symbol)}</div>
                 <div style={{ ...badge(selected.direction), display: "inline-block", marginTop: 4 }}>{selected.direction} · {(selected.probability * 100).toFixed(1)}%</div>
               </div>
             </div>
