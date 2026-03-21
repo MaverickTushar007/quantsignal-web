@@ -19,7 +19,7 @@ export default function AuthPage() {
     if (mode === "signup") {
       const { error } = await supabase.auth.signUp({ email, password });
       if (error) setError(error.message);
-      else setSuccess("Account created! You can now sign in.");
+      else router.push("/onboarding");
     } else {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) setError(error.message);
