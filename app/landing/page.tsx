@@ -45,6 +45,20 @@ export default function Landing() {
         @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
         @keyframes fadeSlide { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+        @media (max-width: 768px) {
+          .hero-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+          .hero-card { display: none !important; }
+          .hero-title { font-size: 36px !important; }
+          .features-grid { grid-template-columns: 1fr !important; }
+          .proof-grid { grid-template-columns: 1fr 1fr !important; }
+          .pricing-grid { grid-template-columns: 1fr !important; }
+          .footer-inner { flex-direction: column !important; gap: 12px !important; text-align: center; }
+          .nav-links { display: none !important; }
+          .nav-cta { font-size: 10px !important; padding: 6px 10px !important; }
+          .hero-stats { gap: 16px !important; }
+          .section-pad { padding: 60px 20px !important; }
+          .hero-section { padding: 100px 20px 60px !important; }
+        }
       `}</style>
 
       {/* NAV */}
@@ -59,18 +73,18 @@ export default function Landing() {
           <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: "0.05em", color: "#fff" }}>QUANT<span style={{ color: "#00ff88" }}>SIGNAL</span></span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-          <a href="#features" style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textDecoration: "none", letterSpacing: "0.08em" }}>FEATURES</a>
-          <a href="#proof" style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textDecoration: "none", letterSpacing: "0.08em" }}>PROOF</a>
-          <a href="#pricing" style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textDecoration: "none", letterSpacing: "0.08em" }}>PRICING</a>
+          <a href="#features" className="nav-links" style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textDecoration: "none", letterSpacing: "0.08em" }}>FEATURES</a>
+          <a href="#proof" className="nav-links" style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textDecoration: "none", letterSpacing: "0.08em" }}>PROOF</a>
+          <a href="#pricing" className="nav-links" style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textDecoration: "none", letterSpacing: "0.08em" }}>PRICING</a>
           <a href="/dashboard" style={{ fontSize: 11, fontWeight: 700, color: "#000", background: "#00ff88", borderRadius: 6, padding: "7px 16px", textDecoration: "none", letterSpacing: "0.05em" }}>LAUNCH APP →</a>
         </div>
       </nav>
 
       {/* HERO */}
-      <section className="grid-bg" style={{ paddingTop: 120, paddingBottom: 80, position: "relative" }}>
+      <section className="grid-bg hero-section" style={{ paddingTop: 120, paddingBottom: 80, position: "relative" }}>
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,255,136,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
 
-        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 32px", display: "grid", gridTemplateColumns: "1fr 420px", gap: 60, alignItems: "center" }}>
+        <div className="hero-grid" style={{ maxWidth: 1100, margin: "0 auto", padding: "0 20px", display: "grid", gridTemplateColumns: "1fr 420px", gap: 60, alignItems: "center" }}>
           {/* LEFT */}
           <div className={`fade-in ${visible ? "visible" : ""}`}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(0,255,136,0.08)", border: "1px solid rgba(0,255,136,0.2)", borderRadius: 100, padding: "5px 14px", marginBottom: 28 }}>
@@ -78,7 +92,7 @@ export default function Landing() {
               <span style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.1em" }}>118 ASSETS · LIVE NOW</span>
             </div>
 
-            <h1 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 58, fontWeight: 800, lineHeight: 1.05, marginBottom: 20, letterSpacing: "-0.02em" }}>
+            <h1 className="hero-title" style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 58, fontWeight: 800, lineHeight: 1.05, marginBottom: 20, letterSpacing: "-0.02em" }}>
               The trading signal
               <br />
               that{" "}
@@ -111,7 +125,7 @@ export default function Landing() {
               </a>
             </div>
 
-            <div style={{ display: "flex", gap: 32 }}>
+            <div className="hero-stats" style={{ display: "flex", gap: 32 }}>
               {[["118", "Live Assets"], ["9", "Confluence Factors"], ["180d", "Backtest Window"]].map(([val, label]) => (
                 <div key={label}>
                   <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 28, fontWeight: 800, color: "#00ff88" }}>{val}</div>
@@ -122,7 +136,7 @@ export default function Landing() {
           </div>
 
           {/* RIGHT — Live signal card */}
-          <div className={`fade-in ${visible ? "visible" : ""}`} style={{ transitionDelay: "0.2s" }}>
+          <div className={`hero-card fade-in ${visible ? "visible" : ""}`} style={{ transitionDelay: "0.2s" }}>
             <div className="glow-green" style={{
               background: "rgba(10,12,20,0.9)", border: "1px solid rgba(0,255,136,0.2)",
               borderRadius: 16, padding: 20, animation: "float 6s ease-in-out infinite",
@@ -178,7 +192,7 @@ export default function Landing() {
       </div>
 
       {/* FEATURES */}
-      <section id="features" style={{ padding: "100px 32px", maxWidth: 1100, margin: "0 auto" }}>
+      <section id="features" className="section-pad" style={{ padding: "100px 32px", maxWidth: 1100, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 60 }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.15em", marginBottom: 12 }}>WHAT MAKES IT DIFFERENT</div>
           <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 40, fontWeight: 800, letterSpacing: "-0.02em" }}>
@@ -187,7 +201,7 @@ export default function Landing() {
           </h2>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
+        <div className="features-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16 }}>
           {[
             { icon: "🧠", title: "ML Ensemble", desc: "XGBoost + LightGBM trained on 180 days of OHLCV data. Walk-forward validated. No curve-fitting.", color: "#00ff88" },
             { icon: "📊", title: "9-Factor Confluence", desc: "RSI, MACD, Bollinger, Stochastic, Volume, SMA Cross, 52W Position, Momentum — all scored together.", color: "#00aaff" },
@@ -209,7 +223,7 @@ export default function Landing() {
       </section>
 
       {/* PROOF */}
-      <section id="proof" style={{ background: "rgba(0,255,136,0.02)", borderTop: "1px solid rgba(0,255,136,0.08)", borderBottom: "1px solid rgba(0,255,136,0.08)", padding: "100px 32px" }}>
+      <section id="proof" className="section-pad" style={{ background: "rgba(0,255,136,0.02)", borderTop: "1px solid rgba(0,255,136,0.08)", borderBottom: "1px solid rgba(0,255,136,0.08)", padding: "100px 32px" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 60 }}>
             <div style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.15em", marginBottom: 12 }}>THE PROOF</div>
@@ -218,7 +232,7 @@ export default function Landing() {
             </h2>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+          <div className="proof-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
             {[
               { val: "62%", label: "Avg Win Rate", sub: "walk-forward tested" },
               { val: "1.84", label: "Sharpe Ratio", sub: "BTC 180d backtest" },
@@ -236,13 +250,13 @@ export default function Landing() {
       </section>
 
       {/* PRICING */}
-      <section id="pricing" style={{ padding: "100px 32px", maxWidth: 800, margin: "0 auto" }}>
+      <section id="pricing" className="section-pad" style={{ padding: "100px 32px", maxWidth: 800, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 60 }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.15em", marginBottom: 12 }}>PRICING</div>
           <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 40, fontWeight: 800, letterSpacing: "-0.02em" }}>Simple. No tricks.</h2>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        <div className="pricing-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
           {/* Free */}
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 16, padding: 32 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 16 }}>FREE</div>
@@ -300,7 +314,7 @@ export default function Landing() {
       </section>
 
       {/* FOOTER */}
-      <footer style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "24px 32px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <footer style={{ borderTop: "1px solid rgba(255,255,255,0.05)", padding: "24px 20px" }}><div className="footer-inner" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ width: 22, height: 22, background: "linear-gradient(135deg, #00ff88, #00cc66)", borderRadius: 5, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 800, color: "#000" }}>Q</div>
           <span style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.4)" }}>QUANTSIGNAL</span>
@@ -311,7 +325,7 @@ export default function Landing() {
           <a href="/portfolio" style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", textDecoration: "none" }}>Portfolio</a>
         </div>
         <div style={{ fontSize: 11, color: "rgba(255,255,255,0.2)" }}>© 2026 QuantSignal</div>
-      </footer>
+      </div></footer>
     </div>
   );
 }
