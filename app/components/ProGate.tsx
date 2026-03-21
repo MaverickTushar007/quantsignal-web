@@ -1,8 +1,7 @@
-// Set to true to disable paywall during beta
-const BETA_MODE = true;
-
 "use client";
 import { useRouter } from "next/navigation";
+
+const BETA_MODE = true;
 
 const API_BASE = "https://web-production-1a093.up.railway.app/api/v1";
 
@@ -41,37 +40,28 @@ export default function ProGate({
 
   return (
     <div style={{ position: "relative" }}>
-      {/* Blurred content */}
       <div style={{ filter: "blur(4px)", pointerEvents: "none", userSelect: "none", opacity: 0.4 }}>
         {children}
       </div>
-
-      {/* Overlay */}
       <div style={{
         position: "absolute", inset: 0,
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "center",
         background: "rgba(8,10,15,0.7)",
         backdropFilter: "blur(2px)",
-        borderRadius: 12,
-        padding: 24,
-        textAlign: "center",
+        borderRadius: 12, padding: 24, textAlign: "center",
         fontFamily: "'IBM Plex Mono', monospace",
       }}>
         <div style={{ fontSize: 28, marginBottom: 10 }}>🔒</div>
-        <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 6 }}>
-          {featureName}
-        </div>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 6 }}>{featureName}</div>
         <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginBottom: 20, lineHeight: 1.6, maxWidth: 260 }}>
           This is a Pro feature. Upgrade to unlock Historical Replay, Trade Guardian, Liquidity Levels, and Portfolio Lab.
         </div>
         <button onClick={handleUpgrade} style={{
           background: "linear-gradient(135deg, #00ff88, #00cc66)",
-          border: "none", borderRadius: 10,
-          padding: "12px 28px",
-          fontSize: 12, fontWeight: 700,
-          color: "#000", cursor: "pointer",
-          fontFamily: "inherit", marginBottom: 10,
+          border: "none", borderRadius: 10, padding: "12px 28px",
+          fontSize: 12, fontWeight: 700, color: "#000",
+          cursor: "pointer", fontFamily: "inherit", marginBottom: 10,
         }}>
           ✨ Upgrade to Pro — ₹999/month
         </button>
