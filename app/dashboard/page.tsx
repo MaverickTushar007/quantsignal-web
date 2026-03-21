@@ -541,6 +541,10 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <span style={{ fontSize: 14 }}>🛡️</span>
             <span style={{ fontSize: 8, fontWeight: 700, color: "#00ff88", letterSpacing: "0.05em" }}>GUARDIAN</span>
           </a>
+          <a href="/portfolio" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, padding: "8px 0", textDecoration: "none", gap: 3 }}>
+            <span style={{ fontSize: 14 }}>📊</span>
+            <span style={{ fontSize: 8, fontWeight: 700, color: "#00aaff", letterSpacing: "0.05em" }}>PORTFOLIO</span>
+          </a>
           {[
             { id: "LIST", icon: List, label: "SIGNALS" },
             { id: "SIGNAL", icon: LayoutDashboard, label: "ANALYSIS" },
@@ -578,6 +582,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <button onClick={() => window.dispatchEvent(new Event("open-tutorial"))} style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", background: "transparent", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "2px 8px", cursor: "pointer", fontFamily: "inherit" }}>TUTORIAL</button>
             <a href="/how-it-works" style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", textDecoration: "none", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "2px 8px" }}>HOW IT WORKS</a>
             <a href="/guardian" style={{ fontSize: 10, color: "#00ff88", textDecoration: "none", border: "1px solid rgba(0,255,136,0.3)", borderRadius: 4, padding: "2px 8px", background: "rgba(0,255,136,0.08)" }}>🛡️ GUARDIAN</a>
+            <a href="/portfolio" style={{ fontSize: 10, color: "#00aaff", textDecoration: "none", border: "1px solid rgba(0,170,255,0.3)", borderRadius: 4, padding: "2px 8px", background: "rgba(0,170,255,0.08)" }}>📊 PORTFOLIO</a>
           </div>
           <span style={{ color: activeWindow ? activeWindow.color : "rgba(255,255,255,0.2)", fontSize: 10, fontWeight: 600 }}>
             {activeWindow ? `● ${activeWindow.label}` : "● MARKET CLOSED"}
