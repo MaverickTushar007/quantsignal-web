@@ -139,6 +139,7 @@ export default function Dashboard() {
   const [mood, setMood] = useState<any>(null);
   const [filter, setFilter] = useState("ALL");
   const { user, isPro } = useAuth();
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [selected, setSelected] = useState<any>(null);
   const [detail, setDetail] = useState<any>(null);
   const [detailLoading, setDetailLoading] = useState(false);
@@ -562,35 +563,59 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         </div>
 
         {/* Mobile bottom nav */}
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", background: "#0a0a0c", display: "flex", flexShrink: 0, paddingBottom: "env(safe-area-inset-bottom)" }}>
-          <a href="/guardian" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, padding: "8px 0", textDecoration: "none", gap: 3 }}>
-            <span style={{ fontSize: 14 }}>🛡️</span>
-            <span style={{ fontSize: 8, fontWeight: 700, color: "#00ff88", letterSpacing: "0.05em" }}>GUARDIAN</span>
-          </a>
-          <a href="/portfolio" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", flex: 1, padding: "8px 0", textDecoration: "none", gap: 3 }}>
-            <span style={{ fontSize: 14 }}>📊</span>
-            <span style={{ fontSize: 8, fontWeight: 700, color: "#00aaff", letterSpacing: "0.05em" }}>PORTFOLIO</span>
-          </a>
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", background: "#0a0a0c", display: "flex", flexShrink: 0, paddingBottom: "env(safe-area-inset-bottom)", position: "relative" }}>
+          {/* Hamburger menu overlay */}
+          {showMobileMenu && (
+            <div style={{ position: "fixed", inset: 0, zIndex: 100 }} onClick={() => setShowMobileMenu(false)}>
+              <div style={{ position: "absolute", bottom: 60, left: 0, right: 0, background: "#0e0f14", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px 16px 0 0", padding: "16px 0" }} onClick={e => e.stopPropagation()}>
+                <div style={{ fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: "0.15em", padding: "0 20px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)", marginBottom: 8 }}>MORE</div>
+                {[
+                  { href: "/guardian", icon: "🛡️", label: "Trade Guardian", desc: "Risk check before entering" },
+                  { href: "/portfolio", icon: "📊", label: "Portfolio Lab", desc: "Optimize your holdings" },
+                  { id: "NEWS", icon: "📰", label: "News Feed", desc: "Live market news" },
+                  { id: "ANALYSIS", icon: "📈", label: "Signal Analysis", desc: "Full ML breakdown" },
+                ].map(item => (
+                  <div key={item.href || item.id} onClick={() => {
+                    if (item.href) window.location.href = item.href;
+                    else { setMobilePanel(item.id!); setShowMobileMenu(false); }
+                  }} style={{ display: "flex", alignItems: "center", gap: 14, padding: "12px 20px", cursor: "pointer", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                    <span style={{ fontSize: 20 }}>{item.icon}</span>
+                    <div>
+                      <div style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>{item.label}</div>
+                      <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>{item.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 3 main tabs */}
           {[
             { id: "LIST", icon: List, label: "SIGNALS" },
-            { id: "SIGNAL", icon: LayoutDashboard, label: "ANALYSIS" },
-            { id: "NEWS", icon: Newspaper, label: "NEWS" },
             { id: "CHAT", icon: MessageSquare, label: "PERSEUS" },
             { id: "CALENDAR", icon: Calendar, label: "CALENDAR" },
           ].map(tab => {
             const active = mobilePanel === tab.id;
             return (
               <button key={tab.id}
-                onClick={() => {
-                  if (tab.id !== "LIST" && !selected) return;
-                  setMobilePanel(tab.id);
-                }}
+                onClick={() => { if (tab.id !== "LIST" && !selected) return; setMobilePanel(tab.id); setShowMobileMenu(false); }}
                 style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "10px 0", background: "transparent", border: "none", borderTop: `2px solid ${active ? "#00ff88" : "transparent"}`, color: active ? "#00ff88" : "rgba(255,255,255,0.3)", cursor: "pointer", fontFamily: "inherit", gap: 3 }}>
                 <tab.icon size={16} color={active ? "#00ff88" : "rgba(255,255,255,0.3)"} />
                 <span style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.05em" }}>{tab.label}</span>
               </button>
             );
           })}
+
+          {/* Hamburger */}
+          <button onClick={() => setShowMobileMenu(m => !m)} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "10px 0", background: "transparent", border: "none", borderTop: `2px solid ${showMobileMenu ? "#00ff88" : "transparent"}`, color: showMobileMenu ? "#00ff88" : "rgba(255,255,255,0.3)", cursor: "pointer", fontFamily: "inherit", gap: 3 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+              <div style={{ width: 16, height: 2, background: showMobileMenu ? "#00ff88" : "rgba(255,255,255,0.3)", borderRadius: 1 }} />
+              <div style={{ width: 16, height: 2, background: showMobileMenu ? "#00ff88" : "rgba(255,255,255,0.3)", borderRadius: 1 }} />
+              <div style={{ width: 16, height: 2, background: showMobileMenu ? "#00ff88" : "rgba(255,255,255,0.3)", borderRadius: 1 }} />
+            </div>
+            <span style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.05em" }}>MORE</span>
+          </button>
         </div>
         <TutorialModal />
       </div>
