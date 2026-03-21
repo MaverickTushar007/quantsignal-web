@@ -3627,6 +3627,11 @@
       "imports": [],
       "format": "cjs"
     },
+    ".open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js": {
+      "bytes": 6302,
+      "imports": [],
+      "format": "cjs"
+    },
     ".open-next/server-functions/default/.next/server/app/auth/page_client-reference-manifest.js": {
       "bytes": 6099,
       "imports": [],
@@ -3639,11 +3644,6 @@
     },
     ".open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js": {
       "bytes": 5224,
-      "imports": [],
-      "format": "cjs"
-    },
-    ".open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js": {
-      "bytes": 6302,
       "imports": [],
       "format": "cjs"
     },
@@ -3696,6 +3696,11 @@
           "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/guardian/page_client-reference-manifest.js"
         },
         {
+          "path": ".open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js",
+          "kind": "require-call",
+          "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js"
+        },
+        {
           "path": ".open-next/server-functions/default/.next/server/app/auth/page_client-reference-manifest.js",
           "kind": "require-call",
           "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/auth/page_client-reference-manifest.js"
@@ -3709,11 +3714,6 @@
           "path": ".open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js",
           "kind": "require-call",
           "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js"
-        },
-        {
-          "path": ".open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js",
-          "kind": "require-call",
-          "original": "/Users/tusharbhatt/Desktop/quantsignal-web/.open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js"
         }
       ],
       "format": "cjs"
@@ -4472,7 +4472,7 @@
       "format": "cjs"
     },
     ".open-next/server-functions/default/.next/server/chunks/ssr/[root-of-the-server]__fd9b43ba._.js": {
-      "bytes": 338494,
+      "bytes": 339357,
       "imports": [
         {
           "path": "node:path",
@@ -8167,6 +8167,9 @@
         ".open-next/server-functions/default/.next/server/app/guardian/page_client-reference-manifest.js": {
           "bytesInOutput": 5660
         },
+        ".open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js": {
+          "bytesInOutput": 6002
+        },
         ".open-next/server-functions/default/.next/server/app/auth/page_client-reference-manifest.js": {
           "bytesInOutput": 5794
         },
@@ -8175,9 +8178,6 @@
         },
         ".open-next/server-functions/default/.next/server/app/_global-error/page_client-reference-manifest.js": {
           "bytesInOutput": 4990
-        },
-        ".open-next/server-functions/default/.next/server/app/dashboard/page_client-reference-manifest.js": {
-          "bytesInOutput": 6002
         },
         ".open-next/server-functions/default/node_modules/next/dist/server/load-manifest.external.js": {
           "bytesInOutput": 17890
@@ -8324,7 +8324,7 @@
           "bytesInOutput": 12078
         },
         ".open-next/server-functions/default/.next/server/chunks/ssr/[root-of-the-server]__fd9b43ba._.js": {
-          "bytesInOutput": 377841
+          "bytesInOutput": 378704
         },
         ".open-next/server-functions/default/.next/server/chunks/ssr/_5c5d5a9d._.js": {
           "bytesInOutput": 18199
@@ -8597,7 +8597,7 @@
           "bytesInOutput": 60040
         }
       },
-      "bytes": 3463200
+      "bytes": 3464063
     }
   }
 }
