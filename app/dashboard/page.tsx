@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useAuth } from "../lib/useAuth";
+import ProGate from "../components/ProGate";
 import { fetchAllSignals, fetchMarketMood, fetchSignal } from "../lib/api";
 import TradingChart from "../components/TradingChart";
 import TutorialModal from "../components/TutorialModal";
@@ -123,6 +125,7 @@ export default function Dashboard() {
   const [signals, setSignals] = useState<any[]>([]);
   const [mood, setMood] = useState<any>(null);
   const [filter, setFilter] = useState("ALL");
+  const { user, isPro } = useAuth();
   const [selected, setSelected] = useState<any>(null);
   const [detail, setDetail] = useState<any>(null);
   const [detailLoading, setDetailLoading] = useState(false);
@@ -287,7 +290,16 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       {/* LIVE / REPLAY toggle */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16, padding: "8px 0", borderBottom: "1px solid rgba(0,255,136,0.15)", minHeight: 36, background: "rgba(0,255,136,0.03)" }}>
         <button onClick={() => { setReplayMode(false); setReplayData(null); }} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "none", background: !replayMode ? "#00ff88" : "rgba(255,255,255,0.06)", color: !replayMode ? "#000" : "rgba(255,255,255,0.4)" }}>● LIVE</button>
-        <button onClick={() => setReplayMode(true)} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "none", background: replayMode ? "#ffd700" : "rgba(255,255,255,0.06)", color: replayMode ? "#000" : "rgba(255,255,255,0.4)" }}>⏪ REPLAY</button>
+        {isPro ? (
+          <button onClick={() => setReplayMode(true)} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "none", background: replayMode ? "#ffd700" : "rgba(255,255,255,0.06)", color: replayMode ? "#000" : "rgba(255,255,255,0.4)" }}>⏪ REPLAY</button>
+        ) : (
+          <button onClick={async () => {
+            if (!user) { window.location.href = "/auth"; return; }
+            const res = await fetch("https://web-production-1a093.up.railway.app/api/v1/payments/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: user.email, user_id: user.id }) });
+            const d = await res.json();
+            if (d.checkout_url) window.location.href = d.checkout_url;
+          }} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "1px solid rgba(255,215,0,0.3)", background: "rgba(255,215,0,0.08)", color: "#ffd700" }}>🔒 REPLAY · PRO</button>
+        )}
         {replayMode && (
           <input type="date" value={replayDate}
             max={new Date(Date.now() - 86400000).toISOString().split("T")[0]}
@@ -444,7 +456,9 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
       {/* Liquidity Levels Card */}
       {selected && ["BTC-USD","ETH-USD","SOL-USD","BNB-USD","XRP-USD","DOGE-USD","ADA-USD","AVAX-USD","DOT-USD","LINK-USD"].includes(selected.symbol) && (
-        <LiquidityCard symbol={selected.symbol} />
+        <ProGate isPro={isPro} user={user} featureName="Liquidity Levels">
+          <LiquidityCard symbol={selected.symbol} />
+        </ProGate>
       )}
       <div style={{ marginBottom: 20 }}>
         <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", marginBottom: 10, letterSpacing: "0.1em" }}>ML PROBABILITY</div>
@@ -582,6 +596,13 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <button onClick={() => window.dispatchEvent(new Event("open-tutorial"))} style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", background: "transparent", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "2px 8px", cursor: "pointer", fontFamily: "inherit" }}>TUTORIAL</button>
             <a href="/how-it-works" style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", textDecoration: "none", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "2px 8px" }}>HOW IT WORKS</a>
             <a href="/guardian" style={{ fontSize: 10, color: "#00ff88", textDecoration: "none", border: "1px solid rgba(0,255,136,0.3)", borderRadius: 4, padding: "2px 8px", background: "rgba(0,255,136,0.08)" }}>🛡️ GUARDIAN</a>
+            {user ? (
+              <span style={{ fontSize: 10, fontWeight: 700, color: isPro ? "#ffd700" : "rgba(255,255,255,0.3)", border: isPro ? "1px solid rgba(255,215,0,0.3)" : "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "2px 8px", background: isPro ? "rgba(255,215,0,0.08)" : "transparent" }}>
+                {isPro ? "✨ PRO" : "FREE"}
+              </span>
+            ) : (
+              <a href="/auth" style={{ fontSize: 10, color: "#fff", textDecoration: "none", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 4, padding: "2px 8px", background: "rgba(255,255,255,0.06)" }}>Sign In</a>
+            )}
             <a href="/portfolio" style={{ fontSize: 10, color: "#00aaff", textDecoration: "none", border: "1px solid rgba(0,170,255,0.3)", borderRadius: 4, padding: "2px 8px", background: "rgba(0,170,255,0.08)" }}>📊 PORTFOLIO</a>
           </div>
           <span style={{ color: activeWindow ? activeWindow.color : "rgba(255,255,255,0.2)", fontSize: 10, fontWeight: 600 }}>
