@@ -105,6 +105,30 @@ export default function Performance() {
           </div>
         )}
 
+
+        {/* Explainer box */}
+        <div style={{ background: "rgba(0,170,255,0.04)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 10, padding: "14px 16px", marginBottom: 16 }}>
+          <div style={{ fontSize: 9, fontWeight: 800, color: "#00aaff", letterSpacing: "0.12em", marginBottom: 8 }}>HOW THIS WORKS</div>
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)", lineHeight: 1.8 }}>
+            Every day our ML model generates BUY/SELL/HOLD signals for 186 assets. This page shows what would have happened if you followed those signals over the last 90 days.
+          </div>
+          <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 6 }}>
+            {[
+              { label: "TP HIT", color: "#00ff88", desc: "Price reached the take-profit target → profitable trade" },
+              { label: "SL HIT", color: "#ff4466", desc: "Price hit the stop-loss before TP → trade closed at loss" },
+              { label: "EXPIRED", color: "rgba(255,255,255,0.3)", desc: "Neither TP nor SL hit within 5 days → closed at market price" },
+            ].map(r => (
+              <div key={r.label} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                <span style={{ fontSize: 8, fontWeight: 800, color: r.color, background: "rgba(255,255,255,0.05)", padding: "2px 6px", borderRadius: 3, flexShrink: 0, marginTop: 1 }}>{r.label}</span>
+                <span style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", lineHeight: 1.6 }}>{r.desc}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 10, fontSize: 9, color: "rgba(255,255,255,0.2)", lineHeight: 1.6 }}>
+            P&L is calculated as % move from entry to exit. Cumulative P&L adds up all trades equally weighted. Not financial advice — past performance does not guarantee future results.
+          </div>
+        </div>
+
         {/* Filter tabs */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 6, marginBottom: 16 }}>
           {[
