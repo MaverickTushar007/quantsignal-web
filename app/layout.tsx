@@ -10,13 +10,7 @@ export const metadata: Metadata = {
     statusBarStyle: "black-translucent",
     title: "QuantSignal",
   },
-  themeColor: "#00ff88",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
+
   icons: {
     icon: [
       { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
@@ -37,6 +31,14 @@ export const metadata: Metadata = {
     title: "QuantSignal — ML Trading Signals",
     description: "186 live signals. 67% win rate. Indian + US + Crypto + Forex.",
   },
+};
+
+export const viewport = {
+  themeColor: "#00ff88",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
