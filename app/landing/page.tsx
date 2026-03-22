@@ -249,6 +249,74 @@ export default function Landing() {
         </div>
       </section>
 
+
+      {/* MCP / AI INTEGRATION SECTION */}
+      <section style={{ padding: "100px 32px", maxWidth: 900, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.15em", marginBottom: 12 }}>FOR DEVELOPERS & AI POWER USERS</div>
+          <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 36, fontWeight: 800, letterSpacing: "-0.02em", color: "#fff", marginBottom: 16 }}>
+            Use QuantSignal inside Claude
+          </h2>
+          <p style={{ fontSize: 14, color: "rgba(255,255,255,0.4)", maxWidth: 520, margin: "0 auto", lineHeight: 1.8 }}>
+            QuantSignal is available as an MCP server. Ask Claude Desktop for live signals directly — no browser needed.
+          </p>
+        </div>
+
+        {/* Demo output */}
+        <div style={{ background: "rgba(0,255,136,0.03)", border: "1px solid rgba(0,255,136,0.15)", borderRadius: 16, padding: 32, marginBottom: 32 }}>
+          <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.12em", marginBottom: 16 }}>EXAMPLE — ASK CLAUDE DESKTOP:</div>
+          <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 8, padding: "12px 16px", marginBottom: 20, fontFamily: "monospace", fontSize: 13, color: "#00ff88", borderLeft: "3px solid #00ff88" }}>
+            "What is the signal for Reliance and Nifty 50 today?"
+          </div>
+          <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.12em", marginBottom: 12 }}>CLAUDE RESPONDS WITH LIVE DATA:</div>
+          <div style={{ background: "#0a0a0f", borderRadius: 8, padding: 16, fontFamily: "monospace", fontSize: 12, lineHeight: 2, color: "rgba(255,255,255,0.7)" }}>
+            <span style={{ color: "#00ff88" }}>Nifty 50</span> — <span style={{ color: "#00ff88" }}>BUY</span> · 93% probability · High confidence<br/>
+            <span style={{ color: "rgba(255,255,255,0.4)" }}>Target ₹23,806 · Stop ₹22,768 · R/R 2.1x</span><br/>
+            <br/>
+            <span style={{ color: "#00ff88" }}>Reliance</span> — <span style={{ color: "#00ff88" }}>BUY</span> · 61% probability · Medium confidence<br/>
+            <span style={{ color: "rgba(255,255,255,0.4)" }}>Target ₹1,485 · Stop ₹1,378 · R/R 2.0x</span>
+          </div>
+        </div>
+
+        {/* Setup steps */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginBottom: 32 }}>
+          {[
+            { step: "01", title: "Download Claude Desktop", desc: "Get the free Claude Desktop app from anthropic.com" },
+            { step: "02", title: "Add MCP config", desc: "Paste one JSON snippet into your claude_desktop_config.json" },
+            { step: "03", title: "Ask Claude anything", desc: 'Ask "What's the signal for BTC today?" — live data instantly' },
+          ].map(s => (
+            <div key={s.step} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: 24 }}>
+              <div style={{ fontSize: 28, fontWeight: 800, color: "rgba(0,255,136,0.3)", marginBottom: 12 }}>{s.step}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#fff", marginBottom: 8 }}>{s.title}</div>
+              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", lineHeight: 1.7 }}>{s.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Config snippet */}
+        <div style={{ background: "#0a0a0f", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 24 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.12em" }}>claude_desktop_config.json</span>
+            <span style={{ fontSize: 9, color: "#00ff88", letterSpacing: "0.1em" }}>PASTE THIS</span>
+          </div>
+          <pre style={{ margin: 0, fontFamily: "monospace", fontSize: 12, color: "rgba(255,255,255,0.7)", lineHeight: 1.8, overflow: "auto" }}>{`{
+  "mcpServers": {
+    "quantsignal": {
+      "command": "python3",
+      "args": ["quantsignal-mcp.py"]
+    }
+  }
+}`}</pre>
+        </div>
+
+        <div style={{ textAlign: "center", marginTop: 32 }}>
+          <a href="https://github.com/MaverickTushar007/quantsignal-api" target="_blank"
+            style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8, padding: "10px 20px", color: "rgba(255,255,255,0.6)", fontSize: 12, textDecoration: "none", fontFamily: "inherit" }}>
+            <span>⭐</span> View MCP setup guide on GitHub
+          </a>
+        </div>
+      </section>
+
       {/* PRICING */}
       <section id="pricing" className="section-pad" style={{ padding: "100px 32px", maxWidth: 800, margin: "0 auto" }}>
         <div style={{ textAlign: "center", marginBottom: 60 }}>
