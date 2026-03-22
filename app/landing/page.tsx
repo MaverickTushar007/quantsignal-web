@@ -283,7 +283,7 @@ export default function Landing() {
           {[
             { step: "01", title: "Download Claude Desktop", desc: "Get the free Claude Desktop app from anthropic.com" },
             { step: "02", title: "Add MCP config", desc: "Paste one JSON snippet into your claude_desktop_config.json" },
-            { step: "03", title: "Ask Claude anything", desc: 'Ask "What's the signal for BTC today?" — live data instantly' },
+            { step: "03", title: "Ask Claude anything", desc: "Ask for any signal — live data instantly" },
           ].map(s => (
             <div key={s.step} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: 24 }}>
               <div style={{ fontSize: 28, fontWeight: 800, color: "rgba(0,255,136,0.3)", marginBottom: 12 }}>{s.step}</div>
