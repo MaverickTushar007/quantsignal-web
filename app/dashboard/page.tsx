@@ -259,6 +259,36 @@ function AlertBell({ symbol }: { symbol: string }) {
   );
 }
 
+function generateOneLiner(sig: any): string {
+  if (!sig) return "";
+  const dir = sig.direction;
+  const prob = sig.probability;
+  const conf = sig.confidence?.toLowerCase() || "moderate";
+  const bulls = sig.confluence_score ? parseInt(sig.confluence_score.split("/")[0]) : 5;
+  const name = sig.display || sig.symbol;
+  const features: string[] = sig.top_features || [];
+  const driver = features[0] || "momentum";
+  const agreement = bulls >= 7 ? "broad market agreement" : bulls >= 5 ? "mixed signals" : "contrarian setup";
+  const strength = prob >= 0.75 ? "strong" : prob >= 0.6 ? "moderate" : "marginal";
+  if (dir === "BUY") {
+    const setups = [
+      `${name} is showing ${strength} bullish momentum — ${driver} aligns with ${agreement} across ${bulls}/9 indicators.`,
+      `Technical structure favors upside for ${name}: ${driver} is the primary driver with ${agreement}.`,
+      `${name} has a ${conf}-confidence BUY setup — ${bulls}/9 factors bullish, led by ${driver}.`,
+    ];
+    return setups[bulls % setups.length];
+  } else if (dir === "SELL") {
+    const setups = [
+      `${name} shows ${strength} bearish pressure — ${driver} is deteriorating with only ${bulls}/9 factors bullish.`,
+      `Distribution signals on ${name}: ${driver} turning negative, ${agreement} to the downside.`,
+      `${name} has a ${conf}-confidence SELL setup — bearish confluence building across key indicators.`,
+    ];
+    return setups[bulls % setups.length];
+  } else {
+    return `${name} is range-bound — ${driver} lacks directional conviction. Wait for a cleaner setup before entering.`;
+  }
+}
+
 export default function Dashboard() {
   const [signals, setSignals] = useState<any[]>([]);
   const [mood, setMood] = useState<any>(null);
@@ -616,6 +646,14 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           </div>
         ))}
       </div>
+      {activeDetail && (
+        <div style={{ background: "rgba(0,255,136,0.04)", border: "1px solid rgba(0,255,136,0.12)", borderRadius: 6, padding: "10px 14px", marginBottom: 16 }}>
+          <div style={{ fontSize: 8, fontWeight: 800, color: "rgba(0,255,136,0.5)", letterSpacing: "0.12em", marginBottom: 6 }}>IN PLAIN ENGLISH</div>
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.75)", lineHeight: 1.7 }}>
+            {generateOneLiner(activeDetail)}
+          </div>
+        </div>
+      )}
       {activeDetail.reasoning && (
         <div style={{ background: "rgba(0,170,255,0.05)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 6, padding: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
