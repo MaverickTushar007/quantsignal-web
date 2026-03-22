@@ -67,7 +67,7 @@ export default function Performance() {
 
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 16px" }}>
         {summary && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 40 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10, marginBottom: 24 }}>
             {[
               { label: "WIN RATE", value: `${summary.win_rate}%`, color: summary.win_rate >= 60 ? "#00ff88" : "#ffc800" },
               { label: "HIGH CONF WR", value: `${summary.high_conf_win_rate}%`, color: "#00ff88" },
@@ -84,7 +84,7 @@ export default function Performance() {
         )}
 
         {summary?.equity_curve && (
-          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: 24, marginBottom: 32 }}>
+          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: 16, marginBottom: 20 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
               <div>
                 <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.12em", marginBottom: 4 }}>EQUITY CURVE — CUMULATIVE P&L</div>
@@ -113,21 +113,19 @@ export default function Performance() {
         </div>
 
         <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, overflow: "auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "100px 1fr 60px 70px 80px 80px 80px 80px", padding: "10px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>
-            <span>DATE</span><span>ASSET</span><span>DIR</span><span>CONF</span><span>ENTRY</span><span>EXIT</span><span>OUTCOME</span><span>P&L</span>
+          <div style={{ display: "grid", gridTemplateColumns: "80px 1fr 50px 60px 70px 60px", padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.06)", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>
+            <span>DATE</span><span>ASSET</span><span>DIR</span><span>CONF</span><span>OUTCOME</span><span>P&L</span>
           </div>
           {filtered.slice(0,30).map((t:any, i:number) => {
             const pnlColor = t.pnl_pct>0?"#00ff88":t.pnl_pct<0?"#ff4466":"rgba(255,255,255,0.4)";
             const outcomeColor = t.outcome==="TP_HIT"?"#00ff88":t.outcome==="SL_HIT"?"#ff4466":"rgba(255,255,255,0.3)";
             const cur = t.symbol.endsWith(".NS")?"₹":"$";
             return (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "100px 1fr 60px 70px 80px 80px 80px 80px", padding: "10px 20px", borderBottom: "1px solid rgba(255,255,255,0.04)", fontSize: 11, alignItems: "center" }}>
+              <div key={i} style={{ display: "grid", gridTemplateColumns: "80px 1fr 50px 60px 70px 60px", padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", fontSize: 11, alignItems: "center" }}>
                 <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 10 }}>{t.date}</span>
                 <span style={{ color: "#fff", fontWeight: 600 }}>{t.symbol.replace(".NS","").replace("-USD","")}</span>
                 <span style={{ color: t.direction==="BUY"?"#00ff88":"#ff4466", fontWeight: 700, fontSize: 10 }}>{t.direction}</span>
                 <span style={{ color: t.confidence==="HIGH"?"#00ff88":t.confidence==="MEDIUM"?"#ffc800":"rgba(255,255,255,0.4)", fontSize: 10 }}>{t.confidence}</span>
-                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 10 }}>{cur}{t.entry?.toLocaleString()}</span>
-                <span style={{ color: "rgba(255,255,255,0.5)", fontSize: 10 }}>{cur}{t.exit?.toLocaleString()}</span>
                 <span style={{ color: outcomeColor, fontWeight: 700, fontSize: 10 }}>{t.outcome?.replace("_"," ")}</span>
                 <span style={{ color: pnlColor, fontWeight: 700 }}>{t.pnl_pct>0?"+":""}{t.pnl_pct?.toFixed(1)}%</span>
               </div>
