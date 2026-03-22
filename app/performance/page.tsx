@@ -113,18 +113,20 @@ export default function Performance() {
         </div>
 
         <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, overflow: "auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "80px 1fr 50px 60px 70px 60px", padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.06)", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>
-            <span>DATE</span><span>ASSET</span><span>DIR</span><span>CONF</span><span>OUTCOME</span><span>P&L</span>
+          <div style={{ display: "grid", gridTemplateColumns: "70px 1fr 55px 70px 45px", padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.06)", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>
+            <span>DATE</span><span>ASSET</span><span style={{display:"none"}}></span><span>CONF</span><span>OUTCOME</span><span>P&L</span>
           </div>
           {filtered.slice(0,30).map((t:any, i:number) => {
             const pnlColor = t.pnl_pct>0?"#00ff88":t.pnl_pct<0?"#ff4466":"rgba(255,255,255,0.4)";
             const outcomeColor = t.outcome==="TP_HIT"?"#00ff88":t.outcome==="SL_HIT"?"#ff4466":"rgba(255,255,255,0.3)";
             const cur = t.symbol.endsWith(".NS")?"₹":"$";
             return (
-              <div key={i} style={{ display: "grid", gridTemplateColumns: "80px 1fr 50px 60px 70px 60px", padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", fontSize: 11, alignItems: "center" }}>
+              <div key={i} style={{ display: "grid", gridTemplateColumns: "70px 1fr 55px 70px 45px", padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", fontSize: 11, alignItems: "center" }}>
                 <span style={{ color: "rgba(255,255,255,0.3)", fontSize: 10 }}>{t.date}</span>
-                <span style={{ color: "#fff", fontWeight: 600 }}>{t.symbol.replace(".NS","").replace("-USD","")}</span>
-                <span style={{ color: t.direction==="BUY"?"#00ff88":"#ff4466", fontWeight: 700, fontSize: 10 }}>{t.direction}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ color: "#fff", fontWeight: 600 }}>{t.symbol.replace(".NS","").replace("-USD","")}</span>
+                  <span style={{ color: t.direction==="BUY"?"#00ff88":"#ff4466", fontWeight: 800, fontSize: 9, background: t.direction==="BUY"?"rgba(0,255,136,0.1)":"rgba(255,68,102,0.1)", padding: "1px 4px", borderRadius: 3 }}>{t.direction}</span>
+                </div>
                 <span style={{ color: t.confidence==="HIGH"?"#00ff88":t.confidence==="MEDIUM"?"#ffc800":"rgba(255,255,255,0.4)", fontSize: 10 }}>{t.confidence}</span>
                 <span style={{ color: outcomeColor, fontWeight: 700, fontSize: 10 }}>{t.outcome?.replace("_"," ")}</span>
                 <span style={{ color: pnlColor, fontWeight: 700 }}>{t.pnl_pct>0?"+":""}{t.pnl_pct?.toFixed(1)}%</span>
