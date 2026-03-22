@@ -65,9 +65,9 @@ export default function Performance() {
         <span style={{ fontSize: 10, color: "rgba(255,255,255,0.2)" }}>Last 90 days · Simulated outcomes</span>
       </div>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 32px" }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 16px" }}>
         {summary && (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 12, marginBottom: 40 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 40 }}>
             {[
               { label: "WIN RATE", value: `${summary.win_rate}%`, color: summary.win_rate >= 60 ? "#00ff88" : "#ffc800" },
               { label: "HIGH CONF WR", value: `${summary.high_conf_win_rate}%`, color: "#00ff88" },
@@ -112,7 +112,7 @@ export default function Performance() {
           ))}
         </div>
 
-        <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, overflow: "hidden" }}>
+        <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, overflow: "auto" }}>
           <div style={{ display: "grid", gridTemplateColumns: "100px 1fr 60px 70px 80px 80px 80px 80px", padding: "10px 20px", borderBottom: "1px solid rgba(255,255,255,0.06)", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>
             <span>DATE</span><span>ASSET</span><span>DIR</span><span>CONF</span><span>ENTRY</span><span>EXIT</span><span>OUTCOME</span><span>P&L</span>
           </div>
