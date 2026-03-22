@@ -259,6 +259,23 @@ function AlertBell({ symbol }: { symbol: string }) {
   );
 }
 
+
+function EarningsBadge({ flag }: { flag?: any }) {
+  if (!flag) return null;
+  const urgent = flag.days_until <= 2;
+  return (
+    <span style={{
+      fontSize: 8, fontWeight: 800, padding: "2px 5px", borderRadius: 3,
+      background: urgent ? "rgba(255,200,0,0.15)" : "rgba(255,200,0,0.08)",
+      border: `1px solid ${urgent ? "rgba(255,200,0,0.5)" : "rgba(255,200,0,0.2)"}`,
+      color: urgent ? "#ffc800" : "rgba(255,200,0,0.6)",
+      letterSpacing: "0.05em", whiteSpace: "nowrap", flexShrink: 0,
+    }}>
+      ⚡ EARNINGS {flag.label}
+    </span>
+  );
+}
+
 function generateOneLiner(sig: any): string {
   if (!sig) return "";
   const dir = sig.direction;
@@ -376,6 +393,7 @@ export default function Dashboard() {
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "rgba(255,255,255,0.3)", alignItems: "center" }}>
               <span>{formatPrice(sig.current_price, sig.type, sig.symbol)}</span>
+              <EarningsBadge flag={sig.earnings_flag} />
               <AlertBell symbol={sig.symbol} />
               <span style={{ color: dirColor(sig.direction) }}>{(sig.probability * 100).toFixed(0)}%</span>
             </div>
@@ -646,6 +664,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           </div>
         ))}
       </div>
+      <EarningsBadge flag={activeDetail.earnings_flag} />
       {activeDetail && (
         <div style={{ background: "rgba(0,255,136,0.04)", border: "1px solid rgba(0,255,136,0.12)", borderRadius: 6, padding: "10px 14px", marginBottom: 16 }}>
           <div style={{ fontSize: 8, fontWeight: 800, color: "rgba(0,255,136,0.5)", letterSpacing: "0.12em", marginBottom: 6 }}>IN PLAIN ENGLISH</div>
