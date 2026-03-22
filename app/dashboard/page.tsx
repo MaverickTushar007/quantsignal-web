@@ -768,6 +768,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                 <div style={{ fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: "0.15em", padding: "0 20px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)", marginBottom: 8 }}>MORE</div>
                 {[
                   { href: "/guardian", icon: "🛡️", label: "Trade Guardian", desc: "Risk check before entering" },
+                  { href: "/performance", icon: "📈", label: "Performance", desc: "90-day signal track record" },
                   { href: "/portfolio", icon: "📊", label: "Portfolio Lab", desc: "Optimize your holdings" },
                   { id: "NEWS", icon: "📰", label: "News Feed", desc: "Live market news" },
                   { id: "ANALYSIS", icon: "📈", label: "Signal Analysis", desc: "Full ML breakdown" },
