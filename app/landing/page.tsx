@@ -75,6 +75,7 @@ export default function Landing() {
         <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
           <a href="#features" className="nav-links" style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textDecoration: "none", letterSpacing: "0.08em" }}>FEATURES</a>
           <a href="#proof" className="nav-links" style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textDecoration: "none", letterSpacing: "0.08em" }}>PROOF</a>
+          <a href="/performance" className="nav-links" style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textDecoration: "none", letterSpacing: "0.08em" }}>PERFORMANCE</a>
           <a href="#pricing" className="nav-links" style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", textDecoration: "none", letterSpacing: "0.08em" }}>PRICING</a>
           <a href="/dashboard" style={{ fontSize: 11, fontWeight: 700, color: "#000", background: "#00ff88", borderRadius: 6, padding: "7px 16px", textDecoration: "none", letterSpacing: "0.05em" }}>LAUNCH APP →</a>
         </div>
