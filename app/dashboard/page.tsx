@@ -668,6 +668,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
               { label: "KELLY SIZE", value: `${activeDetail.kelly_size}%`, color: "#00aaff" },
               { label: "CONFLUENCE", value: activeDetail.confluence_score, color: "#00ff88" },
               { label: "RISK/REWARD", value: `${activeDetail.risk_reward}:1`, color: "#ffd700" },
+              { label: "VOLUME", value: activeDetail.volume_ratio ? `${activeDetail.volume_ratio}x` : "—", color: activeDetail.volume_ratio >= 2.0 ? "#ff5252" : activeDetail.volume_ratio >= 1.5 ? "#ffc107" : "rgba(255,255,255,0.5)" },
             ].map(b => (
               <div key={b.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 6, padding: "12px 10px" }}>
                 <div style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", marginBottom: 6, letterSpacing: "0.1em" }}>{b.label}</div>
@@ -726,6 +727,11 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
           <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", letterSpacing: "0.1em" }}>9-FACTOR CONFLUENCE</div>
           <span style={{ fontSize: 9, fontWeight: 800, color: "#00ff88", background: "rgba(0,255,136,0.1)", padding: "2px 6px", borderRadius: 3 }}>{activeDetail.confluence_score}</span>
+          {activeDetail.volume_ratio >= 1.5 && (
+            <span style={{ fontSize: 9, fontWeight: 800, color: activeDetail.volume_ratio >= 2.5 ? "#ff5252" : "#ffc107", background: activeDetail.volume_ratio >= 2.5 ? "rgba(255,82,82,0.1)" : "rgba(255,193,7,0.1)", padding: "2px 6px", borderRadius: 3, marginLeft: 4 }}>
+              ↑ {activeDetail.volume_ratio}x VOL
+            </span>
+          )}
         </div>
         {activeDetail.confluence?.map((c: any) => (
           <div key={c.name} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
