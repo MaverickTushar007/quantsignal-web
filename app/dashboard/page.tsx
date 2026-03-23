@@ -744,6 +744,19 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       <EarningsBadge flag={activeDetail.earnings_flag} />
       <MTFBar mtf={activeDetail?.mtf} direction={activeDetail?.direction} />
       <ShockWarning shock={activeDetail?.shock_warning} />
+      {activeDetail?.insider?.available && activeDetail.insider.trades?.length > 0 && (
+        <div style={{ background: "rgba(255,193,7,0.05)", border: "1px solid rgba(255,193,7,0.2)", borderRadius: 6, padding: "10px 14px", marginBottom: 12 }}>
+          <div style={{ fontSize: 8, fontWeight: 800, color: "rgba(255,193,7,0.7)", letterSpacing: "0.12em", marginBottom: 6 }}>
+            INSIDER ACTIVITY · SEC FORM 4 · {activeDetail.insider.summary}
+          </div>
+          {activeDetail.insider.trades.slice(0, 3).map((t: any, i: number) => (
+            <div key={i} style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", marginBottom: 3 }}>
+              <span style={{ color: "rgba(255,193,7,0.8)", fontWeight: 700 }}>{t.filer}</span>
+              <span style={{ color: "rgba(255,255,255,0.3)" }}> · Form {t.form} · {t.date}</span>
+            </div>
+          ))}
+        </div>
+      )}
       {activeDetail && (
         <div style={{ background: "rgba(0,255,136,0.04)", border: "1px solid rgba(0,255,136,0.12)", borderRadius: 6, padding: "10px 14px", marginBottom: 16 }}>
           <div style={{ fontSize: 8, fontWeight: 800, color: "rgba(0,255,136,0.5)", letterSpacing: "0.12em", marginBottom: 6 }}>IN PLAIN ENGLISH</div>
