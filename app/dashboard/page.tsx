@@ -261,6 +261,35 @@ function AlertBell({ symbol }: { symbol: string }) {
 
 
 
+
+function ShockWarning({ shock }: { shock?: any }) {
+  if (!shock) return null;
+  return (
+    <div style={{
+      background: 'rgba(255,140,0,0.08)',
+      border: '1px solid rgba(255,140,0,0.3)',
+      borderRadius: 8,
+      padding: '10px 12px',
+      marginBottom: 14,
+      display: 'flex',
+      gap: 10,
+      alignItems: 'flex-start',
+    }}>
+      <span style={{ fontSize: 16, marginTop: 1 }}>⚡</span>
+      <div>
+        <div style={{ fontSize: 10, fontWeight: 800, color: '#ffa500',
+          letterSpacing: '0.1em', marginBottom: 4 }}>SECTOR SHOCK DETECTED</div>
+        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.75)',
+          lineHeight: 1.5 }}>{shock.warning}</div>
+        <div style={{ fontSize: 10, color: 'rgba(255,140,0,0.7)',
+          marginTop: 4, fontWeight: 600 }}>
+          ⚠ Reduce position size — correlation risk elevated
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function MTFBar({ mtf, direction }: { mtf?: any, direction?: string }) {
   if (!mtf) return null;
   const details = mtf.mtf_details || {};
@@ -708,6 +737,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       </div>
       <EarningsBadge flag={activeDetail.earnings_flag} />
       <MTFBar mtf={activeDetail?.mtf} direction={activeDetail?.direction} />
+      <ShockWarning shock={activeDetail?.shock_warning} />
       {activeDetail && (
         <div style={{ background: "rgba(0,255,136,0.04)", border: "1px solid rgba(0,255,136,0.12)", borderRadius: 6, padding: "10px 14px", marginBottom: 16 }}>
           <div style={{ fontSize: 8, fontWeight: 800, color: "rgba(0,255,136,0.5)", letterSpacing: "0.12em", marginBottom: 6 }}>IN PLAIN ENGLISH</div>
