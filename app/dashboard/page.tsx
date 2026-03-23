@@ -842,6 +842,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                 {[
                   { href: "/guardian", icon: "🛡️", label: "Trade Guardian", desc: "Risk check before entering" },
                   { href: "/performance", icon: "📈", label: "Performance", desc: "90-day signal track record" },
+                  { href: "/agents", icon: "🤖", label: "Agents", desc: "Virtual paper trading" },
                   { href: "/portfolio", icon: "📊", label: "Portfolio Lab", desc: "Optimize your holdings" },
                   { id: "NEWS", icon: "📰", label: "News Feed", desc: "Live market news" },
                   { id: "ANALYSIS", icon: "📈", label: "Signal Analysis", desc: "Full ML breakdown" },
@@ -905,6 +906,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <a href="/performance" style={{ fontSize: 10, color: "#00aaff", textDecoration: "none", border: "1px solid rgba(0,170,255,0.3)", borderRadius: 4, padding: "2px 8px", background: "rgba(0,170,255,0.08)" }}>📈 PERFORMANCE</a>
             <a href="/how-it-works" style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", textDecoration: "none", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "2px 8px" }}>HOW IT WORKS</a>
             <a href="/guardian" style={{ fontSize: 10, color: "#00ff88", textDecoration: "none", border: "1px solid rgba(0,255,136,0.3)", borderRadius: 4, padding: "2px 8px", background: "rgba(0,255,136,0.08)" }}>🛡️ GUARDIAN</a>
+            <a href="/agents" style={{ fontSize: 10, color: "#ffc107", textDecoration: "none", border: "1px solid rgba(255,193,7,0.3)", borderRadius: 4, padding: "2px 8px", background: "rgba(255,193,7,0.08)" }}>🤖 AGENTS</a>
             {user ? (
               <span style={{ fontSize: 10, fontWeight: 700, color: isPro ? "#ffd700" : "rgba(255,255,255,0.3)", border: isPro ? "1px solid rgba(255,215,0,0.3)" : "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "2px 8px", background: isPro ? "rgba(255,215,0,0.08)" : "transparent" }}>
                 {isPro ? "✨ PRO" : "FREE"}
