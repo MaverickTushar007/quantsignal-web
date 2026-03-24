@@ -154,6 +154,30 @@ export default function Performance() {
         )}
 
 
+        {/* Benchmark comparison hero */}
+        {summary?.benchmark?.["Nifty 50"] && (
+          <div style={{ background: "linear-gradient(135deg, rgba(0,255,136,0.06), rgba(0,255,136,0.02))", border: "1px solid rgba(0,255,136,0.2)", borderRadius: 10, padding: "16px 20px", marginBottom: 10 }}>
+            <div style={{ fontSize: 8, color: "rgba(0,255,136,0.5)", letterSpacing: "0.12em", marginBottom: 8 }}>VS BENCHMARK — SAME PERIOD</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginBottom: 4 }}>QuantSignal signals</div>
+                <div style={{ fontSize: 28, fontWeight: 800, color: "#00ff88" }}>+{summary.total_pnl}%</div>
+              </div>
+              <div style={{ fontSize: 28, color: "rgba(255,255,255,0.15)", fontWeight: 300 }}>vs</div>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", marginBottom: 4 }}>Nifty 50 buy & hold</div>
+                <div style={{ fontSize: 28, fontWeight: 800, color: summary.benchmark["Nifty 50"].return >= 0 ? "#00ff88" : "#ff5252" }}>
+                  {summary.benchmark["Nifty 50"].return >= 0 ? "+" : ""}{summary.benchmark["Nifty 50"].return}%
+                </div>
+              </div>
+            </div>
+            <div style={{ marginTop: 12, padding: "8px 12px", background: "rgba(0,255,136,0.08)", borderRadius: 6, textAlign: "center" }}>
+              <span style={{ fontSize: 11, fontWeight: 800, color: "#00ff88" }}>
+                +{(summary.total_pnl - summary.benchmark["Nifty 50"].return).toFixed(1)}% outperformance vs Nifty 50
+              </span>
+            </div>
+          </div>
+        )}
         {/* Drawdown curve */}
         {summary?.dd_curve && (
           <div style={{ background: "rgba(255,82,82,0.03)", border: "1px solid rgba(255,82,82,0.12)", borderRadius: 10, padding: "14px 16px", marginBottom: 16 }}>
