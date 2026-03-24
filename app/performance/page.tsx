@@ -4,26 +4,29 @@ import { useState, useEffect } from "react";
 const API = "https://web-production-1a093.up.railway.app/api/v1";
 const mono = "'IBM Plex Mono', monospace";
 
-function EquityChart({ curve }: { curve: any[] }) {
+function EquityChart({ curve, benchmarks }: { curve: any[], benchmarks?: any }) {
   if (!curve || curve.length < 2) return null;
   const W = 600, H = 160, P = 16;
   const vals = curve.map((p: any) => p.cumulative_pnl);
-  const min = Math.min(...vals, 0);
-  const max = Math.max(...vals, 1);
+  const niftyVals = benchmarks?.["Nifty 50"]?.curve?.map((p: any) => p.cumulative_pnl) || [];
+  const spVals = benchmarks?.["S&P 500"]?.curve?.map((p: any) => p.cumulative_pnl) || [];
+  const allVals = [...vals, ...niftyVals, ...spVals];
+  const min = Math.min(...allVals, 0);
+  const max = Math.max(...allVals, 1);
   const range = max - min || 1;
-  const pts = curve.map((p: any, i: number) => {
-    const x = P + (i / (curve.length - 1)) * (W - P * 2);
-    const y = P + ((max - p.cumulative_pnl) / range) * (H - P * 2);
-    return `${x},${y}`;
-  }).join(" ");
-  const zY = P + (max / range) * (H - P * 2);
+  const toY = (v: number) => P + ((max - v) / range) * (H - P * 2);
+  const toPts = (arr: number[]) => arr.map((v, i) =>
+    `${P + (i / (arr.length - 1)) * (W - P * 2)},${toY(v)}`).join(" ");
+  const zY = toY(0);
   const last = vals[vals.length - 1];
   const col = last >= 0 ? "#00ff88" : "#ff4466";
   return (
     <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: 140 }} preserveAspectRatio="none">
       <line x1={P} y1={zY} x2={W-P} y2={zY} stroke="rgba(255,255,255,0.08)" strokeWidth="1" strokeDasharray="4,4"/>
-      <polygon points={`${P},${zY} ${pts} ${W-P},${zY}`} fill={last>=0?"rgba(0,255,136,0.07)":"rgba(255,68,102,0.07)"}/>
-      <polyline points={pts} fill="none" stroke={col} strokeWidth="1.5"/>
+      {niftyVals.length > 1 && <polyline points={toPts(niftyVals)} fill="none" stroke="rgba(255,170,0,0.5)" strokeWidth="1" strokeDasharray="4,3"/>}
+      {spVals.length > 1 && <polyline points={toPts(spVals)} fill="none" stroke="rgba(100,150,255,0.5)" strokeWidth="1" strokeDasharray="4,3"/>}
+      <polygon points={`${P},${zY} ${toPts(vals)} ${W-P},${zY}`} fill={last>=0?"rgba(0,255,136,0.07)":"rgba(255,68,102,0.07)"}/>
+      <polyline points={toPts(vals)} fill="none" stroke={col} strokeWidth="2"/>
     </svg>
   );
 }
@@ -139,7 +142,14 @@ export default function Performance() {
         {summary?.equity_curve && (
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, padding: "14px 16px", marginBottom: 20 }}>
             <div style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", letterSpacing: "0.12em", marginBottom: 12 }}>EQUITY CURVE</div>
-            <EquityChart curve={summary.equity_curve} />
+            <EquityChart curve={summary.equity_curve} benchmarks={summary.benchmark} />
+            {summary.benchmark && (
+              <div style={{ display: "flex", gap: 16, marginTop: 8 }}>
+                <span style={{ fontSize: 9, color: "#00ff88" }}>— QuantSignal: +{summary.total_pnl}%</span>
+                {summary.benchmark["Nifty 50"] && <span style={{ fontSize: 9, color: "rgba(255,170,0,0.7)" }}>-- Nifty 50: {summary.benchmark["Nifty 50"].return}%</span>}
+                {summary.benchmark["S&P 500"] && <span style={{ fontSize: 9, color: "rgba(100,150,255,0.7)" }}>-- S&P 500: {summary.benchmark["S&P 500"].return}%</span>}
+              </div>
+            )}
           </div>
         )}
 
