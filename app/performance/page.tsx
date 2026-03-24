@@ -28,6 +28,29 @@ function EquityChart({ curve }: { curve: any[] }) {
   );
 }
 
+function DrawdownChart({ curve }: { curve: any[] }) {
+  if (!curve || curve.length < 2) return null;
+  const W = 600, H = 80, P = 16;
+  const vals = curve.map((p: any) => p.drawdown);
+  const min = Math.min(...vals, -1);
+  const range = Math.abs(min) || 1;
+  const pts = curve.map((p: any, i: number) => {
+    const x = P + (i / (curve.length - 1)) * (W - P * 2);
+    const y = P + (Math.abs(p.drawdown) / range) * (H - P * 2);
+    return `${x},${y}`;
+  }).join(" ");
+  const maxDD = Math.min(...vals);
+  const maxIdx = vals.indexOf(maxDD);
+  const maxX = P + (maxIdx / (curve.length - 1)) * (W - P * 2);
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: 80 }} preserveAspectRatio="none">
+      <polygon points={`${P},${P} ${pts} ${W-P},${P}`} fill="rgba(255,82,82,0.12)"/>
+      <polyline points={pts} fill="none" stroke="#ff5252" strokeWidth="1.5"/>
+      <line x1={maxX} y1={P} x2={maxX} y2={H-P} stroke="rgba(255,82,82,0.4)" strokeWidth="1" strokeDasharray="3,3"/>
+    </svg>
+  );
+}
+
 export default function Performance() {
   const [summary, setSummary] = useState<any>(null);
   const [trades, setTrades] = useState<any[]>([]);
@@ -121,6 +144,19 @@ export default function Performance() {
         )}
 
 
+        {/* Drawdown curve */}
+        {summary?.dd_curve && (
+          <div style={{ background: "rgba(255,82,82,0.03)", border: "1px solid rgba(255,82,82,0.12)", borderRadius: 10, padding: "14px 16px", marginBottom: 16 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <div style={{ fontSize: 8, color: "rgba(255,82,82,0.6)", letterSpacing: "0.12em" }}>DRAWDOWN CURVE</div>
+              <div style={{ fontSize: 9, color: "#ff5252", fontWeight: 700 }}>Max: {summary.max_drawdown}%</div>
+            </div>
+            <DrawdownChart curve={summary.dd_curve} />
+            <div style={{ fontSize: 8, color: "rgba(255,255,255,0.2)", marginTop: 6 }}>
+              Shows % below peak at each point in time. Dashed line = maximum drawdown point.
+            </div>
+          </div>
+        )}
         {/* Explainer box */}
         <div style={{ background: "rgba(0,170,255,0.04)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 10, padding: "14px 16px", marginBottom: 16 }}>
           <div style={{ fontSize: 9, fontWeight: 800, color: "#00aaff", letterSpacing: "0.12em", marginBottom: 8 }}>HOW THIS WORKS</div>
