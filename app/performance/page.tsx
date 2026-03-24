@@ -31,6 +31,43 @@ function EquityChart({ curve, benchmarks }: { curve: any[], benchmarks?: any }) 
   );
 }
 
+function MonteCarloChart({ data }: { data: any }) {
+  if (!data?.curves) return null;
+  const W = 600, H = 160, P = 16;
+  const { p5, p25, p50, p75, p95 } = data.curves;
+  const len = p50.length;
+  const allVals = [...p5, ...p95, 0];
+  const min = Math.min(...allVals);
+  const max = Math.max(...allVals);
+  const range = max - min || 1;
+  const toY = (v: number) => P + ((max - v) / range) * (H - P * 2);
+  const toX = (i: number) => P + (i / (len - 1)) * (W - P * 2);
+  const pts = (arr: number[]) => arr.map((v, i) => `${toX(i)},${toY(v)}`).join(" ");
+  const zY = toY(0);
+  const actualX = W - P;
+  const actualY = toY(data.actual_pnl);
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: 140 }} preserveAspectRatio="none">
+      <line x1={P} y1={zY} x2={W-P} y2={zY} stroke="rgba(255,255,255,0.08)" strokeWidth="1" strokeDasharray="4,4"/>
+      {/* p5-p95 band */}
+      <polygon
+        points={`${pts(p5)} ${[...p95].reverse().map((v,i) => `${toX(len-1-i)},${toY(v)}`).join(" ")}`}
+        fill="rgba(0,170,255,0.06)"
+      />
+      {/* p25-p75 band */}
+      <polygon
+        points={`${pts(p25)} ${[...p75].reverse().map((v,i) => `${toX(len-1-i)},${toY(v)}`).join(" ")}`}
+        fill="rgba(0,170,255,0.1)"
+      />
+      <polyline points={pts(p5)}  fill="none" stroke="rgba(255,82,82,0.4)"   strokeWidth="1"/>
+      <polyline points={pts(p95)} fill="none" stroke="rgba(0,255,136,0.4)"   strokeWidth="1"/>
+      <polyline points={pts(p50)} fill="none" stroke="rgba(0,170,255,0.9)"   strokeWidth="1.5" strokeDasharray="5,3"/>
+      {/* Actual result dot */}
+      <circle cx={actualX} cy={actualY} r="4" fill="#00ff88"/>
+    </svg>
+  );
+}
+
 function DrawdownChart({ curve }: { curve: any[] }) {
   if (!curve || curve.length < 2) return null;
   const W = 600, H = 80, P = 16;
@@ -56,6 +93,7 @@ function DrawdownChart({ curve }: { curve: any[] }) {
 
 export default function Performance() {
   const [summary, setSummary] = useState<any>(null);
+  const [mc, setMc] = useState<any>(null);
   const [trades, setTrades] = useState<any[]>([]);
   const [filter, setFilter] = useState("ALL");
   const [loading, setLoading] = useState(true);
@@ -64,7 +102,8 @@ export default function Performance() {
     Promise.all([
       fetch(`${API}/history/summary`).then(r => r.json()),
       fetch(`${API}/history/trades?limit=60`).then(r => r.json()),
-    ]).then(([s, t]) => { setSummary(s); setTrades(t.trades || []); setLoading(false); })
+      fetch(`${API}/history/montecarlo`).then(r => r.json()),
+    ]).then(([s, t, m]) => { setSummary(s); setTrades(t.trades || []); setMc(m); setLoading(false); })
     .catch(() => setLoading(false));
   }, []);
 
@@ -188,6 +227,32 @@ export default function Performance() {
             <DrawdownChart curve={summary.dd_curve} />
             <div style={{ fontSize: 8, color: "rgba(255,255,255,0.2)", marginTop: 6 }}>
               Shows % below peak at each point in time. Dashed line = maximum drawdown point.
+            </div>
+          </div>
+        )}
+        {/* Monte Carlo */}
+        {mc?.curves && (
+          <div style={{ background: "rgba(0,170,255,0.03)", border: "1px solid rgba(0,170,255,0.12)", borderRadius: 10, padding: "14px 16px", marginBottom: 16 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <div style={{ fontSize: 8, color: "rgba(0,170,255,0.6)", letterSpacing: "0.12em" }}>MONTE CARLO — {mc.simulations} BOOTSTRAP SIMULATIONS</div>
+              <div style={{ fontSize: 9, color: "#00aaff", fontWeight: 700 }}>{mc.beat_zero}% of runs profitable</div>
+            </div>
+            <MonteCarloChart data={mc} />
+            <div style={{ display: "flex", gap: 16, marginTop: 8, flexWrap: "wrap" }}>
+              {[
+                { label: "WORST 5%", value: `${mc.p5}%`, color: "#ff5252" },
+                { label: "MEDIAN",   value: `${mc.p50}%`, color: "#00aaff" },
+                { label: "BEST 5%",  value: `+${mc.p95}%`, color: "#00ff88" },
+                { label: "ACTUAL",   value: `+${mc.actual_pnl}%`, color: "#fff" },
+              ].map(s => (
+                <div key={s.label} style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 7, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>{s.label}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: s.color }}>{s.value}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: 10, fontSize: 9, color: "rgba(255,255,255,0.2)", lineHeight: 1.6 }}>
+              Bootstrap resampling of {mc.trades} trades. Dark band = 25th–75th percentile. Light band = 5th–95th. Dashed = median path. Green dot = actual result.
             </div>
           </div>
         )}
