@@ -84,6 +84,21 @@ export default function Performance() {
               ))}
             </div>
 
+            {/* Risk metrics row */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 10 }}>
+              {[
+                { label: "SHARPE RATIO", value: summary.sharpe_ratio ?? "—", sub: "risk-adjusted return", color: (summary.sharpe_ratio ?? 0) >= 1 ? "#00ff88" : "#ffc800" },
+                { label: "MAX DRAWDOWN", value: `${summary.max_drawdown ?? "—"}%`, sub: "peak to trough", color: "#ff5252" },
+                { label: "CALMAR RATIO", value: summary.calmar_ratio ?? "—", sub: "return / max DD", color: (summary.calmar_ratio ?? 0) >= 1 ? "#00ff88" : "#ffc800" },
+              ].map(s => (
+                <div key={s.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, padding: "14px 16px" }}>
+                  <div style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", letterSpacing: "0.12em", marginBottom: 6 }}>{s.label}</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: s.color, marginBottom: 2 }}>{s.value}</div>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.2)" }}>{s.sub}</div>
+                </div>
+              ))}
+            </div>
+
             {/* Cumul P&L — full width */}
             <div style={{ background: pnlPositive ? "rgba(0,255,136,0.05)" : "rgba(255,68,102,0.05)", border: `1px solid ${pnlPositive?"rgba(0,255,136,0.2)":"rgba(255,68,102,0.2)"}`, borderRadius: 10, padding: "14px 16px", marginBottom: 10, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div>
@@ -124,8 +139,18 @@ export default function Performance() {
               </div>
             ))}
           </div>
+          <div style={{ marginTop: 10, display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {[
+              { label: "✓ WALK-FORWARD VALIDATED", color: "#00ff88" },
+              { label: "✓ NO LOOK-AHEAD BIAS", color: "#00ff88" },
+              { label: "⚠ SLIPPAGE NOT MODELED", color: "#ffc107" },
+              { label: "⚠ 300 TRADE SAMPLE", color: "#ffc107" },
+            ].map(b => (
+              <span key={b.label} style={{ fontSize: 8, fontWeight: 800, color: b.color, background: "rgba(255,255,255,0.04)", border: `1px solid ${b.color}30`, padding: "3px 7px", borderRadius: 3 }}>{b.label}</span>
+            ))}
+          </div>
           <div style={{ marginTop: 10, fontSize: 9, color: "rgba(255,255,255,0.2)", lineHeight: 1.6 }}>
-            P&L is calculated as % move from entry to exit. Cumulative P&L adds up all trades equally weighted. Not financial advice — past performance does not guarantee future results.
+            P&L is calculated as % move from entry to exit. Cumulative P&L adds up all trades equally weighted. <strong style={{ color: "rgba(255,193,7,0.6)" }}>Simulated returns do not include brokerage, STT, or slippage — net real returns will be lower.</strong> Not financial advice.
           </div>
         </div>
 
