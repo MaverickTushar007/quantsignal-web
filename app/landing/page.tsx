@@ -90,7 +90,7 @@ export default function Landing() {
           <div className={`fade-in ${visible ? "visible" : ""}`}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(0,255,136,0.08)", border: "1px solid rgba(0,255,136,0.2)", borderRadius: 100, padding: "5px 14px", marginBottom: 28 }}>
               <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#00ff88", animation: "pulse-dot 2s infinite" }} />
-              <span style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.1em" }}>186 ASSETS · 67% WIN RATE</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: "#00ff88", letterSpacing: "0.1em" }}>186 ASSETS · 22% WIN RATE · +16.67% P&L</span>
             </div>
 
             <h1 className="hero-title" style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 58, fontWeight: 800, lineHeight: 1.05, marginBottom: 20, letterSpacing: "-0.02em" }}>
@@ -235,7 +235,7 @@ export default function Landing() {
 
           <div className="proof-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
             {[
-              { val: "67%", label: "Avg Win Rate", sub: "across 11 assets tested" },
+              { val: "22%", label: "Win Rate", sub: "300 backtested signals" },
               { val: "2.57", label: "Sharpe Ratio", sub: "stocks + forex + crypto" },
               { val: "2:1", label: "Risk/Reward", sub: "ATR-based targets" },
               { val: "118", label: "Live Assets", sub: "crypto, US & Indian stocks, forex" },

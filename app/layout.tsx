@@ -22,14 +22,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "QuantSignal — ML Trading Signals",
-    description: "186 live signals across crypto, Indian stocks, US stocks, forex. 67% win rate.",
+    description: "186 live signals across crypto, Indian stocks, US stocks, forex. +16.67% cumulative P&L.",
     type: "website",
     url: "https://quantsignal-web.vercel.app",
   },
   twitter: {
     card: "summary_large_image",
     title: "QuantSignal — ML Trading Signals",
-    description: "186 live signals. 67% win rate. Indian + US + Crypto + Forex.",
+    description: "186 live signals. +16.67% cumulative P&L. Indian + US + Crypto + Forex.",
   },
 };
 
