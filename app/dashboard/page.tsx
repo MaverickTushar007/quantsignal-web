@@ -457,16 +457,16 @@ export default function Dashboard() {
           </div>
         )) : filtered.map(sig => (
           <div key={sig.symbol} onClick={() => selectAsset(sig)} 
-            style={{ padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.03)", cursor: "pointer", background: selected?.symbol === sig.symbol ? "rgba(0,255,136,0.05)" : "transparent", borderLeft: selected?.symbol === sig.symbol ? "2px solid #00ff88" : "2px solid transparent" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3 }}>
-              <span style={{ fontSize: 12, fontWeight: 600, color: selected?.symbol === sig.symbol ? "#00ff88" : "#e2e8f0" }}>{sig.display}</span>
+            style={{ padding: isMobile ? "14px 16px" : "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)", cursor: "pointer", background: selected?.symbol === sig.symbol ? "rgba(0,255,136,0.05)" : "transparent", borderLeft: selected?.symbol === sig.symbol ? "3px solid #00ff88" : "3px solid transparent" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
+              <span style={{ fontSize: isMobile ? 15 : 12, fontWeight: 700, color: selected?.symbol === sig.symbol ? "#00ff88" : "#e2e8f0" }}>{sig.display}</span>
               <span style={badge(sig.direction)}>{sig.direction}</span>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "rgba(255,255,255,0.3)", alignItems: "center" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: isMobile ? 13 : 10, color: "rgba(255,255,255,0.4)", alignItems: "center" }}>
               <span>{formatPrice(sig.current_price, sig.type, sig.symbol)}</span>
               <EarningsBadge flag={sig.earnings_flag} />
               <AlertBell symbol={sig.symbol} />
-              <span style={{ color: dirColor(sig.direction) }}>{(sig.probability * 100).toFixed(0)}%</span>
+              <span style={{ color: dirColor(sig.direction), fontWeight: 600 }}>{(sig.probability * 100).toFixed(0)}%</span>
             </div>
           </div>
         ))}

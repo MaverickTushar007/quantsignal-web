@@ -16,6 +16,13 @@ export default function AgentsPage() {
   const [loading, setLoading]     = useState(true);
   const [creating, setCreating]   = useState(false);
   const [showForm, setShowForm]   = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
   const [form, setForm]           = useState({
     name: "", strategy: "india",
     min_probability: 0.65, budget_inr: 100000,
@@ -281,8 +288,8 @@ export default function AgentsPage() {
                   </div>
 
                   {/* Stats row */}
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)",
-                    gap: 12 }}>
+                  <div style={{ display: "grid", gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
+                    gap: isMobile ? 8 : 12 }}>
                     {[
                       { label: "TOTAL P&L",
                         value: `${pnl >= 0 ? "+" : ""}₹${pnl.toLocaleString()}`,
