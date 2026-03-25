@@ -115,17 +115,56 @@ export default function Landing() {
             </div>
           </div>
 
-          {/* Right — Spline + floating card */}
+          {/* Right — Dashboard mockup */}
           <div style={{ position: "relative", opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "all 1s cubic-bezier(0.16,1,0.3,1) 0.2s" }}>
-            {/* Spline embed — swap URL here */}
-            <div style={{ width: "100%", aspectRatio: "1/1", borderRadius: 24, overflow: "hidden", border: "1px solid rgba(34,197,94,0.12)", background: "rgba(34,197,94,0.03)" }}>
-              <iframe
-                src="https://my.spline.design/nexbotrobotdigitalfuturisticdesign-e8f79ae23af2da93c3de96f65c0c9960/"
-                frameBorder={0}
-                width="100%"
-                height="100%"
-                style={{ display: "block" }}
-              />
+            <div style={{ position: "absolute", inset: -1, borderRadius: 24, background: "linear-gradient(135deg, rgba(34,197,94,0.3), rgba(34,197,94,0.05), rgba(34,197,94,0.15))", zIndex: 0 }} />
+            <div style={{ position: "relative", zIndex: 1, borderRadius: 22, overflow: "hidden", background: "#0a110a", boxShadow: "0 40px 80px rgba(0,0,0,0.6)" }}>
+              <div style={{ padding: "14px 18px", borderBottom: "1px solid rgba(34,197,94,0.1)", display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(34,197,94,0.03)" }}>
+                <div style={{ display: "flex", gap: 6 }}>
+                  {[0.12,0.08,0.05].map((o,i) => <div key={i} style={{ width: 10, height: 10, borderRadius: "50%", background: `rgba(255,255,255,${o})` }} />)}
+                </div>
+                <div style={{ fontSize: 11, color: "rgba(232,245,232,0.3)", fontFamily: "monospace" }}>quantsignal.app/dashboard</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 10, color: "#22c55e" }}>
+                  <span style={{ width: 5, height: 5, borderRadius: "50%", background: "#22c55e", display: "inline-block", boxShadow: "0 0 6px #22c55e" }} />LIVE
+                </div>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", borderBottom: "1px solid rgba(34,197,94,0.08)" }}>
+                {[["P&L TODAY","+₹4,820","#22c55e"],["ACCURACY","94.2%","#22c55e"],["SIGNALS","186","#e2e8f0"]].map(([label,val,color]) => (
+                  <div key={label} style={{ padding: "12px 16px", borderRight: "1px solid rgba(34,197,94,0.06)" }}>
+                    <div style={{ fontSize: 9, color: "rgba(232,245,232,0.3)", letterSpacing: "0.1em", marginBottom: 4 }}>{label}</div>
+                    <div style={{ fontSize: 18, fontWeight: 800, color: color as string }}>{val}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ padding: "10px 16px 6px", display: "flex", justifyContent: "space-between", fontSize: 9, color: "rgba(232,245,232,0.25)", letterSpacing: "0.1em" }}>
+                <span>ASSET</span><span>SIGNAL</span><span>CONF.</span>
+              </div>
+              {[
+                { symbol: "RELIANCE", dir: "BUY",  prob: 87, price: "₹2,847",  active: true },
+                { symbol: "BTC/USD",  dir: "BUY",  prob: 81, price: "$67,420", active: false },
+                { symbol: "TCS",      dir: "HOLD", prob: 63, price: "₹3,921",  active: false },
+                { symbol: "NIFTY50",  dir: "BUY",  prob: 78, price: "₹24,132", active: false },
+                { symbol: "AAPL",     dir: "SELL", prob: 71, price: "$189.40", active: false },
+              ].map(row => (
+                <div key={row.symbol} style={{ padding: "10px 16px", borderBottom: "1px solid rgba(34,197,94,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between", background: row.active ? "rgba(34,197,94,0.06)" : "transparent", borderLeft: row.active ? "2px solid #22c55e" : "2px solid transparent" }}>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: row.active ? "#22c55e" : "#e2e8f0" }}>{row.symbol}</div>
+                    <div style={{ fontSize: 10, color: "rgba(232,245,232,0.3)", marginTop: 1 }}>{row.price}</div>
+                  </div>
+                  <div style={{ padding: "3px 10px", borderRadius: 6, fontSize: 11, fontWeight: 700, background: row.dir === "BUY" ? "rgba(34,197,94,0.15)" : row.dir === "SELL" ? "rgba(239,68,68,0.15)" : "rgba(245,158,11,0.15)", color: row.dir === "BUY" ? "#22c55e" : row.dir === "SELL" ? "#ef4444" : "#f59e0b" }}>{row.dir}</div>
+                  <div style={{ textAlign: "right" }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: "#e2e8f0" }}>{row.prob}%</div>
+                    <div style={{ width: 60, height: 3, borderRadius: 2, background: "rgba(255,255,255,0.08)", marginTop: 4 }}>
+                      <div style={{ width: `${row.prob}%`, height: "100%", borderRadius: 2, background: row.dir === "BUY" ? "#22c55e" : row.dir === "SELL" ? "#ef4444" : "#f59e0b" }} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <div style={{ padding: "12px 16px", display: "flex", justifyContent: "space-around", borderTop: "1px solid rgba(34,197,94,0.08)" }}>
+                {["Dashboard","Agents","Guardian","Portfolio"].map((tab,i) => (
+                  <div key={tab} style={{ fontSize: 10, color: i===0 ? "#22c55e" : "rgba(232,245,232,0.25)", fontWeight: i===0 ? 700 : 400 }}>{tab}</div>
+                ))}
+              </div>
             </div>
             {/* Floating signal card */}
             <div style={{
