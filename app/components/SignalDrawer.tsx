@@ -143,9 +143,35 @@ function LiquidityCard({ symbol }: { symbol: string }) {
 export default function SignalDrawer({ symbol, onClose }: { symbol: string; onClose: () => void }) {
   const [signal, setSignal] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [reasoning, setReasoning] = useState<string | null>(null);
+  const [reasoningStatus, setReasoningStatus] = useState<"pending" | "complete" | "failed">("pending");
 
   useEffect(() => {
     fetchSignal(symbol).then(setSignal).finally(() => setLoading(false));
+  }, [symbol]);
+
+  useEffect(() => {
+    if (!symbol) return;
+    setReasoning(null);
+    setReasoningStatus("pending");
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch(`https://web-production-1a093.up.railway.app/api/v1/signals/${symbol}/reasoning`);
+        const data = await res.json();
+        setReasoningStatus(data.status);
+        if (data.status === "complete") {
+          setReasoning(data.reasoning);
+          clearInterval(interval);
+        }
+        if (data.status === "failed" || data.status === "not_found") {
+          clearInterval(interval);
+        }
+      } catch {}
+    }, 2000);
+
+    const timeout = setTimeout(() => clearInterval(interval), 30000);
+    return () => { clearInterval(interval); clearTimeout(timeout); };
   }, [symbol]);
 
   return (
@@ -255,12 +281,21 @@ export default function SignalDrawer({ symbol, onClose }: { symbol: string; onCl
                 </div>
               </div>
             )}
-            {signal.reasoning && (
-              <div className="bg-violet-500/10 border border-violet-500/20 rounded-2xl p-4">
-                <div className="text-xs text-violet-400 mb-2 font-medium">AI Reasoning</div>
-                <div className="text-sm text-white/70 leading-relaxed">{signal.reasoning}</div>
-              </div>
-            )}
+            <div className="bg-violet-500/10 border border-violet-500/20 rounded-2xl p-4">
+              <div className="text-xs text-violet-400 mb-2 font-medium">AI Reasoning</div>
+              {reasoningStatus === "pending" && (
+                <div className="flex items-center gap-2 text-sm text-white/40">
+                  <RefreshCw size={12} className="animate-spin" />
+                  Analyzing market conditions...
+                </div>
+              )}
+              {reasoningStatus === "complete" && reasoning && (
+                <div className="text-sm text-white/70 leading-relaxed">{reasoning}</div>
+              )}
+              {reasoningStatus === "failed" && (
+                <div className="text-sm text-red-400/60">Reasoning unavailable</div>
+              )}
+            </div>
             <div className="text-xs text-white/20 text-center pb-4">Educational signals only — not financial advice</div>
           </div>
         ) : (
