@@ -43,26 +43,16 @@ function MonteCarloChart({ data }: { data: any }) {
   const toY = (v: number) => P + ((max - v) / range) * (H - P * 2);
   const toX = (i: number) => P + (i / (len - 1)) * (W - P * 2);
   const pts = (arr: number[]) => arr.map((v, i) => `${toX(i)},${toY(v)}`).join(" ");
-  const zY = toY(0);
   const actualX = W - P;
   const actualY = toY(data.actual_pnl);
   return (
     <svg viewBox={`0 0 ${W} ${H}`} style={{ width: "100%", height: 140 }} preserveAspectRatio="none">
-      <line x1={P} y1={zY} x2={W-P} y2={zY} stroke="rgba(255,255,255,0.08)" strokeWidth="1" strokeDasharray="4,4"/>
-      {/* p5-p95 band */}
-      <polygon
-        points={`${pts(p5)} ${[...p95].reverse().map((v,i) => `${toX(len-1-i)},${toY(v)}`).join(" ")}`}
-        fill="rgba(0,170,255,0.06)"
-      />
-      {/* p25-p75 band */}
-      <polygon
-        points={`${pts(p25)} ${[...p75].reverse().map((v,i) => `${toX(len-1-i)},${toY(v)}`).join(" ")}`}
-        fill="rgba(0,170,255,0.1)"
-      />
-      <polyline points={pts(p5)}  fill="none" stroke="rgba(255,82,82,0.4)"   strokeWidth="1"/>
-      <polyline points={pts(p95)} fill="none" stroke="rgba(0,255,136,0.4)"   strokeWidth="1"/>
-      <polyline points={pts(p50)} fill="none" stroke="rgba(0,170,255,0.9)"   strokeWidth="1.5" strokeDasharray="5,3"/>
-      {/* Actual result dot */}
+      <line x1={P} y1={toY(0)} x2={W-P} y2={toY(0)} stroke="rgba(255,255,255,0.08)" strokeWidth="1" strokeDasharray="4,4"/>
+      <polygon points={`${pts(p5)} ${[...p95].reverse().map((v,i) => `${toX(len-1-i)},${toY(v)}`).join(" ")}`} fill="rgba(0,170,255,0.06)"/>
+      <polygon points={`${pts(p25)} ${[...p75].reverse().map((v,i) => `${toX(len-1-i)},${toY(v)}`).join(" ")}`} fill="rgba(0,170,255,0.1)"/>
+      <polyline points={pts(p5)}  fill="none" stroke="rgba(255,82,82,0.4)"  strokeWidth="1"/>
+      <polyline points={pts(p95)} fill="none" stroke="rgba(0,255,136,0.4)"  strokeWidth="1"/>
+      <polyline points={pts(p50)} fill="none" stroke="rgba(0,170,255,0.9)"  strokeWidth="1.5" strokeDasharray="5,3"/>
       <circle cx={actualX} cy={actualY} r="4" fill="#00ff88"/>
     </svg>
   );
@@ -98,14 +88,30 @@ export default function Performance() {
   const [filter, setFilter] = useState("ALL");
   const [loading, setLoading] = useState(true);
 
+  // ── NEW: prob filter state
+  const [minProb, setMinProb] = useState(0);
+  const [filteredSummary, setFilteredSummary] = useState<any>(null);
+
   useEffect(() => {
     Promise.all([
       fetch(`${API}/history/summary`).then(r => r.json()),
       fetch(`${API}/history/trades?limit=60`).then(r => r.json()),
       fetch(`${API}/history/montecarlo`).then(r => r.json()),
     ]).then(([s, t, m]) => { setSummary(s); setTrades(t.trades || []); setMc(m); setLoading(false); })
-    .catch(() => setLoading(false));
+      .catch(() => setLoading(false));
   }, []);
+
+  // ── NEW: fetch filtered summary on prob change
+  useEffect(() => {
+    if (minProb === 0) { setFilteredSummary(null); return; }
+    const timer = setTimeout(() => {
+      fetch(`${API}/portfolio?min_probability=${minProb}`)
+        .then(r => r.json())
+        .then(setFilteredSummary)
+        .catch(() => {});
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [minProb]);
 
   const filtered = filter === "ALL" ? trades
     : filter === "HIGH" ? trades.filter((t:any) => t.confidence === "HIGH")
@@ -129,7 +135,56 @@ export default function Performance() {
         <span style={{ marginLeft: "auto", fontSize: 9, color: "rgba(255,255,255,0.2)" }}>90 days</span>
       </div>
 
+      {/* ── NEW: Probability filter toolbar */}
+      <div style={{ padding: "8px 16px", borderBottom: "1px solid rgba(255,255,255,0.05)", display: "flex", alignItems: "center", gap: 16, background: "rgba(0,0,0,0.3)" }}>
+        <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>MIN PROB</span>
+        <input
+          type="range" min={0} max={90} step={5} value={minProb * 100}
+          onChange={e => setMinProb(parseFloat(e.target.value) / 100)}
+          style={{ flex: 1, maxWidth: 140, accentColor: "#f5a623" }}
+        />
+        <span style={{ fontSize: 10, color: "#f5a623", minWidth: 32 }}>{(minProb * 100).toFixed(0)}%</span>
+        {minProb > 0 && (
+          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.2)" }}>
+            Showing signals with probability ≥ {(minProb * 100).toFixed(0)}%
+          </span>
+        )}
+      </div>
+
       <div style={{ padding: "20px 16px", maxWidth: 600, margin: "0 auto" }}>
+
+        {/* ── NEW: All vs Filtered comparison panel */}
+        {filteredSummary && minProb > 0 && summary && (
+          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,165,0,0.2)", borderRadius: 10, padding: "14px 16px", marginBottom: 16 }}>
+            <div style={{ fontSize: 8, color: "rgba(255,165,0,0.6)", letterSpacing: "0.12em", marginBottom: 12 }}>
+              FILTER COMPARISON — ALL vs ≥{(minProb*100).toFixed(0)}% PROBABILITY
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              {[
+                { label: "All Signals", data: summary },
+                { label: `Filtered ≥${(minProb*100).toFixed(0)}%`, data: filteredSummary },
+              ].map(col => (
+                <div key={col.label}>
+                  <div style={{ fontSize: 9, color: "#f5a623", letterSpacing: "0.1em", marginBottom: 8, paddingBottom: 6, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                    {col.label}
+                  </div>
+                  {[
+                    ["WIN RATE", `${col.data?.win_rate ?? "—"}%`],
+                    ["CUM P&L", `${(col.data?.total_pnl ?? 0) >= 0 ? "+" : ""}${col.data?.total_pnl ?? "—"}%`],
+                    ["SHARPE", col.data?.sharpe_ratio ?? "—"],
+                    ["MAX DD", `${col.data?.max_drawdown ?? "—"}%`],
+                    ["TRADES", col.data?.total_trades ?? "—"],
+                  ].map(([k, v]) => (
+                    <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "4px 0", borderBottom: "1px solid rgba(255,255,255,0.04)", fontSize: 10 }}>
+                      <span style={{ color: "rgba(255,255,255,0.3)" }}>{k}</span>
+                      <span>{v}</span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Stats — 2x2 grid + full width P&L */}
         {summary && (
@@ -192,7 +247,6 @@ export default function Performance() {
           </div>
         )}
 
-
         {/* Benchmark comparison hero */}
         {summary?.benchmark?.["Nifty 50"] && (
           <div style={{ background: "linear-gradient(135deg, rgba(0,255,136,0.06), rgba(0,255,136,0.02))", border: "1px solid rgba(0,255,136,0.2)", borderRadius: 10, padding: "16px 20px", marginBottom: 10 }}>
@@ -217,6 +271,7 @@ export default function Performance() {
             </div>
           </div>
         )}
+
         {/* Drawdown curve */}
         {summary?.dd_curve && (
           <div style={{ background: "rgba(255,82,82,0.03)", border: "1px solid rgba(255,82,82,0.12)", borderRadius: 10, padding: "14px 16px", marginBottom: 16 }}>
@@ -230,6 +285,7 @@ export default function Performance() {
             </div>
           </div>
         )}
+
         {/* Monte Carlo */}
         {mc?.curves && (
           <div style={{ background: "rgba(0,170,255,0.03)", border: "1px solid rgba(0,170,255,0.12)", borderRadius: 10, padding: "14px 16px", marginBottom: 16 }}>
@@ -256,6 +312,7 @@ export default function Performance() {
             </div>
           </div>
         )}
+
         {/* Explainer box */}
         <div style={{ background: "rgba(0,170,255,0.04)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 10, padding: "14px 16px", marginBottom: 16 }}>
           <div style={{ fontSize: 9, fontWeight: 800, color: "#00aaff", letterSpacing: "0.12em", marginBottom: 8 }}>HOW THIS WORKS</div>
@@ -323,7 +380,6 @@ export default function Performance() {
                 borderRadius: 10, padding: "12px 14px",
                 display: "flex", alignItems: "center", justifyContent: "space-between",
               }}>
-                {/* Left */}
                 <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <span style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{sym}</span>
@@ -334,7 +390,6 @@ export default function Performance() {
                     {t.date.slice(5)} · {cur}{t.entry?.toLocaleString()}
                   </div>
                 </div>
-                {/* Right */}
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
                   <span style={{ fontSize: 16, fontWeight: 800, color: pnlPos?"#00ff88":"#ff4466" }}>
                     {pnlPos?"+":""}{t.pnl_pct?.toFixed(1)}%
