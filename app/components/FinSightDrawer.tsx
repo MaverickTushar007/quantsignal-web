@@ -32,7 +32,7 @@ export default function FinSightDrawer({ symbol }: { symbol: string }) {
     setCurrentStatus([]);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://web-production-1a093.up.railway.app/api/v1"}/chat/${symbol}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "https://quantsignal-api-production.up.railway.app/api/v1"}/chat/${symbol}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

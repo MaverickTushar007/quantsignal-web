@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 
 const BETA_MODE = true;
 
-const API_BASE = "https://web-production-1a093.up.railway.app/api/v1";
+const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
 
 export default function ProGate({
   children,

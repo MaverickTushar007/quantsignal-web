@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { Send, Terminal, Cpu, Brain, Zap } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
-const API_BASE = "https://web-production-1a093.up.railway.app/api/v1";
+const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
 
 interface Message {
   role: "user" | "assistant";

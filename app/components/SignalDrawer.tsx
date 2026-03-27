@@ -4,7 +4,7 @@ import { X, TrendingUp, TrendingDown, Minus, ExternalLink, Zap, RefreshCw } from
 import { fetchSignal } from "../lib/api";
 import TradingChart from "./TradingChart";
 
-const API_BASE = "https://web-production-1a093.up.railway.app/api/v1";
+const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
 
 const dirColor = (d: string) =>
   d === "BUY" ? "text-emerald-400" : d === "SELL" ? "text-red-400" : "text-yellow-400";
@@ -157,7 +157,7 @@ export default function SignalDrawer({ symbol, onClose }: { symbol: string; onCl
 
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`https://web-production-1a093.up.railway.app/api/v1/signals/${symbol}/reasoning`);
+        const res = await fetch(`https://quantsignal-api-production.up.railway.app/api/v1/signals/${symbol}/reasoning`);
         const data = await res.json();
         setReasoningStatus(data.status);
         if (data.status === "complete") {

@@ -11,7 +11,7 @@ export default function GuardianPage() {
   const openGuardian = async (sig: any) => {
     setLoadingSignal(sig.symbol);
     try {
-      const res = await fetch(`https://web-production-1a093.up.railway.app/api/v1/signals/${sig.symbol}?reason=false`);
+      const res = await fetch(`https://quantsignal-api-production.up.railway.app/api/v1/signals/${sig.symbol}?reason=false`);
       if (res.ok) {
         const full = await res.json();
         setSelected({ ...sig, ...full });
