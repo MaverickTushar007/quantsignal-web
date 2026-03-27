@@ -222,7 +222,7 @@ function AlertBell({ symbol }: { symbol: string }) {
   );
 
   if (state === "input" || state === "loading") return (
-    <div style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", 
+    <div onClick={e => e.stopPropagation()} style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", 
       background: "#0e0f14", border: "1px solid rgba(0,255,136,0.3)", borderRadius: 8,
       padding: "8px 10px", zIndex: 50, display: "flex", gap: 6, alignItems: "center",
       boxShadow: "0 4px 20px rgba(0,0,0,0.6)" }}>
@@ -230,7 +230,7 @@ function AlertBell({ symbol }: { symbol: string }) {
         autoFocus
         value={email}
         onChange={e => setEmail(e.target.value)}
-        onKeyDown={e => { if (e.key === "Enter") submit(); if (e.key === "Escape") setState("idle"); }}
+        onKeyDown={e => { e.preventDefault(); if (e.key === "Enter") submit(); if (e.key === "Escape") setState("idle"); }}
         placeholder="your@email.com"
         style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)",
           borderRadius: 5, padding: "5px 8px", color: "#fff", fontSize: 10, width: 150,

@@ -17,23 +17,20 @@ export function usePushNotifications() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setSupported("serviceWorker" in navigator && "PushManager" in window);
-    checkSubscription();
+    if (!("serviceWorker" in navigator) || !("PushManager" in window)) return;
+    setSupported(true);
+    // Register SW silently on mount — avoids reload on button click
+    navigator.serviceWorker.register("/sw.js", { scope: "/" }).then((reg) => {
+      reg.pushManager.getSubscription().then((sub) => {
+        setSubscribed(!!sub);
+      });
+    }).catch(console.error);
   }, []);
-
-  async function checkSubscription() {
-    if (!("serviceWorker" in navigator)) return;
-    const reg = await navigator.serviceWorker.getRegistration();
-    if (!reg) return;
-    const sub = await reg.pushManager.getSubscription();
-    setSubscribed(!!sub);
-  }
 
   async function subscribe() {
     setLoading(true);
     try {
-      const reg = await navigator.serviceWorker.register("/sw.js");
-      await navigator.serviceWorker.ready;
+      const reg = await navigator.serviceWorker.ready;
       const sub = await reg.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC),
@@ -53,8 +50,7 @@ export function usePushNotifications() {
   async function unsubscribe() {
     setLoading(true);
     try {
-      const reg = await navigator.serviceWorker.getRegistration();
-      if (!reg) return;
+      const reg = await navigator.serviceWorker.ready;
       const sub = await reg.pushManager.getSubscription();
       if (sub) {
         await fetch(`${API}/push/subscribe`, {
