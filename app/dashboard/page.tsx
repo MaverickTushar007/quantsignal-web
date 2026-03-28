@@ -646,6 +646,7 @@ function TrackRecordTab({ symbol }: { symbol: string }) {
 
 export default function Dashboard() {
   const [signals, setSignals] = useState<any[]>([]);
+  const [outcomeMap, setOutcomeMap] = useState<Record<string, {outcome: string, pnl: number}>>({});
   const [mood, setMood] = useState<any>(null);
   const [filter, setFilter] = useState("ALL");
   const { user, isPro } = useAuth();
@@ -728,6 +729,16 @@ export default function Dashboard() {
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
               <span style={{ fontSize: isMobile ? 15 : 12, fontWeight: 700, color: selected?.symbol === sig.symbol ? "#00ff88" : "#e2e8f0" }}>{sig.display}</span>
               <span style={badge(sig.direction)}>{sig.direction}</span>
+              {outcomeMap[sig.symbol] && (
+                <span style={{
+                  fontSize: 8, fontWeight: 800, padding: "1px 5px", borderRadius: 3,
+                  background: outcomeMap[sig.symbol].outcome === "TP_HIT" ? "rgba(0,255,136,0.15)" : "rgba(255,68,102,0.15)",
+                  color: outcomeMap[sig.symbol].outcome === "TP_HIT" ? "#00ff88" : "#ff4466",
+                  marginLeft: 4,
+                }}>
+                  {outcomeMap[sig.symbol].outcome === "TP_HIT" ? "✓" : "✗"}{outcomeMap[sig.symbol].pnl >= 0 ? "+" : ""}{outcomeMap[sig.symbol].pnl?.toFixed(1)}%
+                </span>
+              )}
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: isMobile ? 13 : 10, color: "rgba(255,255,255,0.4)", alignItems: "center" }}>
               <span>{formatPrice(sig.current_price, sig.type, sig.symbol)}</span>
