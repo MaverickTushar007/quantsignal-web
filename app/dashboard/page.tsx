@@ -1026,6 +1026,34 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                 SUPPRESSED
               </span>
             )}
+            {activeDetail.energy && (
+              <span style={{
+                fontSize: 8, padding: "2px 6px", borderRadius: 3, fontWeight: 700,
+                background: activeDetail.energy.state === "releasing" ? "rgba(0,255,136,0.1)" :
+                            activeDetail.energy.state === "coiled"    ? "rgba(0,170,255,0.1)" :
+                            activeDetail.energy.state === "exhausted" ? "rgba(255,68,102,0.1)" :
+                            "rgba(255,255,255,0.05)",
+                border: `1px solid ${activeDetail.energy.state === "releasing" ? "rgba(0,255,136,0.3)" :
+                                     activeDetail.energy.state === "coiled"    ? "rgba(0,170,255,0.3)" :
+                                     activeDetail.energy.state === "exhausted" ? "rgba(255,68,102,0.3)" :
+                                     "rgba(255,255,255,0.1)"}`,
+                color: activeDetail.energy.state === "releasing" ? "#00ff88" :
+                       activeDetail.energy.state === "coiled"    ? "#00aaff" :
+                       activeDetail.energy.state === "exhausted" ? "#ff4466" :
+                       "rgba(255,255,255,0.4)",
+              }}>
+                {activeDetail.energy.state === "releasing" ? "⚡" :
+                 activeDetail.energy.state === "coiled"    ? "🌀" :
+                 activeDetail.energy.state === "exhausted" ? "💤" : "〰"} {activeDetail.energy.state?.toUpperCase()}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Energy Implication */}
+        {activeDetail.energy?.implication && activeDetail.energy.state !== "neutral" && activeDetail.energy.state !== "unknown" && (
+          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", fontStyle: "italic", marginBottom: 10, padding: "6px 8px", background: "rgba(255,255,255,0.02)", borderRadius: 4, borderLeft: `2px solid ${activeDetail.energy.state === "releasing" ? "rgba(0,255,136,0.3)" : activeDetail.energy.state === "coiled" ? "rgba(0,170,255,0.3)" : "rgba(255,68,102,0.3)"}` }}>
+            ⚡ {activeDetail.energy.implication}
           </div>
         )}
 
