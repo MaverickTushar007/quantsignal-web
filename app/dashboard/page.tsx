@@ -462,15 +462,17 @@ function TrackRecordTab({ symbol }: { symbol: string }) {
         // This symbol's recent trades
         const symRecent = sym.slice(0, 8);
 
-        // Fetch EV stats and morning briefing in parallel
-        const [evRes, briefingRes] = await Promise.allSettled([
+        setData({ total: all.length, wins: wins.length, losses: losses.length, winRate, avgPnl, avgWin, avgLoss, buckets, byDir, symRecent, symTotal: sym.length, evStats: [], briefing: null });
+
+        // Fetch EV stats and morning briefing separately
+        Promise.allSettled([
           fetch(`${API_BASE_TR}/system/ev-stats`).then(r => r.json()),
           fetch(`${API_BASE_TR}/system/morning-briefing`).then(r => r.json()),
-        ]);
-        const evStats = evRes.status === "fulfilled" ? (evRes.value?.ev_stats || []) : [];
-        const briefing = briefingRes.status === "fulfilled" ? briefingRes.value : null;
-
-        setData({ total: all.length, wins: wins.length, losses: losses.length, winRate, avgPnl, avgWin, avgLoss, buckets, byDir, symRecent, symTotal: sym.length, evStats, briefing });
+        ]).then(([evRes, briefingRes]) => {
+          const evStats = evRes.status === "fulfilled" ? (evRes.value?.ev_stats || []) : [];
+          const briefing = briefingRes.status === "fulfilled" ? briefingRes.value : null;
+          setData((prev: any) => prev ? { ...prev, evStats, briefing } : prev);
+        });
       })
       .catch(() => setData(null))
       .finally(() => setLoading(false));
