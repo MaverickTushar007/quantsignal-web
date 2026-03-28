@@ -740,6 +740,56 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       )}
       <div style={{ marginBottom: 20 }}>
         <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", marginBottom: 10, letterSpacing: "0.1em" }}>ML PROBABILITY</div>
+
+        {/* Probability Waterfall: Raw → Regime → Final */}
+        {activeDetail.raw_probability && (
+          <div style={{ marginBottom: 12 }}>
+            {[
+              { label: "RAW MODEL", value: activeDetail.raw_probability, color: "#00aaff" },
+              { label: "REGIME ADJ", value: activeDetail.regime_adjusted_probability || activeDetail.probability, color: "#ffd700" },
+              { label: "FINAL", value: activeDetail.probability, color: activeDetail.probability >= 0.5 ? "#00ff88" : activeDetail.probability >= 0.35 ? "#ffd700" : "#ff4466" },
+            ].map(row => (
+              <div key={row.label} style={{ marginBottom: 6 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+                  <span style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", letterSpacing: "0.08em" }}>{row.label}</span>
+                  <span style={{ fontSize: 9, fontWeight: 800, color: row.color }}>{(row.value * 100).toFixed(0)}%</span>
+                </div>
+                <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
+                  <div style={{ width: `${row.value * 100}%`, height: "100%", background: row.color, borderRadius: 2, transition: "width 0.4s ease" }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Regime Badge */}
+        {activeDetail.regime && (
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+            <div style={{
+              fontSize: 9, fontWeight: 700, letterSpacing: "0.1em",
+              padding: "3px 8px", borderRadius: 4,
+              background: activeDetail.regime === "bull" ? "rgba(0,255,136,0.1)" : activeDetail.regime === "bear" ? "rgba(255,68,102,0.1)" : "rgba(255,255,255,0.06)",
+              border: `1px solid ${activeDetail.regime === "bull" ? "rgba(0,255,136,0.3)" : activeDetail.regime === "bear" ? "rgba(255,68,102,0.3)" : "rgba(255,255,255,0.1)"}`,
+              color: activeDetail.regime === "bull" ? "#00ff88" : activeDetail.regime === "bear" ? "#ff4466" : "rgba(255,255,255,0.4)",
+            }}>
+              {activeDetail.regime === "bull" ? "🐂" : activeDetail.regime === "bear" ? "🐻" : "↔"} {activeDetail.regime?.toUpperCase()} REGIME
+            </div>
+            {activeDetail.regime_suppressed && (
+              <span style={{ fontSize: 8, color: "#ffd700", background: "rgba(255,215,0,0.1)", border: "1px solid rgba(255,215,0,0.2)", padding: "2px 6px", borderRadius: 3 }}>
+                SUPPRESSED
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Signal Bias */}
+        {activeDetail.signal_bias && (
+          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", fontStyle: "italic", marginBottom: 10, padding: "6px 8px", background: "rgba(255,255,255,0.02)", borderRadius: 4, borderLeft: "2px solid rgba(255,215,0,0.3)" }}>
+            {activeDetail.signal_bias}
+          </div>
+        )}
+
+        {/* Final probability bar */}
         <div style={{ height: 20, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden", display: "flex", marginBottom: 6 }}>
           <div style={{ width: `${activeDetail.probability * 100}%`, background: "linear-gradient(90deg, #00ff88, #00cc66)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: "#000" }}>
             {(activeDetail.probability * 100).toFixed(0)}%
