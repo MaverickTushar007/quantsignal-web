@@ -96,7 +96,7 @@ export default function Landing() {
                     <div style={{width:6,height:6,borderRadius:"50%",background:"#4ade80"}}/>
                     <div style={{position:"absolute",width:6,height:6,borderRadius:"50%",border:"1px solid #4ade80",animation:"pr 2s ease-out infinite"}}/>
                   </div>
-                  <span style={{fontSize:11,fontWeight:600,color:"#4ade80",letterSpacing:".07em",fontFamily:"DM Mono,monospace"}}>118 live signals · Updated every cycle</span>
+                  <span style={{fontSize:11,fontWeight:600,color:"#4ade80",letterSpacing:".07em",fontFamily:"DM Mono,monospace"}}>186 live signals · Updated every cycle</span>
                 </div>
               </div>
 
@@ -116,7 +116,7 @@ export default function Landing() {
               </div>
 
               <div style={{display:"flex",gap:44,opacity:vis?1:0,animation:vis?"su .85s cubic-bezier(.22,1,.36,1) .5s forwards":"none"}}>
-                {[["118","Live Assets"],["9","Confluence Factors"],["180d","Backtest Window"]].map(([v,l])=>(
+                {[["186","Live Signals"],["9","Confluence Factors"],["15","ML Features"]].map(([v,l])=>(
                   <div key={l}>
                     <div style={{fontSize:28,fontWeight:800,color:"#4ade80",letterSpacing:"-.5px"}}>{v}</div>
                     <div style={{fontSize:11,color:"rgba(226,240,226,.28)",marginTop:3,fontFamily:"DM Mono,monospace"}}>{l}</div>
@@ -141,7 +141,7 @@ export default function Landing() {
 
                 {/* stats */}
                 <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",borderBottom:"1px solid rgba(74,222,128,.06)"}}>
-                  {[["P&L TODAY","+₹4,820","#4ade80"],["ACCURACY","94.2%","#4ade80"],["SIGNALS","118","#e2f0e2"]].map(([lbl,val,clr])=>(
+                  {[["SIGNALS","186","#4ade80"],["CONFLUENCE","9-FACTOR","#4ade80"],["COVERAGE","186","#e2f0e2"]].map(([lbl,val,clr])=>(
                     <div key={lbl} style={{padding:"11px 14px",borderRight:"1px solid rgba(74,222,128,.05)"}}>
                       <div style={{fontSize:8,color:"rgba(226,240,226,.22)",letterSpacing:".1em",marginBottom:4,fontFamily:"DM Mono,monospace"}}>{lbl}</div>
                       <div style={{fontSize:17,fontWeight:800,color:clr as string}}>{val}</div>
@@ -273,7 +273,7 @@ export default function Landing() {
             <h2 style={{fontSize:48,fontWeight:900,letterSpacing:"-1.5px",color:"#f0fdf4",lineHeight:1.05}}>Your financial partner<br/>in 3 easy steps.</h2>
           </div>
           <div className="sg" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
-            {[["01","Create your account","Sign up free. No credit card. Access 118 live signals across crypto, stocks and macro instantly."],["02","Set your strategy","Configure your risk profile. Let an AI agent trade for you, or follow signals manually."],["03","Track your edge","Monitor your virtual portfolio, win rate and P&L. Every trade tracked with full reasoning."]].map(([n,t,d])=>(
+            {[["01","Create your account","Sign up free. No credit card. Access 186 live signals across crypto, stocks and macro instantly."],["02","Set your strategy","Configure your risk profile. Let an AI agent trade for you, or follow signals manually."],["03","Track your edge","Monitor your virtual portfolio, win rate and P&L. Every trade tracked with full reasoning."]].map(([n,t,d])=>(
               <div key={n} className="ch" style={{background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.05)",borderRadius:16,padding:"28px 20px"}}>
                 <div style={{fontSize:34,fontWeight:900,color:"rgba(74,222,128,.18)",marginBottom:13,fontFamily:"DM Mono,monospace"}}>{n}</div>
                 <div style={{fontSize:14,fontWeight:700,color:"#f0fdf4",marginBottom:8}}>{t}</div>
@@ -330,7 +330,7 @@ export default function Landing() {
         <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:520,height:260,background:"radial-gradient(ellipse,rgba(74,222,128,.055) 0%,transparent 70%)",pointerEvents:"none"}}/>
         <div style={{position:"relative"}}>
           <h2 style={{fontSize:54,fontWeight:900,letterSpacing:"-2px",color:"#f0fdf4",marginBottom:14,lineHeight:1.0}}>Ready to trade with<br/><span style={{color:"#4ade80"}}>actual edge?</span></h2>
-          <p style={{fontSize:13,color:"rgba(226,240,226,.32)",marginBottom:30,fontFamily:"DM Mono,monospace"}}>No credit card required · 118 live signals · Start in 10 seconds</p>
+          <p style={{fontSize:13,color:"rgba(226,240,226,.32)",marginBottom:30,fontFamily:"DM Mono,monospace"}}>No credit card required · 186 live signals · Start in 10 seconds</p>
           <a href="/dashboard" className="bp" style={{display:"inline-flex",alignItems:"center",gap:10,background:"#4ade80",color:"#050c05",fontWeight:700,fontSize:15,padding:"15px 34px",borderRadius:12,textDecoration:"none"}}>
             Launch QuantSignal free
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="#050c05" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
