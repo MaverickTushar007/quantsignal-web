@@ -462,7 +462,15 @@ function TrackRecordTab({ symbol }: { symbol: string }) {
         // This symbol's recent trades
         const symRecent = sym.slice(0, 8);
 
-        setData({ total: all.length, wins: wins.length, losses: losses.length, winRate, avgPnl, avgWin, avgLoss, buckets, byDir, symRecent, symTotal: sym.length });
+        // Fetch EV stats and morning briefing in parallel
+        const [evRes, briefingRes] = await Promise.allSettled([
+          fetch(`${API_BASE_TR}/system/ev-stats`).then(r => r.json()),
+          fetch(`${API_BASE_TR}/system/morning-briefing`).then(r => r.json()),
+        ]);
+        const evStats = evRes.status === "fulfilled" ? (evRes.value?.ev_stats || []) : [];
+        const briefing = briefingRes.status === "fulfilled" ? briefingRes.value : null;
+
+        setData({ total: all.length, wins: wins.length, losses: losses.length, winRate, avgPnl, avgWin, avgLoss, buckets, byDir, symRecent, symTotal: sym.length, evStats, briefing });
       })
       .catch(() => setData(null))
       .finally(() => setLoading(false));
@@ -552,6 +560,47 @@ function TrackRecordTab({ symbol }: { symbol: string }) {
           );
         })}
       </div>
+
+      {/* Regime Performance Panel */}
+      <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>REGIME PERFORMANCE</div>
+      <div style={{ marginBottom: 18 }}>
+        {data.evStats && data.evStats.map((ev: any, i: number) => {
+          if (ev.ev === null) return null;
+          const wr = ev.win_rate ? ev.win_rate * 100 : 0;
+          return (
+            <div key={i} style={{ marginBottom: 8 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+                <span style={{ fontSize: 9, color: "rgba(255,255,255,0.5)" }}>
+                  <span style={{ color: ev.direction === "BUY" ? "#00ff88" : "#ff4466", fontWeight: 700 }}>{ev.direction}</span>
+                  {" in "}{ev.regime.toUpperCase()}
+                </span>
+                <div style={{ display: "flex", gap: 10 }}>
+                  <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{ev.total_trades} trades</span>
+                  <span style={{ fontSize: 9, fontWeight: 700, color: ev.ev >= 0 ? "#00ff88" : "#ff4466" }}>EV {ev.ev >= 0 ? "+" : ""}{ev.ev?.toFixed(2)}%</span>
+                  <span style={{ fontSize: 9, fontWeight: 800, color: wr >= 50 ? "#00ff88" : wr >= 35 ? "#ffd700" : "#ff4466" }}>{wr.toFixed(0)}% WR</span>
+                </div>
+              </div>
+              <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
+                <div style={{ width: `${Math.min(wr, 100)}%`, height: "100%", background: wr >= 50 ? "#00ff88" : wr >= 35 ? "#ffd700" : "#ff4466", borderRadius: 2 }} />
+              </div>
+            </div>
+          );
+        })}
+        {(!data.evStats || data.evStats.length === 0) && (
+          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>No regime data yet</div>
+        )}
+      </div>
+
+      {/* Morning Briefing */}
+      {data.briefing && (
+        <>
+          <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>PERSEUS MORNING BRIEFING</div>
+          <div style={{ background: "rgba(0,170,255,0.05)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 6, padding: "10px 12px", marginBottom: 18 }}>
+            <div style={{ fontSize: 8, color: "rgba(0,170,255,0.6)", marginBottom: 6, letterSpacing: "0.08em" }}>{data.briefing.date} — AUTO GENERATED</div>
+            <div style={{ fontSize: 9, color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>{data.briefing.briefing_text}</div>
+          </div>
+        </>
+      )}
 
       {/* This symbol's recent trades */}
       {data.symRecent.length > 0 && (
