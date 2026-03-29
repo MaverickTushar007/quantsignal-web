@@ -25,7 +25,7 @@ const SUGGESTED = [
   "Is now a good time to enter?",
 ];
 
-export default function AgentChat({ symbol }: { symbol: string }) {
+export default function AgentChat({ symbol, userId }: { symbol: string; userId?: string }) {
   const [messages, setMessages] = useState<Message[]>(GLOBAL_MEMORY.history);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);

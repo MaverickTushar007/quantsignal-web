@@ -1207,7 +1207,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                 {mobilePanel === "NEWS" && selected && <NewsTab symbol={selected.symbol} />}
                 {mobilePanel === "CHAT" && (
                   <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", padding: "0 16px 16px" }}>
-                    <AgentChat symbol={selected.symbol} />
+                    <AgentChat symbol={selected.symbol} userId={user?.id} />
                   </div>
                 )}
                 {mobilePanel === "CALENDAR" && <EconomicCalendar />}
