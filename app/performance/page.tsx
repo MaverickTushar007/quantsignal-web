@@ -86,6 +86,14 @@ export default function PerformancePage() {
   const [trades, setTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"ALL" | "BUY" | "SELL" | "TP" | "SL">("ALL");
+  const [evStats, setEvStats] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch(`${API}/system/ev-stats`)
+      .then(r => r.json())
+      .then(d => setEvStats(d.ev_stats || []))
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     Promise.all([
@@ -240,6 +248,40 @@ export default function PerformancePage() {
             </ResponsiveContainer>
           </div>
         </div>
+
+        {/* ── REGIME PERFORMANCE ── */}
+        {evStats.length > 0 && (
+          <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 8, padding: "16px 18px" }}>
+            <div style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 16 }}>REGIME PERFORMANCE — EV STATS</div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 10 }}>
+              {evStats.filter((e: any) => e.win_rate !== null).map((e: any, i: number) => {
+                const color = e.regime === "bull" ? "#00ff88" : e.regime === "bear" ? "#ff4466" : "#ffd700";
+                const dirColor = e.direction === "BUY" ? "#00ff88" : "#ff4466";
+                return (
+                  <div key={i} style={{ background: "rgba(255,255,255,0.02)", border: `1px solid ${color}20`, borderRadius: 6, padding: "12px 14px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                      <span style={{ fontSize: 9, fontWeight: 700, color, textTransform: "uppercase" }}>{e.regime}</span>
+                      <span style={{ fontSize: 9, fontWeight: 700, color: dirColor }}>{e.direction}</span>
+                    </div>
+                    <div style={{ fontSize: 20, fontWeight: 800, color: "#fff", marginBottom: 4 }}>
+                      {e.win_rate !== null ? `${(e.win_rate * 100).toFixed(0)}%` : "—"}
+                    </div>
+                    <div style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", marginBottom: 6 }}>WIN RATE</div>
+                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9 }}>
+                      <span style={{ color: e.ev > 0 ? "#00ff88" : "#ff4466" }}>
+                        EV {e.ev !== null ? `${e.ev > 0 ? "+" : ""}${e.ev?.toFixed(2)}%` : "—"}
+                      </span>
+                      <span style={{ color: "rgba(255,255,255,0.3)" }}>{e.total_trades} trades</span>
+                    </div>
+                    <div style={{ marginTop: 8, height: 3, background: "rgba(255,255,255,0.06)", borderRadius: 2 }}>
+                      <div style={{ width: `${Math.min((e.win_rate || 0) * 100, 100)}%`, height: "100%", background: color, borderRadius: 2 }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* ── TRADES TABLE ── */}
         <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 8, padding: "16px 18px" }}>
