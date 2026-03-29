@@ -1030,6 +1030,27 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           </div>
         )}
 
+        {/* Signal Reasoning */}
+        {activeDetail.context_text && (
+          <div style={{
+            marginBottom: 12, padding: "10px 12px", borderRadius: 6,
+            background: "rgba(0,170,255,0.06)",
+            border: "1px solid rgba(0,170,255,0.15)",
+          }}>
+            <div style={{ fontSize: 8, fontWeight: 700, letterSpacing: "0.1em", color: "#00aaff", marginBottom: 6 }}>
+              💡 SIGNAL REASONING
+            </div>
+            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.7)", lineHeight: 1.6 }}>
+              {activeDetail.context_text}
+            </div>
+            {activeDetail.conflict_detected && (
+              <div style={{ marginTop: 6, fontSize: 9, color: "#ffd700", display: "flex", alignItems: "center", gap: 4 }}>
+                ⚠️ {activeDetail.conflict_reason || "Signal conflict detected — trade with caution"}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Regime Badge */}
         {activeDetail.regime && (
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
