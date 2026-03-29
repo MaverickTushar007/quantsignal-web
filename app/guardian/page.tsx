@@ -144,7 +144,7 @@ export default function GuardianPage() {
                 <div style={{ fontSize:9, fontWeight:700, color:"#ffd700", letterSpacing:"0.1em", marginBottom:10 }}>🔔 ACTIVE ALERTS ({alertCount})</div>
                 {guardian?.alerts_fired?.map((a: any, i: number) => (
                   <div key={i} style={{ background:"rgba(255,215,0,0.06)", border:"1px solid rgba(255,215,0,0.2)", borderRadius:10, padding:"14px 16px", display:"flex", alignItems:"center", gap:16, marginBottom:8 }}>
-                    <div style={{ fontSize:18, fontWeight:800, color:DIR_COLOR[a.direction]???"#fff", minWidth:60 }}>{a.symbol}</div>
+                    <div style={{ fontSize:18, fontWeight:800, color:DIR_COLOR[a.direction]??"#fff", minWidth:60 }}>{a.symbol}</div>
                     <div style={{ flex:1 }}>
                       <div style={{ display:"flex", gap:8, marginBottom:4, alignItems:"center" }}>
                         <span style={{ fontSize:10, fontWeight:700, color:DIR_COLOR[a.direction], background:DIR_COLOR[a.direction]+"15", padding:"2px 8px", borderRadius:4 }}>{a.direction}</span>
@@ -172,8 +172,8 @@ export default function GuardianPage() {
                 <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:8 }}>
                   <span style={{ fontSize:13, fontWeight:700, color:"#fff", minWidth:90 }}>{w.symbol}</span>
                   <span style={{ fontSize:9, fontWeight:700, color:DIR_COLOR[w.direction], background:DIR_COLOR[w.direction]+"15", padding:"2px 8px", borderRadius:4 }}>{w.direction}</span>
-                  <span style={{ fontSize:10, color:"rgba(255,255,255,0.4)" }}>{REGIME_ICON[w.regime]???"?"} <span style={{ fontSize:9, color:"rgba(255,255,255,0.25)" }}>{w.regime}</span></span>
-                  <span style={{ fontSize:9, color:ENERGY_COLOR[w.energy]???"rgba(255,255,255,0.3)", marginLeft:"auto" }}>⚡ {w.energy}</span>
+                  <span style={{ fontSize:10, color:"rgba(255,255,255,0.4)" }}>{REGIME_ICON[w.regime]??"?"} <span style={{ fontSize:9, color:"rgba(255,255,255,0.25)" }}>{w.regime}</span></span>
+                  <span style={{ fontSize:9, color:ENERGY_COLOR[w.energy]??"rgba(255,255,255,0.3)", marginLeft:"auto" }}>⚡ {w.energy}</span>
                 </div>
                 <ProbBar prob={w.prob} />
                 <div style={{ marginTop:6, fontSize:9, color:"rgba(255,255,255,0.3)", display:"flex", justifyContent:"space-between" }}>
