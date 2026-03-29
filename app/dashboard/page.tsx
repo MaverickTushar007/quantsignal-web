@@ -673,6 +673,27 @@ export default function Dashboard() {
   }, []);
 
 
+  // Fetch outcome map — shows ✓/✗ badges on signal list
+  useEffect(() => {
+    fetch(`${API_BASE}/history/trades?limit=500`)
+      .then(r => r.json())
+      .then(data => {
+        const trades = data.trades || [];
+        const map: Record<string, {outcome: string, pnl: number}> = {};
+        // Keep most recent trade per symbol
+        trades.forEach((t: any) => {
+          if (!map[t.symbol] && t.outcome && t.outcome !== "open") {
+            map[t.symbol] = {
+              outcome: t.outcome,
+              pnl: t.pnl_pct || 0,
+            };
+          }
+        });
+        setOutcomeMap(map);
+      })
+      .catch(() => {});
+  }, []);
+
   useEffect(() => {
     setLoading(true);
     const type = filter === "ALL" ? undefined : filter === "COMMOD" ? "COMMODITY" : filter === "INDIA" ? "IN_STOCK" : filter;
