@@ -31,8 +31,15 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
   const [loading, setLoading] = useState(false);
   const [currentStatus, setCurrentStatus] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
+  const [quantMode, setQuantMode] = useState(() => localStorage.getItem("qs_perseus_mode") === "quant");
   const scrollRef = useRef<HTMLDivElement>(null);
   const mono = "'IBM Plex Mono', monospace";
+
+  const toggleMode = () => {
+    const newMode = quantMode ? false : true;
+    setQuantMode(newMode);
+    localStorage.setItem("qs_perseus_mode", newMode ? "quant" : "simple");
+  };
 
   // Track watchlist
   useEffect(() => {
