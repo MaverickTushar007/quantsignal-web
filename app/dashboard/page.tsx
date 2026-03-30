@@ -747,6 +747,32 @@ export default function Dashboard() {
         ))}
       </div>
       <div style={{ flex: 1, overflowY: "auto" }}>
+        {/* TOP SIGNALS — pinned, highest confidence BUY/SELL */}
+        {!loading && signals.length > 0 && filter === "ALL" && (() => {
+          const top = [...signals]
+            .filter(s => s.direction !== "HOLD")
+            .sort((a, b) => b.probability - a.probability)
+            .slice(0, 3);
+          if (!top.length) return null;
+          return (
+            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "8px 12px 6px" }}>
+              <div style={{ fontSize: 8, color: "rgba(0,255,136,0.5)", letterSpacing: "0.15em", fontWeight: 700, marginBottom: 6 }}>⚡ TOP SIGNALS</div>
+              <div style={{ display: "flex", gap: 4 }}>
+                {top.map(sig => (
+                  <button key={sig.symbol} onClick={() => selectAsset(sig)} style={{
+                    flex: 1, background: selected?.symbol === sig.symbol ? "rgba(0,255,136,0.1)" : "rgba(255,255,255,0.03)",
+                    border: `1px solid ${selected?.symbol === sig.symbol ? "rgba(0,255,136,0.3)" : "rgba(255,255,255,0.08)"}`,
+                    borderRadius: 4, padding: "5px 4px", cursor: "pointer", fontFamily: "inherit", textAlign: "center"
+                  }}>
+                    <div style={{ fontSize: 9, fontWeight: 700, color: "#e2e8f0", marginBottom: 2 }}>{sig.display}</div>
+                    <div style={{ fontSize: 8, fontWeight: 800, color: sig.direction === "BUY" ? "#00ff88" : "#ff4466" }}>{sig.direction}</div>
+                    <div style={{ fontSize: 8, color: "rgba(255,255,255,0.4)" }}>{(sig.probability * 100).toFixed(0)}%</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
         {loading ? (
           <>
           <style>{`
@@ -1444,8 +1470,8 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           </div>
         )}
 
-        {/* Right sidebar — desktop only */}
-        {detail && (
+        {/* Right sidebar — only on SIGNAL and CHAT tabs */}
+        {detail && (activeTab === "SIGNAL" || activeTab === "CHAT") && (
           <div style={{ width: 300, background: "#0a0a0c", overflowY: "auto", padding: "16px", flexShrink: 0 }}>
             <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 16 }}>ANALYST SIDEBAR</div>
             <SidebarContent />
