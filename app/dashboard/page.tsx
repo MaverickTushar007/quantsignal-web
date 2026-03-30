@@ -3,7 +3,7 @@ import { usePushNotifications } from "../hooks/usePushNotifications";
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/useAuth";
 import ProGate from "../components/ProGate";
-import { fetchAllSignals, fetchMarketMood, fetchSignal } from "../lib/api";
+import { fetchAllSignals, fetchMarketMood, fetchSignal, UpgradeRequiredError } from "../lib/api";
 import TradingChart from "../components/TradingChart";
 import TutorialModal from "../components/TutorialModal";
 import AgentChat from "../components/AgentChat";
@@ -12,6 +12,7 @@ import EconomicCalendar from "../components/EconomicCalendar";
 import TradeGuardian from "../components/TradeGuardian";
 import NewsTab from "../components/NewsTab";
 import MarketSentiment from "../components/MarketSentiment";
+import UpgradeModal from "../components/UpgradeModal";
 
 
 const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
@@ -42,6 +43,7 @@ function formatPrice(price: number, type: string, symbol: string): string {
 
 function LiquidityCard({ symbol }: { symbol: string }) {
   const [data, setData] = useState<any>(null);
+  const [upgradeError, setUpgradeError] = useState<{kind:"signals"|"perseus",used:number,limit:number}|null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const fetchLiquidity = async () => {
@@ -62,6 +64,8 @@ function LiquidityCard({ symbol }: { symbol: string }) {
   const oiColor = data.oi_change_24h_pct >= 0 ? "#00ff88" : "#ff4466";
 
   return (
+    <>
+    {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
     <div style={{ marginBottom: 20, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 14 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
         <span style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", letterSpacing: "0.1em" }}>⚡ LIQUIDITY LEVELS</span>
@@ -160,6 +164,8 @@ function EstClock() {
   const tz = TIMEZONES[tzIndex];
 
   return (
+    <>
+    {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
     <div >
       <div onClick={() => setShowPicker(p => !p)} style={{ display: "flex", alignItems: "center", gap: 5, cursor: "pointer", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 6, padding: "3px 8px" }}>
         <span style={{ fontSize: 11 }}>{tz.flag}</span>
@@ -266,6 +272,8 @@ function AlertBell({ symbol }: { symbol: string }) {
 function ShockWarning({ shock }: { shock?: any }) {
   if (!shock) return null;
   return (
+    <>
+    {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
     <div style={{
       background: 'rgba(255,140,0,0.08)',
       border: '1px solid rgba(255,140,0,0.3)',
@@ -304,6 +312,8 @@ function MTFBar({ mtf, direction }: { mtf?: any, direction?: string }) {
   const filled = Math.round(score);
   const barColor = score >= 3 ? '#00ff88' : score >= 2 ? '#ffc800' : '#ff4466';
   return (
+    <>
+    {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
     <div style={{ marginBottom: 14 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
         <span style={{ fontSize: 8, fontWeight: 800, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em' }}>MTF ALIGNMENT</span>
@@ -414,6 +424,7 @@ const API_BASE_TR = "https://quantsignal-api-production.up.railway.app/api/v1";
 
 function TrackRecordTab({ symbol }: { symbol: string }) {
   const [data, setData] = useState<any>(null);
+  const [upgradeError, setUpgradeError] = useState<{kind:"signals"|"perseus",used:number,limit:number}|null>(null);
   const [loading, setLoading] = useState(true);
   const mono = "'IBM Plex Mono', monospace";
 
@@ -474,7 +485,7 @@ function TrackRecordTab({ symbol }: { symbol: string }) {
           setData((prev: any) => prev ? { ...prev, evStats, briefing } : prev);
         });
       })
-      .catch(() => setData(null))
+      .catch((e) => { if (e instanceof UpgradeRequiredError) setUpgradeError({kind:e.kind as any,used:e.used,limit:e.limit}); else setData(null); })
       .finally(() => setLoading(false));
   }, [symbol]);
 
@@ -495,6 +506,8 @@ function TrackRecordTab({ symbol }: { symbol: string }) {
   );
 
   return (
+    <>
+    {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
     <div style={{ padding: "14px 16px", fontFamily: mono, overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}>
 
       {/* Header */}
@@ -709,7 +722,7 @@ export default function Dashboard() {
     setLivePrice(sig.current_price);
     setDetail(null);
     setDetailLoading(true);
-    fetchSignal(sig.symbol).then(setDetail).finally(() => setDetailLoading(false));
+    fetchSignal(sig.symbol).then(setDetail).catch((e) => { if (e instanceof UpgradeRequiredError) setUpgradeError({kind:e.kind as any,used:e.used,limit:e.limit}); }).finally(() => setDetailLoading(false));
     if (isMobile && switchPanel) setMobilePanel("SIGNAL");
   };
 
@@ -1314,6 +1327,8 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
   // ── DESKTOP LAYOUT ─────────────────────────────────────────────
   return (
+    <>
+    {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden", background: "#060608", fontFamily: "'IBM Plex Mono', monospace", color: "#e2e8f0" }}>
       {/* Top bar */}
       <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
