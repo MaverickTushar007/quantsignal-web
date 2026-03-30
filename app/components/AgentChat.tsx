@@ -64,8 +64,10 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
     const msg = text || input;
     if (!msg.trim() || loading) return;
 
-    // Auto-inject symbol context if not already mentioned
-    const contextualMsg = msg.includes(symbol) ? msg : `[Viewing ${symbol}] ${msg}`;
+    // Only inject symbol context if message seems asset-specific
+    const assetKeywords = ["signal", "trade", "buy", "sell", "entry", "exit", "stop", "target", "chart", "price", "trend"];
+    const isAssetSpecific = assetKeywords.some(k => msg.toLowerCase().includes(k)) || msg.includes(symbol);
+    const contextualMsg = isAssetSpecific && !msg.includes(symbol) ? `[Viewing ${symbol}] ${msg}` : msg;
 
     const userMsg: Message = { role: "user", content: msg };
     const newHistory = [...GLOBAL_MEMORY.history, userMsg];
@@ -266,7 +268,7 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && sendMessage()}
-            placeholder={`Ask about ${symbol}...`}
+            placeholder="Ask anything — markets, signals, macro, strategy..."
             style={{ flex: 1, background: "transparent", border: "none", color: "#fff", fontSize: 12, outline: "none", padding: "8px 4px", fontFamily: mono }}
           />
           <button
