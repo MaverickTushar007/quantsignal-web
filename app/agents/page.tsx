@@ -100,10 +100,10 @@ export default function AgentsPage() {
           alignItems: "flex-start", marginBottom: 32 }}>
           <div>
             <div style={{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.02em" }}>
-              🤖 Virtual Agents
+              🤖 Agent Lab
             </div>
             <div style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", marginTop: 4 }}>
-              Automated paper trading on live signals
+              Virtual paper trading — test strategies on live signals with no real money
             </div>
           </div>
           <button onClick={() => setShowForm(!showForm)} style={{
@@ -231,7 +231,7 @@ export default function AgentsPage() {
               No agents yet
             </div>
             <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)" }}>
-              Create your first agent to start paper trading automatically
+              Create a virtual agent to paper trade automatically on live signals
             </div>
           </div>
         ) : (

@@ -116,7 +116,7 @@ export default function Landing() {
               </div>
 
               <div style={{display:"flex",gap:44,opacity:vis?1:0,animation:vis?"su .85s cubic-bezier(.22,1,.36,1) .5s forwards":"none"}}>
-                {[["186","Live Signals"],["9","Confluence Factors"],["15","ML Features"]].map(([v,l])=>(
+                {[["133","Live Assets"],["9","Confluence Factors"],["47","ML Features"]].map(([v,l])=>(
                   <div key={l}>
                     <div style={{fontSize:28,fontWeight:800,color:"#4ade80",letterSpacing:"-.5px"}}>{v}</div>
                     <div style={{fontSize:11,color:"rgba(226,240,226,.28)",marginTop:3,fontFamily:"DM Mono,monospace"}}>{l}</div>
@@ -141,7 +141,7 @@ export default function Landing() {
 
                 {/* stats */}
                 <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",borderBottom:"1px solid rgba(74,222,128,.06)"}}>
-                  {[["SIGNALS","186","#4ade80"],["CONFLUENCE","9-FACTOR","#4ade80"],["COVERAGE","186","#e2f0e2"]].map(([lbl,val,clr])=>(
+                  {[["SIGNALS","133","#4ade80"],["CONFLUENCE","9-FACTOR","#4ade80"],["COVERAGE","133","#e2f0e2"]].map(([lbl,val,clr])=>(
                     <div key={lbl} style={{padding:"11px 14px",borderRight:"1px solid rgba(74,222,128,.05)"}}>
                       <div style={{fontSize:8,color:"rgba(226,240,226,.22)",letterSpacing:".1em",marginBottom:4,fontFamily:"DM Mono,monospace"}}>{lbl}</div>
                       <div style={{fontSize:17,fontWeight:800,color:clr as string}}>{val}</div>
@@ -254,7 +254,7 @@ export default function Landing() {
             <h2 style={{fontSize:48,fontWeight:900,letterSpacing:"-1.5px",color:"#f0fdf4"}}>Every claim is verifiable.</h2>
           </div>
           <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10}}>
-            {[["22%","Win Rate","300 backtested signals"],["2.57","Sharpe Ratio","across all asset classes"],["2:1","Risk/Reward","ATR-based targets"],["186","Live Assets","crypto, stocks, forex"]].map(([v,l,s])=>(
+            {[["+39.5%","Total P&L","262 closed trades"],["2.57","Sharpe Ratio","across all asset classes"],["2:1","Risk/Reward","ATR-based targets"],["133","Live Assets","crypto, stocks, forex"]].map(([v,l,s])=>(
               <div key={l} style={{textAlign:"center",padding:"32px 12px",background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.05)",borderRadius:16}}>
                 <div style={{fontSize:44,fontWeight:900,color:"#4ade80",letterSpacing:"-1px",marginBottom:6}}>{v}</div>
                 <div style={{fontSize:12,fontWeight:700,color:"#f0fdf4",marginBottom:4}}>{l}</div>
@@ -296,7 +296,7 @@ export default function Landing() {
               <div style={{fontSize:10,fontWeight:700,color:"rgba(226,240,226,.32)",letterSpacing:".14em",fontFamily:"DM Mono,monospace",marginBottom:16}}>FREE</div>
               <div style={{fontSize:42,fontWeight:900,color:"#f0fdf4",letterSpacing:"-1px",marginBottom:4}}>₹0</div>
               <div style={{fontSize:11,color:"rgba(226,240,226,.26)",marginBottom:26,fontFamily:"DM Mono,monospace"}}>forever</div>
-              {["186 live signals","Direction + confidence","News feed","Economic calendar","Perseus AI chat"].map(f=>(
+              {["133 live signals","Direction + confidence","News feed","Economic calendar","Perseus AI chat"].map(f=>(
                 <div key={f} style={{display:"flex",alignItems:"center",gap:9,marginBottom:10}}>
                   <div style={{width:15,height:15,borderRadius:"50%",background:"rgba(255,255,255,.05)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
                     <svg width="8" height="8" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="rgba(226,240,226,.32)" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round"/></svg>

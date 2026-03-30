@@ -177,8 +177,15 @@ export default function GuardianPage() {
 
             <div style={{ fontSize:9, fontWeight:700, color:"rgba(255,255,255,0.3)", letterSpacing:"0.1em", marginBottom:10 }}>WATCHLIST — LIVE SCAN</div>
             {guardian?.note && (
-              <div style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:10, padding:"20px", fontSize:11, color:"rgba(255,255,255,0.4)", textAlign:"center" as const }}>
-                {guardian.note}
+              <div style={{ background:"rgba(255,255,255,0.02)", border:"1px solid rgba(255,255,255,0.07)", borderRadius:10, padding:"32px 20px", textAlign:"center" as const }}>
+                <div style={{ fontSize:24, marginBottom:12 }}>🛡️</div>
+                <div style={{ fontSize:12, fontWeight:700, color:"rgba(255,255,255,0.5)", marginBottom:8 }}>No symbols being watched</div>
+                <div style={{ fontSize:11, color:"rgba(255,255,255,0.25)", marginBottom:16, lineHeight:1.6 }}>
+                  Guardian monitors your watchlist every 15 minutes and fires alerts when signals meet your thresholds.
+                </div>
+                <a href="/dashboard" style={{ fontSize:10, fontWeight:700, color:"#00ff88", textDecoration:"none", border:"1px solid rgba(0,255,136,0.3)", borderRadius:4, padding:"6px 16px", background:"rgba(0,255,136,0.06)" }}>
+                  GO TO DASHBOARD → ADD ASSETS TO WATCHLIST
+                </a>
               </div>
             )}
             {!guardian?.note && (guardian?.watched??[]).map((w: any) => (
