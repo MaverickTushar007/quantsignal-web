@@ -57,13 +57,13 @@ export default function Landing() {
           .fg{grid-template-columns:1fr!important;}
           .pg{grid-template-columns:1fr!important;}
           .sg{grid-template-columns:1fr!important;}
-          .nl{display:none!important;}
+          .nl{display:none!important;}.st{grid-template-columns:repeat(2,1fr)!important;}
           .fi{flex-direction:column!important;gap:16px!important;text-align:center;}
         }
       `}</style>
 
       {/* NAV */}
-      <nav style={{position:"fixed",top:0,width:"100%",zIndex:100,height:58,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 40px",background:scrolled?"rgba(5,12,5,.94)":"transparent",backdropFilter:scrolled?"blur(24px)":"none",borderBottom:scrolled?"1px solid rgba(74,222,128,.07)":"1px solid transparent",transition:"all .3s"}}>
+      <nav style={{position:"fixed",top:0,width:"100%",zIndex:100,height:58,display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 20px",background:scrolled?"rgba(5,12,5,.94)":"transparent",backdropFilter:scrolled?"blur(24px)":"none",borderBottom:scrolled?"1px solid rgba(74,222,128,.07)":"1px solid transparent",transition:"all .3s"}}>
         <div style={{display:"flex",alignItems:"center",gap:9}}>
           <div style={{width:28,height:28,background:"#16a34a",borderRadius:7,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:900,color:"#f0fdf4"}}>Q</div>
           <span style={{fontSize:14,fontWeight:700,color:"#f0fdf4",letterSpacing:"-.3px"}}>Quant<span style={{color:"#4ade80"}}>Signal</span></span>
@@ -253,7 +253,7 @@ export default function Landing() {
             <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".16em",fontFamily:"DM Mono,monospace",marginBottom:12}}>THE PROOF</div>
             <h2 style={{fontSize:48,fontWeight:900,letterSpacing:"-1.5px",color:"#f0fdf4"}}>Every claim is verifiable.</h2>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10}}>
+          <div className="st" style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10}}>
             {[["+39.5%","Total P&L","262 closed trades"],["2.57","Sharpe Ratio","across all asset classes"],["2:1","Risk/Reward","ATR-based targets"],["133","Live Assets","crypto, stocks, forex"]].map(([v,l,s])=>(
               <div key={l} style={{textAlign:"center",padding:"32px 12px",background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.05)",borderRadius:16}}>
                 <div style={{fontSize:44,fontWeight:900,color:"#4ade80",letterSpacing:"-1px",marginBottom:6}}>{v}</div>
