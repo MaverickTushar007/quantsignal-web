@@ -213,7 +213,7 @@ export default function Landing() {
         <div style={{maxWidth:900,margin:"0 auto",textAlign:"center"}}>
           <p style={{fontSize:10,color:"rgba(226,240,226,.18)",letterSpacing:".14em",fontFamily:"DM Mono,monospace",marginBottom:20}}>BUILT WITH</p>
           <div style={{display:"flex",justifyContent:"center",gap:34,flexWrap:"wrap"}}>
-            {["XGBoost","LightGBM","Groq AI","Supabase","Railway","Vercel"].map(n=>(
+            {["XGBoost","LightGBM","Groq AI","Supabase","Railway","Cloudflare"].map(n=>(
               <span key={n} style={{fontSize:12,fontWeight:600,color:"rgba(226,240,226,.16)"}}>{n}</span>
             ))}
           </div>
@@ -273,7 +273,7 @@ export default function Landing() {
             <h2 style={{fontSize:48,fontWeight:900,letterSpacing:"-1.5px",color:"#f0fdf4",lineHeight:1.05}}>Your financial partner<br/>in 3 easy steps.</h2>
           </div>
           <div className="sg" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
-            {[["01","Create your account","Sign up free. No credit card. Access 186 live signals across crypto, stocks and macro instantly."],["02","Set your strategy","Configure your risk profile. Let an AI agent trade for you, or follow signals manually."],["03","Track your edge","Monitor your virtual portfolio, win rate and P&L. Every trade tracked with full reasoning."]].map(([n,t,d])=>(
+            {[["01","Create your account","Sign up free. No credit card. Access 133 live signals across crypto, stocks and macro instantly."],["02","Set your strategy","Configure your risk profile. Let an AI agent trade for you, or follow signals manually."],["03","Track your edge","Monitor your virtual portfolio, win rate and P&L. Every trade tracked with full reasoning."]].map(([n,t,d])=>(
               <div key={n} className="ch" style={{background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.05)",borderRadius:16,padding:"28px 20px"}}>
                 <div style={{fontSize:34,fontWeight:900,color:"rgba(74,222,128,.18)",marginBottom:13,fontFamily:"DM Mono,monospace"}}>{n}</div>
                 <div style={{fontSize:14,fontWeight:700,color:"#f0fdf4",marginBottom:8}}>{t}</div>
@@ -310,7 +310,7 @@ export default function Landing() {
               <div style={{position:"absolute",top:-11,left:"50%",transform:"translateX(-50%)",background:"#4ade80",color:"#050c05",fontSize:9,fontWeight:800,padding:"3px 14px",borderRadius:100,letterSpacing:".1em",fontFamily:"DM Mono,monospace"}}>MOST POPULAR</div>
               <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".14em",fontFamily:"DM Mono,monospace",marginBottom:16}}>PRO</div>
               <div style={{fontSize:42,fontWeight:900,color:"#f0fdf4",letterSpacing:"-1px",marginBottom:4}}>₹999</div>
-              <div style={{fontSize:11,color:"rgba(226,240,226,.26)",marginBottom:26,fontFamily:"DM Mono,monospace"}}>per month · 7-day free trial</div>
+              <div style={{fontSize:11,color:"rgba(226,240,226,.26)",marginBottom:26,fontFamily:"DM Mono,monospace"}}>per month · cancel anytime</div>
               {["Everything in Free","Historical Replay + AI analysis","Trade Guardian risk check","Liquidity Levels (live OI)","Portfolio Lab optimizer","Signal reasoning + Kelly sizing"].map(f=>(
                 <div key={f} style={{display:"flex",alignItems:"center",gap:9,marginBottom:10}}>
                   <div style={{width:15,height:15,borderRadius:"50%",background:"rgba(74,222,128,.12)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
@@ -319,7 +319,7 @@ export default function Landing() {
                   <span style={{fontSize:12,color:"rgba(226,240,226,.56)"}}>{f}</span>
                 </div>
               ))}
-              <a href="/dashboard" className="bp" style={{display:"block",textAlign:"center",marginTop:26,padding:"12px",background:"#4ade80",borderRadius:10,fontSize:13,fontWeight:700,color:"#050c05",textDecoration:"none"}}>Start 7-day trial →</a>
+              <a href="/dashboard" className="bp" style={{display:"block",textAlign:"center",marginTop:26,padding:"12px",background:"#4ade80",borderRadius:10,fontSize:13,fontWeight:700,color:"#050c05",textDecoration:"none"}}>Start Pro →</a>
             </div>
           </div>
         </div>
