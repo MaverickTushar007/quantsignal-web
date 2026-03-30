@@ -43,7 +43,6 @@ function formatPrice(price: number, type: string, symbol: string): string {
 
 function LiquidityCard({ symbol }: { symbol: string }) {
   const [data, setData] = useState<any>(null);
-  const [upgradeError, setUpgradeError] = useState<{kind:"signals"|"perseus",used:number,limit:number}|null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const fetchLiquidity = async () => {
@@ -64,8 +63,6 @@ function LiquidityCard({ symbol }: { symbol: string }) {
   const oiColor = data.oi_change_24h_pct >= 0 ? "#00ff88" : "#ff4466";
 
   return (
-    <>
-    {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
     <div style={{ marginBottom: 20, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 14 }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
         <span style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", letterSpacing: "0.1em" }}>⚡ LIQUIDITY LEVELS</span>
@@ -164,8 +161,6 @@ function EstClock() {
   const tz = TIMEZONES[tzIndex];
 
   return (
-    <>
-    {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
     <div >
       <div onClick={() => setShowPicker(p => !p)} style={{ display: "flex", alignItems: "center", gap: 5, cursor: "pointer", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 6, padding: "3px 8px" }}>
         <span style={{ fontSize: 11 }}>{tz.flag}</span>
@@ -272,8 +267,6 @@ function AlertBell({ symbol }: { symbol: string }) {
 function ShockWarning({ shock }: { shock?: any }) {
   if (!shock) return null;
   return (
-    <>
-    {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
     <div style={{
       background: 'rgba(255,140,0,0.08)',
       border: '1px solid rgba(255,140,0,0.3)',
@@ -312,8 +305,6 @@ function MTFBar({ mtf, direction }: { mtf?: any, direction?: string }) {
   const filled = Math.round(score);
   const barColor = score >= 3 ? '#00ff88' : score >= 2 ? '#ffc800' : '#ff4466';
   return (
-    <>
-    {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
     <div style={{ marginBottom: 14 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
         <span style={{ fontSize: 8, fontWeight: 800, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em' }}>MTF ALIGNMENT</span>
@@ -424,7 +415,6 @@ const API_BASE_TR = "https://quantsignal-api-production.up.railway.app/api/v1";
 
 function TrackRecordTab({ symbol }: { symbol: string }) {
   const [data, setData] = useState<any>(null);
-  const [upgradeError, setUpgradeError] = useState<{kind:"signals"|"perseus",used:number,limit:number}|null>(null);
   const [loading, setLoading] = useState(true);
   const mono = "'IBM Plex Mono', monospace";
 
@@ -485,7 +475,7 @@ function TrackRecordTab({ symbol }: { symbol: string }) {
           setData((prev: any) => prev ? { ...prev, evStats, briefing } : prev);
         });
       })
-      .catch((e) => { if (e instanceof UpgradeRequiredError) setUpgradeError({kind:e.kind as any,used:e.used,limit:e.limit}); else setData(null); })
+      .catch(() => setData(null))
       .finally(() => setLoading(false));
   }, [symbol]);
 
@@ -506,8 +496,6 @@ function TrackRecordTab({ symbol }: { symbol: string }) {
   );
 
   return (
-    <>
-    {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
     <div style={{ padding: "14px 16px", fontFamily: mono, overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}>
 
       {/* Header */}
@@ -658,6 +646,7 @@ function TrackRecordTab({ symbol }: { symbol: string }) {
 
 
 export default function Dashboard() {
+  const [upgradeError, setUpgradeError] = useState<{kind:"signals"|"perseus",used:number,limit:number}|null>(null);
   const [signals, setSignals] = useState<any[]>([]);
   const [outcomeMap, setOutcomeMap] = useState<Record<string, {outcome: string, pnl: number}>>({});
   const [mood, setMood] = useState<any>(null);
@@ -684,6 +673,7 @@ export default function Dashboard() {
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
+      {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
 
 
   // Fetch outcome map — shows ✓/✗ badges on signal list
@@ -1327,8 +1317,6 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
   // ── DESKTOP LAYOUT ─────────────────────────────────────────────
   return (
-    <>
-    {upgradeError && <UpgradeModal kind={upgradeError.kind} used={upgradeError.used} limit={upgradeError.limit} onClose={() => setUpgradeError(null)} />}
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden", background: "#060608", fontFamily: "'IBM Plex Mono', monospace", color: "#e2e8f0" }}>
       {/* Top bar */}
       <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
