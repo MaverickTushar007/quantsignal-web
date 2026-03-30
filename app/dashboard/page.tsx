@@ -742,12 +742,32 @@ export default function Dashboard() {
         ))}
       </div>
       <div style={{ flex: 1, overflowY: "auto" }}>
-        {loading ? [...Array(15)].map((_, i) => (
-          <div key={i} style={{ padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.03)", opacity: 0.3 }}>
-            <div style={{ height: 10, background: "rgba(255,255,255,0.1)", borderRadius: 2, marginBottom: 6 }} />
-            <div style={{ height: 8, background: "rgba(255,255,255,0.05)", borderRadius: 2, width: "60%" }} />
+        {loading ? (
+          <>
+          <style>{`
+            @keyframes shimmer {
+              0% { opacity: 0.15; }
+              50% { opacity: 0.4; }
+              100% { opacity: 0.15; }
+            }
+          `}</style>
+          <div style={{ padding: "6px 12px", fontSize: 9, color: "rgba(0,255,136,0.5)", letterSpacing: "0.1em", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+            ⟳ LOADING SIGNALS...
           </div>
-        )) : filtered.map(sig => (
+          {[...Array(15)].map((_, i) => (
+            <div key={i} style={{ padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.03)", animation: `shimmer ${1.2 + (i % 3) * 0.2}s ease-in-out infinite`, animationDelay: `${i * 0.05}s` }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, alignItems: "center" }}>
+                <div style={{ height: 9, background: "rgba(255,255,255,0.12)", borderRadius: 2, width: `${50 + (i % 4) * 12}px` }} />
+                <div style={{ height: 9, background: "rgba(0,255,136,0.08)", borderRadius: 2, width: "28px" }} />
+              </div>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ height: 7, background: "rgba(255,255,255,0.05)", borderRadius: 2, width: `${40 + (i % 3) * 15}px` }} />
+                <div style={{ height: 7, background: "rgba(255,255,255,0.04)", borderRadius: 2, width: "30px" }} />
+              </div>
+            </div>
+          ))}
+          </>
+        ) : filtered.map(sig => (
           <div key={sig.symbol} onClick={() => selectAsset(sig)} 
             style={{ padding: isMobile ? "14px 16px" : "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)", cursor: "pointer", background: selected?.symbol === sig.symbol ? "rgba(0,255,136,0.05)" : "transparent", borderLeft: selected?.symbol === sig.symbol ? "3px solid #00ff88" : "3px solid transparent" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
