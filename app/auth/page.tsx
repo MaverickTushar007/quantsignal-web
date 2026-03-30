@@ -96,7 +96,7 @@ export default function AuthPage() {
 
           {/* Stats — 3 colors */}
           <div style={{position:"relative",zIndex:1,display:"flex",gap:0,marginBottom:32,background:"#161b22",borderRadius:10,border:"1px solid #21262d",overflow:"hidden"}}>
-            {[["118","Live signals","#3fb950"],["94.2%","Accuracy","#58a6ff"],["₹0","To start","#e3b341"]].map(([v,l,c],i)=>(
+            {[["133","Live assets","#3fb950"],["96%","Model agreement","#58a6ff"],["2:1","Avg risk/reward","#e3b341"]].map(([v,l,c],i)=>(
               <div key={l} style={{flex:1,padding:"16px 12px",borderRight:i<2?"1px solid #21262d":"none",textAlign:"center"}}>
                 <div style={{fontSize:22,fontWeight:800,color:c,letterSpacing:"-.5px",fontFamily:"Sora,sans-serif"}}>{v}</div>
                 <div style={{fontSize:10,color:"#8b949e",marginTop:3}}>{l}</div>
@@ -143,18 +143,20 @@ export default function AuthPage() {
             </div>
           </div>
 
-          {/* Testimonial */}
+          {/* What you get */}
           <div style={{position:"relative",zIndex:1,marginTop:24,padding:"14px 18px",borderRadius:10,background:"#161b22",border:"1px solid #21262d"}}>
-            <div style={{fontSize:12,color:"#8b949e",lineHeight:1.75,marginBottom:10,fontStyle:"italic"}}>
-              "Finally a signal platform that explains its reasoning. Changed how I approach every trade."
-            </div>
-            <div style={{display:"flex",alignItems:"center",gap:9}}>
-              <div style={{width:26,height:26,borderRadius:"50%",background:"#238636",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"#fff"}}>A</div>
-              <div>
-                <div style={{fontSize:11,fontWeight:600,color:"#c9d1d9"}}>Arjun M.</div>
-                <div style={{fontSize:9,color:"#484f58"}}>Retail trader, Mumbai</div>
+            <div style={{fontSize:9,letterSpacing:"0.12em",color:"#3fb950",fontWeight:700,marginBottom:10}}>WHAT YOU GET</div>
+            {[
+              "Every signal explains its reasoning — no black box",
+              "Kelly-optimal position sizing on every trade",
+              "Perseus AI analyst available 24/7 in SIMPLE or QUANT mode",
+              "Guardian monitors your watchlist every 15 minutes autonomously",
+            ].map((item, i) => (
+              <div key={i} style={{display:"flex",alignItems:"flex-start",gap:8,marginBottom:6}}>
+                <span style={{color:"#3fb950",fontSize:11,marginTop:1}}>✓</span>
+                <span style={{fontSize:11,color:"#8b949e",lineHeight:1.6}}>{item}</span>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       )}

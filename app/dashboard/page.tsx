@@ -503,17 +503,22 @@ function TrackRecordTab({ symbol }: { symbol: string }) {
         SYSTEM TRACK RECORD — {data.total} TRADES
       </div>
 
-      {/* Top stats */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
-        {statBox("WIN RATE", `${data.winRate.toFixed(1)}%`, data.winRate >= 50 ? "#00ff88" : data.winRate >= 40 ? "#ffd700" : "#ff4466")}
-        {statBox("AVG P&L", `${data.avgPnl >= 0 ? "+" : ""}${data.avgPnl.toFixed(2)}%`, data.avgPnl >= 0 ? "#00ff88" : "#ff4466")}
-        {statBox("W / L", `${data.wins} / ${data.losses}`, "rgba(255,255,255,0.7)")}
-      </div>
-      <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
-        {statBox("AVG WIN", `+${data.avgWin.toFixed(2)}%`, "#00ff88")}
-        {statBox("AVG LOSS", `${data.avgLoss.toFixed(2)}%`, "#ff4466")}
+      {/* Top stats — Expectancy first, it's what matters */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 6 }}>
         {statBox("EXPECTANCY", `${(data.winRate/100 * data.avgWin + (1-data.winRate/100) * data.avgLoss).toFixed(2)}%`,
           (data.winRate/100 * data.avgWin + (1-data.winRate/100) * data.avgLoss) >= 0 ? "#00ff88" : "#ff4466")}
+        {statBox("AVG WIN", `+${data.avgWin.toFixed(2)}%`, "#00ff88")}
+        {statBox("AVG LOSS", `${data.avgLoss.toFixed(2)}%`, "#ff4466")}
+      </div>
+      <div style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", marginBottom: 14, paddingLeft: 2 }}>
+        {(data.winRate/100 * data.avgWin + (1-data.winRate/100) * data.avgLoss) >= 0
+          ? "✓ Positive expectancy — system is profitable per trade on average"
+          : "⚠ Negative expectancy — system needs more data or recalibration"}
+      </div>
+      <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
+        {statBox("WIN RATE", `${data.winRate.toFixed(1)}%`, data.winRate >= 50 ? "#00ff88" : data.winRate >= 40 ? "#ffd700" : "rgba(255,255,255,0.4)")}
+        {statBox("AVG P&L", `${data.avgPnl >= 0 ? "+" : ""}${data.avgPnl.toFixed(2)}%`, data.avgPnl >= 0 ? "#00ff88" : "#ff4466")}
+        {statBox("W / L", `${data.wins} / ${data.losses}`, "rgba(255,255,255,0.7)")}
       </div>
 
       {/* By Direction */}
