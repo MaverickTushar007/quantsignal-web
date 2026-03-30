@@ -29,6 +29,7 @@ export default function EconomicCalendar() {
   const [email, setEmail] = useState("");
   const [reminderStatus, setReminderStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [subscribedIds, setSubscribedIds] = useState<Set<string>>(new Set());
+  const [impactFilter, setImpactFilter] = useState<"ALL"|"High"|"Medium">("ALL");
 
   useEffect(() => {
     setLoading(true);
@@ -236,6 +237,18 @@ export default function EconomicCalendar() {
 
       {!loading && !error && (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {/* Impact filter */}
+          <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
+            {(["ALL","High","Medium"] as const).map(f => (
+              <button key={f} onClick={() => setImpactFilter(f)} style={{
+                fontSize: 9, fontWeight: 700, padding: "3px 10px", borderRadius: 4,
+                border: impactFilter === f ? (f === "High" ? "1px solid rgba(255,68,102,0.5)" : f === "Medium" ? "1px solid rgba(255,215,0,0.5)" : "1px solid rgba(0,255,136,0.4)") : "1px solid rgba(255,255,255,0.08)",
+                background: impactFilter === f ? (f === "High" ? "rgba(255,68,102,0.1)" : f === "Medium" ? "rgba(255,215,0,0.08)" : "rgba(0,255,136,0.06)") : "transparent",
+                color: impactFilter === f ? (f === "High" ? "#ff4466" : f === "Medium" ? "#ffd700" : "#00ff88") : "rgba(255,255,255,0.3)",
+                cursor: "pointer", fontFamily: "inherit", letterSpacing: "0.08em"
+              }}>{f === "ALL" ? "ALL" : f === "High" ? "🔴 HIGH" : "🟡 MEDIUM"}</button>
+            ))}
+          </div>
           {upcoming.length > 0 && <div style={{ fontSize: 9, color: "#00ff88", letterSpacing: "0.15em", fontWeight: 700, padding: "4px 0 8px" }}>▶ UPCOMING EVENTS</div>}
           {upcoming.map((event, i) => <EventRow key={i} event={event} index={i} />)}
 

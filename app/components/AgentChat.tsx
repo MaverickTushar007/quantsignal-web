@@ -217,13 +217,13 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
 
         {/* Messages */}
         {messages.map((m, i) => (
-          <div key={i} style={{ alignSelf: m.role === "user" ? "flex-end" : "flex-start", maxWidth: "88%" }}>
+          <div key={i} style={{ alignSelf: m.role === "user" ? "flex-end" : "flex-start", maxWidth: m.role === "user" ? "80%" : "92%" }}>
             {m.role === "user" ? (
               <div style={{ background: "rgba(0,170,255,0.08)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 8, padding: "8px 14px", color: "#fff", fontSize: 12, lineHeight: 1.6 }}>
                 {m.content}
               </div>
             ) : (
-              <div style={{ color: "rgba(255,255,255,0.85)", fontSize: 12, lineHeight: 1.8 }}>
+              <div style={{ color: "rgba(255,255,255,0.85)", fontSize: 12, lineHeight: 1.9, maxWidth: 680, letterSpacing: "0.01em" }}>
                 <ReactMarkdown>{m.content}</ReactMarkdown>
               </div>
             )}
