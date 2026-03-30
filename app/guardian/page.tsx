@@ -2,7 +2,21 @@
 import { useEffect, useState, useCallback } from "react";
 
 const API = "https://quantsignal-api-production.up.railway.app/api/v1";
-const USER_ID = "test_user_001";
+function getUserId(): string {
+  if (typeof window === "undefined") return "anonymous";
+  try {
+    const raw = localStorage.getItem(
+      Object.keys(localStorage).find(k => k.includes("supabase") && k.includes("auth")) || ""
+    );
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      const uid = parsed?.user?.id || parsed?.session?.user?.id;
+      if (uid) return uid;
+    }
+  } catch {}
+  return localStorage.getItem("user_id") || "anonymous";
+}
+const USER_ID = typeof window !== "undefined" ? getUserId() : "anonymous";
 
 const DIR_COLOR: Record<string,string> = { BUY:"#00ff88", SELL:"#ff4466", HOLD:"#ffd700" };
 const RISK_COLOR: Record<string,string> = { normal:"#00ff88", elevated:"#ffd700", critical:"#ff4466" };
