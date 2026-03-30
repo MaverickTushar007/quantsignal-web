@@ -57,7 +57,7 @@ export default function Landing() {
           .fg{grid-template-columns:1fr!important;}
           .pg{grid-template-columns:1fr!important;}
           .sg{grid-template-columns:1fr!important;}
-          .nl{display:none!important;}.st{grid-template-columns:repeat(2,1fr)!important;}
+          .nl{display:none!important;}.st{grid-template-columns:repeat(2,1fr)!important;}.sec{padding-left:20px!important;padding-right:20px!important;}
           .fi{flex-direction:column!important;gap:16px!important;text-align:center;}
         }
       `}</style>
@@ -221,7 +221,7 @@ export default function Landing() {
       </div>
 
       {/* FEATURES */}
-      <section id="features" style={{padding:"96px 40px"}}>
+      <section id="features" className="sec" style={{padding:"96px 40px"}}>
         <div style={{maxWidth:1100,margin:"0 auto"}}>
           <div style={{textAlign:"center",marginBottom:56}}>
             <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".16em",fontFamily:"DM Mono,monospace",marginBottom:12}}>WHAT MAKES IT DIFFERENT</div>
@@ -247,7 +247,7 @@ export default function Landing() {
       </section>
 
       {/* PROOF */}
-      <section id="proof" style={{padding:"96px 40px",background:"rgba(74,222,128,.014)",borderTop:"1px solid rgba(74,222,128,.06)",borderBottom:"1px solid rgba(74,222,128,.06)"}}>
+      <section id="proof" className="sec" style={{padding:"96px 40px",background:"rgba(74,222,128,.014)",borderTop:"1px solid rgba(74,222,128,.06)",borderBottom:"1px solid rgba(74,222,128,.06)"}}>
         <div style={{maxWidth:1000,margin:"0 auto"}}>
           <div style={{textAlign:"center",marginBottom:52}}>
             <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".16em",fontFamily:"DM Mono,monospace",marginBottom:12}}>THE PROOF</div>
@@ -266,7 +266,7 @@ export default function Landing() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section style={{padding:"72px 40px 56px"}}>
+      <section className="sec" style={{padding:"72px 40px 56px"}}>
         <div style={{maxWidth:900,margin:"0 auto"}}>
           <div style={{textAlign:"center",marginBottom:52}}>
             <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".16em",fontFamily:"DM Mono,monospace",marginBottom:12}}>GET STARTED</div>
@@ -285,7 +285,7 @@ export default function Landing() {
       </section>
 
       {/* PRICING */}
-      <section id="pricing" style={{padding:"96px 40px",background:"rgba(74,222,128,.014)",borderTop:"1px solid rgba(74,222,128,.06)"}}>
+      <section id="pricing" className="sec" style={{padding:"96px 40px",background:"rgba(74,222,128,.014)",borderTop:"1px solid rgba(74,222,128,.06)"}}>
         <div style={{maxWidth:1100,margin:"0 auto"}}>
           <div style={{textAlign:"center",marginBottom:52}}>
             <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".16em",fontFamily:"DM Mono,monospace",marginBottom:12}}>PRICING</div>

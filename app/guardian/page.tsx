@@ -133,7 +133,7 @@ export default function GuardianPage() {
           </div>
         )}
 
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:28 }}>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))", gap:12, marginBottom:28 }}>
           {[
             { label:"RISK LEVEL", value:riskLevel.toUpperCase(), color:riskColor, sub:"market-wide", icon:"⚡" },
             { label:"WATCHING", value:String(guardian?.watched?.length??0), color:"#00aaff", sub:"symbols", icon:"👁" },
@@ -151,7 +151,7 @@ export default function GuardianPage() {
           ))}
         </div>
 
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 300px", gap:20 }}>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
           <div>
             {alertCount > 0 && (
               <div style={{ marginBottom:20 }}>

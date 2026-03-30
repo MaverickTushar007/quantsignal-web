@@ -174,7 +174,7 @@ export default function PerformancePage() {
       <div style={{ maxWidth: 1300, margin: "0 auto", padding: "24px 20px" }}>
 
         {/* ── STAT CARDS ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 10, marginBottom: 24 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 10, marginBottom: 24 }}>
           <StatCard
             label="TOTAL P&L"
             value={`${pnlPos ? "+" : ""}${summary?.total_pnl?.toFixed(2) ?? "--"}%`}
@@ -208,7 +208,7 @@ export default function PerformancePage() {
         </div>
 
         {/* ── CHARTS ROW ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 10, marginBottom: 24 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 10, marginBottom: 24 }}>
 
           {/* Equity Curve */}
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 8, padding: "16px 18px" }}>
@@ -304,7 +304,7 @@ export default function PerformancePage() {
 
           {/* Column headers */}
           <div style={{
-            display: "grid", gridTemplateColumns: "90px 60px 70px 70px 80px 80px 80px 80px 80px",
+            display: "grid", gridTemplateColumns: "90px 60px 70px 70px 80px 80px 80px 80px 80px", minWidth: 700,
             gap: 8, padding: "6px 10px",
             borderBottom: "1px solid rgba(255,255,255,0.06)",
             fontSize: 8, color: "rgba(255,255,255,0.25)", letterSpacing: "0.1em",
@@ -326,7 +326,7 @@ export default function PerformancePage() {
               <div style={{ padding: "40px 0", textAlign: "center", color: "rgba(255,255,255,0.2)", fontSize: 11 }}>No trades</div>
             ) : filtered.map((t, i) => (
               <div key={i} style={{
-                display: "grid", gridTemplateColumns: "90px 60px 70px 70px 80px 80px 80px 80px 80px",
+                display: "grid", gridTemplateColumns: "90px 60px 70px 70px 80px 80px 80px 80px 80px", minWidth: 700,
                 gap: 8, padding: "8px 10px",
                 borderBottom: "1px solid rgba(255,255,255,0.03)",
                 fontSize: 10, alignItems: "center",

@@ -83,7 +83,7 @@ export default function PricingPage() {
           </p>
         </div>
         {error && <div style={{ background:"rgba(255,68,102,0.1)", border:"1px solid rgba(255,68,102,0.3)", borderRadius:10, padding:"12px 16px", marginBottom:24, fontSize:11, color:"#ff4466", textAlign:"center" }}>{error}</div>}
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:16 }}>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:16 }}>
           {PLANS.map(plan => (
             <div key={plan.id} style={{ background:plan.highlight?"rgba(0,255,136,0.04)":"rgba(255,255,255,0.02)", border:`1px solid ${plan.highlight?"rgba(0,255,136,0.25)":"rgba(255,255,255,0.07)"}`, borderRadius:16, padding:"28px 24px", position:"relative", display:"flex", flexDirection:"column" }}>
               {plan.highlight && <div style={{ position:"absolute", top:-1, left:"50%", transform:"translateX(-50%)", background:"#00ff88", color:"#000", fontSize:9, fontWeight:800, padding:"4px 14px", borderRadius:"0 0 8px 8px", letterSpacing:"0.1em" }}>MOST POPULAR</div>}
