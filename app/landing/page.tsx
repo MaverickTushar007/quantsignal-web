@@ -266,7 +266,7 @@ export default function Landing() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section style={{padding:"96px 40px"}}>
+      <section style={{padding:"72px 40px 56px"}}>
         <div style={{maxWidth:900,margin:"0 auto"}}>
           <div style={{textAlign:"center",marginBottom:52}}>
             <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".16em",fontFamily:"DM Mono,monospace",marginBottom:12}}>GET STARTED</div>
@@ -286,12 +286,12 @@ export default function Landing() {
 
       {/* PRICING */}
       <section id="pricing" style={{padding:"96px 40px",background:"rgba(74,222,128,.014)",borderTop:"1px solid rgba(74,222,128,.06)"}}>
-        <div style={{maxWidth:700,margin:"0 auto"}}>
+        <div style={{maxWidth:1100,margin:"0 auto"}}>
           <div style={{textAlign:"center",marginBottom:52}}>
             <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".16em",fontFamily:"DM Mono,monospace",marginBottom:12}}>PRICING</div>
             <h2 style={{fontSize:48,fontWeight:900,letterSpacing:"-1.5px",color:"#f0fdf4"}}>Simple. No tricks.</h2>
           </div>
-          <div className="pg" style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+          <div className="pg" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:12}}>
             <div style={{background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.06)",borderRadius:20,padding:32}}>
               <div style={{fontSize:10,fontWeight:700,color:"rgba(226,240,226,.32)",letterSpacing:".14em",fontFamily:"DM Mono,monospace",marginBottom:16}}>FREE</div>
               <div style={{fontSize:42,fontWeight:900,color:"#f0fdf4",letterSpacing:"-1px",marginBottom:4}}>₹0</div>
