@@ -160,6 +160,24 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
             +{GLOBAL_MEMORY.watchlist.length - 1} tracked
           </span>
         )}
+        <button
+          onClick={toggleMode}
+          style={{
+            marginLeft: 8,
+            fontSize: 9,
+            fontWeight: 700,
+            padding: "2px 8px",
+            borderRadius: 3,
+            border: quantMode ? "1px solid rgba(255,193,7,0.4)" : "1px solid rgba(0,255,136,0.3)",
+            background: quantMode ? "rgba(255,193,7,0.08)" : "rgba(0,255,136,0.06)",
+            color: quantMode ? "#ffc107" : "#00ff88",
+            cursor: "pointer",
+            fontFamily: mono,
+            letterSpacing: "0.08em",
+          }}
+        >
+          {quantMode ? "⚗ QUANT" : "◎ SIMPLE"}
+        </button>
         {messages.length > 0 && (
           <button onClick={clearMemory} style={{ marginLeft: "auto", background: "transparent", border: "none", fontSize: 9, color: "rgba(255,255,255,0.2)", cursor: "pointer", fontFamily: mono }}>
             CLEAR
