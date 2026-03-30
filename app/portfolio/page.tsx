@@ -79,7 +79,7 @@ export default function PortfolioPage() {
         <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>Build · Optimize · Stress Test</span>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "360px 1fr", minHeight: "calc(100vh - 49px)", gap: 0 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))", minHeight: "calc(100vh - 49px)", gap: 0 }}>
         {/* LEFT PANEL — Builder */}
         <div style={{ borderRight: "1px solid rgba(255,255,255,0.06)", padding: 20, overflowY: "auto" }}>
           <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 14 }}>BUILD YOUR PORTFOLIO</div>
@@ -180,7 +180,7 @@ export default function PortfolioPage() {
           ) : (
             <div>
               {/* Health Score */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 12, marginBottom: 24 }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 12, marginBottom: 24 }}>
                 {[
                   { label: "HEALTH SCORE", value: `${result.health_score}/100`, color: result.health_color, sub: result.health_label },
                   { label: "SHARPE RATIO", value: result.current_metrics.sharpe_ratio.toFixed(2), color: "#00aaff", sub: "current" },
