@@ -133,9 +133,10 @@ function getExecutionWindows() {
 
 const TIMEZONES = [
   { label: "IST", offset: 5.5,  flag: "🇮🇳" },
-  { label: "EST", offset: -5,   flag: "🗽" },
-  { label: "GMT", offset: 0,    flag: "🇬🇧" },
-  { label: "JST", offset: 9,    flag: "🇯🇵" },
+  { label: "EST", offset: -5, iana: "America/New_York",  flag: "🗽" },
+  { label: "GMT", offset:  0, iana: "Europe/London",      flag: "🇬🇧" },
+  { label: "IST", offset: 5.5, iana: "Asia/Kolkata",      flag: "🇮🇳" },
+  { label: "JST", offset:  9, iana: "Asia/Tokyo",         flag: "🇯🇵" },
 ];
 
 function EstClock() {
@@ -147,11 +148,8 @@ function EstClock() {
     const update = () => {
       const tz = TIMEZONES[tzIndex];
       const now = new Date();
-      const utc = now.getUTCHours() + now.getUTCMinutes() / 60;
-      const local = (utc + tz.offset + 24) % 24;
-      const h = Math.floor(local);
-      const m = Math.floor((local - h) * 60);
-      setTime(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`);
+      const t = now.toLocaleTimeString("en-GB", { timeZone: tz.iana, hour: "2-digit", minute: "2-digit", hour12: false });
+      setTime(t);
     };
     update();
     const t = setInterval(update, 1000);
@@ -161,7 +159,7 @@ function EstClock() {
   const tz = TIMEZONES[tzIndex];
 
   return (
-    <div >
+    <div style={{ position: "relative" }}>
       <div onClick={() => setShowPicker(p => !p)} style={{ display: "flex", alignItems: "center", gap: 5, cursor: "pointer", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 6, padding: "3px 8px" }}>
         <span style={{ fontSize: 11 }}>{tz.flag}</span>
         <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", fontFamily: "'IBM Plex Mono', monospace" }}>{time}</span>
