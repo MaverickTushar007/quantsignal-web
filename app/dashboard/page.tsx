@@ -1004,12 +1004,11 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
       <div style={{ marginBottom: 20 }}>
         <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 10 }}>EXECUTION WINDOWS</div>
-        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-          {windows.map(w => (
-            <div key={w.label} style={{ display: "flex", alignItems: "center", gap: 5, background: w.active ? `${w.color}15` : "rgba(255,255,255,0.02)", border: `1px solid ${w.active ? `${w.color}40` : "rgba(255,255,255,0.06)"}`, borderRadius: 4, padding: "4px 8px", whiteSpace: "nowrap" }}>
+        <div style={{ display: "flex", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 6, overflow: "hidden" }}>
+          {windows.map((w, i) => (
+            <div key={w.label} style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 5, background: w.active ? `${w.color}15` : "transparent", borderRight: i < windows.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none", padding: "5px 8px" }}>
               {w.active && <span style={{ width: 5, height: 5, borderRadius: "50%", background: w.color, display: "inline-block", flexShrink: 0 }} />}
-              <span style={{ fontSize: 8, fontWeight: 700, color: w.active ? w.color : "rgba(255,255,255,0.3)" }}>{w.label}</span>
-              <span style={{ fontSize: 8, color: "rgba(255,255,255,0.2)" }}>{w.range}</span>
+              <span style={{ fontSize: 8, fontWeight: 700, color: w.active ? w.color : "rgba(255,255,255,0.25)", whiteSpace: "nowrap" }}>{w.label}</span>
             </div>
           ))}
         </div>
