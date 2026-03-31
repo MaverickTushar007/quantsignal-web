@@ -746,6 +746,17 @@ export default function Dashboard() {
         ))}
       </div>
       <div style={{ flex: 1, overflowY: "auto" }}>
+        {/* Skeleton while loading */}
+        {loading && Array.from({length: 8}).map((_, i) => (
+          <div key={i} style={{ padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.04)", display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 32, height: 32, borderRadius: 6, background: "rgba(255,255,255,0.04)", flexShrink: 0 }} />
+            <div style={{ flex: 1 }}>
+              <div style={{ width: "60%", height: 9, borderRadius: 3, background: "rgba(255,255,255,0.06)", marginBottom: 5 }} />
+              <div style={{ width: "40%", height: 7, borderRadius: 3, background: "rgba(255,255,255,0.03)" }} />
+            </div>
+            <div style={{ width: 36, height: 18, borderRadius: 3, background: "rgba(255,255,255,0.04)" }} />
+          </div>
+        ))}
         {/* TOP SIGNALS — pinned, highest confidence BUY/SELL */}
         {!loading && signals.length > 0 && filter === "ALL" && (() => {
           const top = [...signals]
@@ -1231,7 +1242,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
   );
 
   // ── MOBILE LAYOUT ──────────────────────────────────────────────
-  if (!mounted) return <div style={{ background: "#060608", height: "100dvh" }} />;
+  if (isMobile && !mounted) return <div style={{ background: "#060608", height: "100dvh" }} />;
   if (isMobile) {
     return (
       <div style={{ display: "flex", flexDirection: "column", height: "100dvh", background: "#060608", fontFamily: "'IBM Plex Mono', monospace", color: "#e2e8f0", overflow: "hidden" }}>
