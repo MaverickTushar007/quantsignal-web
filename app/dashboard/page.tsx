@@ -1477,15 +1477,17 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           <div
             onClick={() => setShowAssetList(p => !p)}
             style={{
-              width: 18, background: "#0a0a0c", borderLeft: "1px solid rgba(255,255,255,0.06)",
+              width: 28, background: "#0a0a0c", borderLeft: "1px solid rgba(255,255,255,0.06)",
               display: "flex", alignItems: "center", justifyContent: "center",
               cursor: "pointer", flexShrink: 0, userSelect: "none",
             }}
             title={showAssetList ? "Hide asset list" : "Show asset list"}
           >
-            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", writingMode: "vertical-rl", letterSpacing: "0.1em" }}>
-              {showAssetList ? "›" : "‹"}
-            </span>
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              <div style={{ width: 14, height: 2, borderRadius: 1, background: showAssetList ? "rgba(0,255,136,0.6)" : "rgba(255,255,255,0.25)" }} />
+              <div style={{ width: 14, height: 2, borderRadius: 1, background: showAssetList ? "rgba(0,255,136,0.6)" : "rgba(255,255,255,0.25)" }} />
+              <div style={{ width: 14, height: 2, borderRadius: 1, background: showAssetList ? "rgba(0,255,136,0.6)" : "rgba(255,255,255,0.25)" }} />
+            </div>
           </div>
           {/* Panel */}
           {showAssetList && (
