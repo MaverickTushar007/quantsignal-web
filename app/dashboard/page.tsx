@@ -1489,12 +1489,20 @@ Give a punchy, honest explanation of why the model made this call, what the mark
               <div style={{ width: 14, height: 2, borderRadius: 1, background: showAssetList ? "rgba(0,255,136,0.6)" : "rgba(255,255,255,0.25)" }} />
             </div>
           </div>
-          {/* Panel */}
-          {showAssetList && (
-            <div className="qs-scroll" style={{ width: 240, borderLeft: "1px solid rgba(255,255,255,0.06)", display: "flex", flexDirection: "column", background: "#0a0a0c", overflowY: "auto", transition: "width 0.2s" }}>
-              <AssetList />
-            </div>
-          )}
+          {/* Panel — always mounted, width:0 when hidden so chart never remounts */}
+          <div className="qs-scroll" style={{
+            width: showAssetList ? 240 : 0,
+            minWidth: 0,
+            overflow: "hidden",
+            borderLeft: showAssetList ? "1px solid rgba(255,255,255,0.06)" : "none",
+            display: "flex",
+            flexDirection: "column",
+            background: "#0a0a0c",
+            transition: "width 0.25s ease",
+            flexShrink: 0,
+          }}>
+            <AssetList />
+          </div>
         </div>
       </div>
       <TutorialModal />
