@@ -1407,7 +1407,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       <MarketSentiment />
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
         {/* Left panel — Analyst Sidebar */}
-        <div style={{ width: 300, borderRight: "1px solid rgba(255,255,255,0.06)", background: "#0a0a0c", overflowY: "auto", padding: "16px", flexShrink: 0 }}>
+        <div style={{ width: 300, borderRight: "1px solid rgba(255,255,255,0.06)", background: "#0a0a0c", overflowY: "auto", padding: "16px", flexShrink: 0, scrollbarWidth: "thin" as const }}>
           {selected && detail ? <SidebarContent /> : <div style={{ color: "rgba(255,255,255,0.2)", fontSize: 12, marginTop: 40, textAlign: "center" }}>SELECT AN ASSET</div>}
         </div>
 
@@ -1417,7 +1417,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             SELECT AN ASSET TO INITIALIZE PERSEUS AGENT
           </div>
         ) : (
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", borderRight: "1px solid rgba(255,255,255,0.06)" }}>
+          <div className="qs-scroll" style={{ flex: 1, display: "flex", flexDirection: "column", overflowY: "auto", borderRight: "1px solid rgba(255,255,255,0.06)" }}>
             {/* Asset header */}
             <div style={{ padding: "16px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0c0c0f", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -1491,7 +1491,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           </div>
           {/* Panel */}
           {showAssetList && (
-            <div style={{ width: 240, borderLeft: "1px solid rgba(255,255,255,0.06)", display: "flex", flexDirection: "column", background: "#0a0a0c", overflow: "hidden", transition: "width 0.2s" }}>
+            <div className="qs-scroll" style={{ width: 240, borderLeft: "1px solid rgba(255,255,255,0.06)", display: "flex", flexDirection: "column", background: "#0a0a0c", overflowY: "auto", transition: "width 0.2s" }}>
               <AssetList />
             </div>
           )}
