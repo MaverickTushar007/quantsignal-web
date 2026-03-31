@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { ArrowLeft, ChevronDown, ChevronUp } from "lucide-react";
+import { motion } from "framer-motion";
 
 const mono = "'IBM Plex Mono', monospace";
 
@@ -110,7 +111,7 @@ function Section({ s }: { s: typeof SECTIONS[0] }) {
       </button>
 
       {open && (
-        <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", padding: "24px 24px 28px 64px" }}>
+        <motion.div initial={{opacity:0,height:0}} animate={{opacity:1,height:"auto"}} exit={{opacity:0,height:0}} transition={{duration:0.25,ease:"easeOut"}} style={{ borderTop: "1px solid rgba(255,255,255,0.06)", padding: "24px 24px 28px 64px", overflow:"hidden" }}>
           {s.body.split("\n\n").map((para, i) => (
             <p key={i} style={{
               fontSize: 13,
@@ -120,7 +121,7 @@ function Section({ s }: { s: typeof SECTIONS[0] }) {
               maxWidth: 620,
             }}>{para}</p>
           ))}
-        </div>
+        </motion.div>
       )}
     </div>
   );

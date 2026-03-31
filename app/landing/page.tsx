@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 const TICKERS = ["BTC/USD","ETH/USD","SOL/USD","NASDAQ","GOLD","AAPL","RELIANCE","TCS","NIFTY50","XRP/USD","EUR/USD","HDFC BANK"];
 const DIRECTIONS = ["BUY","BUY","SELL","BUY","HOLD","BUY","BUY","BUY","BUY","SELL","HOLD","BUY"];

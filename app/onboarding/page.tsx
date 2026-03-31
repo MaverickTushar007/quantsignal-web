@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "../lib/supabase";
+import { motion } from "framer-motion";
 
 const MARKETS = [
   { id: "CRYPTO",    label: "Crypto",        icon: "₿", desc: "BTC, ETH, SOL and 17 more" },
@@ -54,7 +55,7 @@ export default function Onboarding() {
       <div style={{ width: "100%", maxWidth: 560 }}>
 
         {step === 0 && (
-          <div>
+          <motion.div initial={{opacity:0,x:32}} animate={{opacity:1,x:0}} transition={{duration:0.35,ease:"easeOut"}}>
             <div style={{ textAlign: "center", marginBottom: 40 }}>
               <div style={{ width: 48, height: 48, background: "linear-gradient(135deg, #00ff88, #00cc66)", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 800, color: "#000", margin: "0 auto 20px" }}>Q</div>
               <h1 style={{ fontSize: 24, fontWeight: 800, color: "#fff", marginBottom: 8 }}>Welcome to QuantSignal</h1>
@@ -76,11 +77,11 @@ export default function Onboarding() {
             <div style={{ textAlign: "center", marginTop: 16 }}>
               <span onClick={() => setStep(1)} style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", cursor: "pointer", textDecoration: "underline" }}>skip</span>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {step === 1 && (
-          <div>
+          <motion.div initial={{opacity:0,x:32}} animate={{opacity:1,x:0}} transition={{duration:0.35,ease:"easeOut"}}>
             <div style={{ textAlign: "center", marginBottom: 8 }}>
               <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 20 }}>FEATURE {featureStep + 1} OF {FEATURES.length}</div>
             </div>
@@ -97,11 +98,11 @@ export default function Onboarding() {
             <button onClick={() => { if (featureStep < FEATURES.length - 1) setFeatureStep(f => f + 1); else setStep(2); }} style={{ width: "100%", padding: 14, background: "linear-gradient(135deg, #00ff88, #00cc66)", border: "none", borderRadius: 10, color: "#000", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: mono, letterSpacing: "0.05em" }}>
               {FEATURES[featureStep].cta}
             </button>
-          </div>
+          </motion.div>
         )}
 
         {step === 2 && (
-          <div style={{ textAlign: "center" }}>
+          <motion.div initial={{opacity:0,scale:0.96}} animate={{opacity:1,scale:1}} transition={{duration:0.4,ease:"easeOut"}} style={{ textAlign: "center" }}>
             <div style={{ fontSize: 64, marginBottom: 24 }}>🚀</div>
             <h1 style={{ fontSize: 28, fontWeight: 800, color: "#fff", marginBottom: 12 }}>You are all set!</h1>
             <p style={{ fontSize: 13, color: "rgba(255,255,255,0.4)", lineHeight: 1.8, marginBottom: 40, maxWidth: 360, margin: "0 auto 40px" }}>186 live signals across crypto, Indian stocks, US stocks, forex and commodities.</p>
@@ -116,7 +117,7 @@ export default function Onboarding() {
             <button onClick={finish} style={{ width: "100%", padding: 16, background: "linear-gradient(135deg, #00ff88, #00cc66)", border: "none", borderRadius: 12, color: "#000", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: mono, letterSpacing: "0.05em" }}>
               VIEW MY SIGNALS →
             </button>
-          </div>
+          </motion.div>
         )}
 
       </div>

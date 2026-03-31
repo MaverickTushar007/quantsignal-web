@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
 
 const SIGNALS = [
   { symbol:"RELIANCE", dir:"BUY",  prob:87, price:"₹2,847"  },
