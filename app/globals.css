@@ -13,24 +13,27 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ── Custom scrollbars: ultra-thin, dark grey on hover only ── */
+
+
+/* ── Custom scrollbars: 1px, dark, invisible until hover ── */
+.qs-scroll::-webkit-scrollbar {
+  width: 1px !important;
+  background: transparent !important;
+}
+.qs-scroll::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+.qs-scroll::-webkit-scrollbar-thumb {
+  background: transparent !important;
+  border-radius: 99px;
+}
+.qs-scroll:hover::-webkit-scrollbar-thumb {
+  background: rgba(50, 50, 52, 0.7) !important;
+}
 .qs-scroll {
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 }
 .qs-scroll:hover {
-  scrollbar-color: rgba(80, 80, 85, 0.55) transparent;
-}
-.qs-scroll::-webkit-scrollbar {
-  width: 2px;
-}
-.qs-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-.qs-scroll::-webkit-scrollbar-thumb {
-  background: transparent;
-  border-radius: 99px;
-}
-.qs-scroll:hover::-webkit-scrollbar-thumb {
-  background: rgba(80, 80, 85, 0.55);
+  scrollbar-color: rgba(50, 50, 52, 0.7) transparent;
 }
