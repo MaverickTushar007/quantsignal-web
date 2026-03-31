@@ -12,6 +12,8 @@ import EconomicCalendar from "../components/EconomicCalendar";
 import TradeGuardian from "../components/TradeGuardian";
 import NewsTab from "../components/NewsTab";
 import UpgradeModal from "../components/UpgradeModal";
+import { StaggerList, StaggerItem, SlideInRight, PriceFlash } from "../components/Animated";
+import SmoothScroll from "../components/SmoothScroll";
 
 
 const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
@@ -807,7 +809,10 @@ export default function Dashboard() {
             </div>
           ))}
           </>
-        ) : filtered.map(sig => (
+        ) : (() => (
+          <StaggerList>
+            {filtered.map(sig => (
+          <StaggerItem key={sig.symbol}>
           <div key={sig.symbol} onClick={() => selectAsset(sig)} 
             style={{ padding: isMobile ? "14px 16px" : "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)", cursor: "pointer", background: selected?.symbol === sig.symbol ? "rgba(0,255,136,0.05)" : "transparent", borderLeft: selected?.symbol === sig.symbol ? "3px solid #00ff88" : "3px solid transparent" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
@@ -831,7 +836,11 @@ export default function Dashboard() {
               <span style={{ color: dirColor(sig.direction), fontWeight: 600 }}>{(sig.probability * 100).toFixed(0)}%</span>
             </div>
           </div>
-        ))}
+          </StaggerItem>
+            ))}
+          </StaggerList>
+        ))()
+        }
       </div>
     </div>
   );
@@ -1281,7 +1290,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                   </div>
                 </div>
                 <div style={{ textAlign: "right" }}>
-                  <div style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}>{formatPrice(livePrice || selected.current_price, selected.type, selected.symbol)}</div>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: "#fff" }}><PriceFlash value={livePrice}>{formatPrice(livePrice || selected.current_price, selected.type, selected.symbol)}</PriceFlash></div>
                   <div style={{ ...badge(selected.direction), display: "inline-block", marginTop: 2 }}>{selected.direction} · {(selected.probability * 100).toFixed(0)}%</div>
                 </div>
               </div>
@@ -1414,9 +1423,9 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
             <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
         {/* Left panel — Analyst Sidebar */}
-        <div style={{ width: 300, borderRight: "1px solid rgba(255,255,255,0.06)", background: "#0a0a0c", overflowY: "auto", padding: "16px", flexShrink: 0, scrollbarWidth: "thin" as const }}>
+        <SmoothScroll style={{ width: 300, borderRight: "1px solid rgba(255,255,255,0.06)", background: "#0a0a0c", padding: "16px", flexShrink: 0, scrollbarWidth: "thin" as const }}>
           {selected && detail ? <SidebarContent /> : <div style={{ color: "rgba(255,255,255,0.1)", fontSize: 11, marginTop: 60, textAlign: "center", letterSpacing: "0.12em" }}>SELECT AN ASSET</div>}
-        </div>
+        </SmoothScroll>
 
         {/* Center panel */}
         {!selected ? (
@@ -1424,7 +1433,8 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             SELECT AN ASSET TO INITIALIZE PERSEUS AGENT
           </div>
         ) : (
-          <div className="qs-scroll" style={{ flex: 1, display: "flex", flexDirection: "column", overflowY: "auto", borderRight: "1px solid rgba(255,255,255,0.06)", background: "#060608" }}>
+          <SlideInRight style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", borderRight: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="qs-scroll" style={{ flex: 1, display: "flex", flexDirection: "column", overflowY: "auto", background: "#060608" }}>
             {/* Asset header */}
             <div style={{ padding: "16px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0c0c0f", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -1475,7 +1485,8 @@ Give a punchy, honest explanation of why the model made this call, what the mark
               {activeTab === "NEWS" && selected && <NewsTab symbol={selected.symbol} />}
               {activeTab === "TRACK" && selected && <TrackRecordTab symbol={selected.symbol} />}
             </div>
-          </div>
+            </div>
+          </SlideInRight>
         )}
 
         {/* Right panel — Asset List (collapsible) */}
