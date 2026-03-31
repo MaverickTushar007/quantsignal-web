@@ -1396,6 +1396,12 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           </span>
         </div>
         <div style={{ display: "flex", gap: 24, fontSize: 11, alignItems: "center" }}>
+          <EstClock />
+          {mood && <>
+            <span>SIGNALS <span style={{ color: "#00ff88", fontWeight: 600 }}>86</span></span>
+            <span>BUY / SELL <span style={{ color: "#00ff88" }}>{mood.buy_count}</span> / <span style={{ color: "#ff4466" }}>{mood.sell_count}</span></span>
+            <span>MOOD <span style={{ color: mood.mood === "BULLISH" ? "#00ff88" : mood.mood === "BEARISH" ? "#ff4466" : "#ffd700", fontWeight: 600 }}>{mood.mood}</span></span>
+                    </>}
           {user ? (
             <a href="/pricing" style={{ fontSize: 10, fontWeight: 700, color: isPro ? "#ffd700" : "rgba(255,255,255,0.35)", border: isPro ? "1px solid rgba(255,215,0,0.25)" : "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "3px 10px", background: isPro ? "rgba(255,215,0,0.06)" : "transparent", textDecoration: "none", letterSpacing: "0.06em" }}>
               {isPro ? "PRO" : "FREE"}
@@ -1403,12 +1409,6 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           ) : (
             <a href="/auth" style={{ fontSize: 10, color: "#fff", textDecoration: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 4, padding: "3px 10px", background: "rgba(255,255,255,0.05)", letterSpacing: "0.06em" }}>SIGN IN</a>
           )}
-          <EstClock />
-          {mood && <>
-            <span>SIGNALS <span style={{ color: "#00ff88", fontWeight: 600 }}>86</span></span>
-            <span>BUY / SELL <span style={{ color: "#00ff88" }}>{mood.buy_count}</span> / <span style={{ color: "#ff4466" }}>{mood.sell_count}</span></span>
-            <span>MOOD <span style={{ color: mood.mood === "BULLISH" ? "#00ff88" : mood.mood === "BEARISH" ? "#ff4466" : "#ffd700", fontWeight: 600 }}>{mood.mood}</span></span>
-                    </>}
         </div>
       </div>
 
