@@ -930,15 +930,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 6, padding: "4px 10px", fontSize: 10, color: "#ffd700", outline: "none", fontFamily: "inherit" }} />
         )}
         {replayLoading && <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>Loading...</span>}
-        <div style={{ display: "flex", marginLeft: "auto", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 5, overflow: "hidden" }}>
-        {windows.map((w, i) => (
-          <div key={w.label} style={{ display: "flex", alignItems: "center", gap: 4, background: w.active ? `${w.color}15` : "transparent", borderRight: i < windows.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none", padding: "4px 8px" }}>
-            {w.active && <span style={{ width: 4, height: 4, borderRadius: "50%", background: w.color, display: "inline-block" }} />}
-            <span style={{ fontSize: 8, fontWeight: 700, color: w.active ? w.color : "rgba(255,255,255,0.2)", whiteSpace: "nowrap" }}>{w.label}</span>
-          </div>
-        ))}
-      </div>
-      {replayMode && replayData && (
+        {replayMode && replayData && (
           <span style={{ fontSize: 9, fontWeight: 700, color: replayData.was_correct ? "#00ff88" : "#ff4466", marginLeft: "auto" }}>
             {replayData.was_correct ? "✓ CORRECT" : "✗ WRONG"} · 5d return: {replayData.actual_return_5d > 0 ? "+" : ""}{replayData.actual_return_5d}%
           </span>
@@ -946,14 +938,6 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       </div>
 
       {/* Historical badge */}
-      <div style={{ display: "flex", marginLeft: "auto", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 5, overflow: "hidden" }}>
-        {windows.map((w, i) => (
-          <div key={w.label} style={{ display: "flex", alignItems: "center", gap: 4, background: w.active ? `${w.color}15` : "transparent", borderRight: i < windows.length - 1 ? "1px solid rgba(255,255,255,0.06)" : "none", padding: "4px 8px" }}>
-            {w.active && <span style={{ width: 4, height: 4, borderRadius: "50%", background: w.color, display: "inline-block" }} />}
-            <span style={{ fontSize: 8, fontWeight: 700, color: w.active ? w.color : "rgba(255,255,255,0.2)", whiteSpace: "nowrap" }}>{w.label}</span>
-          </div>
-        ))}
-      </div>
       {replayMode && replayData && (
         <div style={{ background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.2)", borderRadius: 6, padding: "6px 12px", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
           <span style={{ fontSize: 9, fontWeight: 700, color: "#ffd700" }}>⏪ HISTORICAL SIGNAL — {replayDate}</span>
@@ -1019,6 +1003,17 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       )}
 
 
+      <div style={{ marginBottom: 20 }}>
+        <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 10 }}>EXECUTION WINDOWS</div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
+          {windows.map(w => (
+            <div key={w.label} style={{ background: w.active ? `${w.color}15` : "rgba(255,255,255,0.02)", border: `1px solid ${w.active ? `${w.color}40` : "rgba(255,255,255,0.06)"}`, borderRadius: 6, padding: "8px 10px" }}>
+              <div style={{ fontSize: 8, fontWeight: 700, color: w.active ? w.color : "rgba(255,255,255,0.3)", marginBottom: 3 }}>{w.active ? "● " : ""}{w.label}</div>
+              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{w.range}</div>
+            </div>
+          ))}
+        </div>
+      </div>
       <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 10 }}>REALTIME PRICE ACTION</div>
       {!isMobile ? (
         <div style={{ height: 420, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", marginBottom: 20 }}>
