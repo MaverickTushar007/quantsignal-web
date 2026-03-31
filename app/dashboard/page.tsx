@@ -669,6 +669,7 @@ export default function Dashboard() {
   // Mobile: "LIST" | "SIGNAL" | "CHAT" | "CALENDAR" | "SIDEBAR"
   const [mobilePanel, setMobilePanel] = useState("LIST");
   const [isMobile, setIsMobile] = useState(false);
+  const [showAssetList, setShowAssetList] = useState(true);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -1470,9 +1471,28 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           </div>
         )}
 
-        {/* Right panel — Asset List */}
-        <div style={{ width: 240, borderLeft: "1px solid rgba(255,255,255,0.06)", display: "flex", flexDirection: "column", flexShrink: 0, background: "#0a0a0c" }}>
-          <AssetList />
+        {/* Right panel — Asset List (collapsible) */}
+        <div style={{ display: "flex", flexDirection: "row", flexShrink: 0 }}>
+          {/* Toggle tab */}
+          <div
+            onClick={() => setShowAssetList(p => !p)}
+            style={{
+              width: 18, background: "#0a0a0c", borderLeft: "1px solid rgba(255,255,255,0.06)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", flexShrink: 0, userSelect: "none",
+            }}
+            title={showAssetList ? "Hide asset list" : "Show asset list"}
+          >
+            <span style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", writingMode: "vertical-rl", letterSpacing: "0.1em" }}>
+              {showAssetList ? "›" : "‹"}
+            </span>
+          </div>
+          {/* Panel */}
+          {showAssetList && (
+            <div style={{ width: 240, borderLeft: "1px solid rgba(255,255,255,0.06)", display: "flex", flexDirection: "column", background: "#0a0a0c", overflow: "hidden", transition: "width 0.2s" }}>
+              <AssetList />
+            </div>
+          )}
         </div>
       </div>
       <TutorialModal />
