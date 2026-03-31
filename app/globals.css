@@ -15,25 +15,27 @@ body {
 
 
 
-/* ── Custom scrollbars: 1px, dark, invisible until hover ── */
+
+
+/* ── Custom scrollbars: 3px, dark grey, invisible until hover ── */
 .qs-scroll::-webkit-scrollbar {
-  width: 1px !important;
+  width: 2px !important;
   background: transparent !important;
 }
 .qs-scroll::-webkit-scrollbar-track {
-  background: transparent !important;
+  background: rgba(255,255,255,0.03) !important;
 }
 .qs-scroll::-webkit-scrollbar-thumb {
   background: transparent !important;
-  border-radius: 99px;
+  border-radius: 2px;
 }
 .qs-scroll:hover::-webkit-scrollbar-thumb {
-  background: rgba(50, 50, 52, 0.7) !important;
+  background: rgba(45, 45, 48, 0.95) !important;
 }
 .qs-scroll {
   scrollbar-width: thin;
   scrollbar-color: transparent transparent;
 }
 .qs-scroll:hover {
-  scrollbar-color: rgba(50, 50, 52, 0.7) transparent;
+  scrollbar-color: rgba(45, 45, 48, 0.95) transparent;
 }
