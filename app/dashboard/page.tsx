@@ -1405,9 +1405,9 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
       <MarketSentiment />
       <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
-        {/* Left panel */}
-        <div style={{ width: 240, borderRight: "1px solid rgba(255,255,255,0.06)", display: "flex", flexDirection: "column", flexShrink: 0, background: "#0a0a0c" }}>
-          <AssetList />
+        {/* Left panel — Analyst Sidebar */}
+        <div style={{ width: 300, borderRight: "1px solid rgba(255,255,255,0.06)", background: "#0a0a0c", overflowY: "auto", padding: "16px", flexShrink: 0 }}>
+          {selected && detail ? <SidebarContent /> : <div style={{ color: "rgba(255,255,255,0.2)", fontSize: 12, marginTop: 40, textAlign: "center" }}>SELECT AN ASSET</div>}
         </div>
 
         {/* Center panel */}
@@ -1470,13 +1470,10 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           </div>
         )}
 
-        {/* Right sidebar — only on SIGNAL and CHAT tabs */}
-        {detail && (activeTab === "SIGNAL" || activeTab === "CHAT") && (
-          <div style={{ width: 300, background: "#0a0a0c", overflowY: "auto", padding: "16px", flexShrink: 0 }}>
-            <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 16 }}>ANALYST SIDEBAR</div>
-            <SidebarContent />
-          </div>
-        )}
+        {/* Right panel — Asset List */}
+        <div style={{ width: 240, borderLeft: "1px solid rgba(255,255,255,0.06)", display: "flex", flexDirection: "column", flexShrink: 0, background: "#0a0a0c" }}>
+          <AssetList />
+        </div>
       </div>
       <TutorialModal />
       {guardianSignal && (
