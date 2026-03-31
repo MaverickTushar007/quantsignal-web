@@ -1389,20 +1389,20 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <a href="/guardian" style={{ fontSize: 10, color: "#00ff88", textDecoration: "none", border: "1px solid rgba(0,255,136,0.2)", borderRadius: 4, padding: "3px 10px", background: "rgba(0,255,136,0.06)", letterSpacing: "0.06em" }}>GUARDIAN</a>
             <a href="/agents" style={{ fontSize: 10, color: "#ffc107", textDecoration: "none", border: "1px solid rgba(255,193,7,0.2)", borderRadius: 4, padding: "3px 10px", background: "rgba(255,193,7,0.06)", letterSpacing: "0.06em" }}>AGENTS</a>
             <a href="/portfolio" style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", textDecoration: "none", padding: "3px 10px", borderRadius: 4, letterSpacing: "0.06em" }} onMouseEnter={e => (e.currentTarget.style.color="#fff")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.5)")}>PORTFOLIO</a>
-            <div style={{ width: 1, height: 14, background: "rgba(255,255,255,0.08)", margin: "0 4px" }} />
-            {user ? (
-              <a href="/pricing" style={{ fontSize: 10, fontWeight: 700, color: isPro ? "#ffd700" : "rgba(255,255,255,0.35)", border: isPro ? "1px solid rgba(255,215,0,0.25)" : "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "3px 10px", background: isPro ? "rgba(255,215,0,0.06)" : "transparent", textDecoration: "none", letterSpacing: "0.06em" }}>
-                {isPro ? "PRO" : "FREE"}
-              </a>
-            ) : (
-              <a href="/auth" style={{ fontSize: 10, color: "#fff", textDecoration: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 4, padding: "3px 10px", background: "rgba(255,255,255,0.05)", letterSpacing: "0.06em" }}>SIGN IN</a>
-            )}
+
           </div>
           <span style={{ color: activeWindow ? activeWindow.color : "rgba(255,255,255,0.2)", fontSize: 10, fontWeight: 600 }}>
             {activeWindow ? `● ${activeWindow.label}` : "● MARKET CLOSED"}
           </span>
         </div>
         <div style={{ display: "flex", gap: 24, fontSize: 11, alignItems: "center" }}>
+          {user ? (
+            <a href="/pricing" style={{ fontSize: 10, fontWeight: 700, color: isPro ? "#ffd700" : "rgba(255,255,255,0.35)", border: isPro ? "1px solid rgba(255,215,0,0.25)" : "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "3px 10px", background: isPro ? "rgba(255,215,0,0.06)" : "transparent", textDecoration: "none", letterSpacing: "0.06em" }}>
+              {isPro ? "PRO" : "FREE"}
+            </a>
+          ) : (
+            <a href="/auth" style={{ fontSize: 10, color: "#fff", textDecoration: "none", border: "1px solid rgba(255,255,255,0.15)", borderRadius: 4, padding: "3px 10px", background: "rgba(255,255,255,0.05)", letterSpacing: "0.06em" }}>SIGN IN</a>
+          )}
           <EstClock />
           {mood && <>
             <span>SIGNALS <span style={{ color: "#00ff88", fontWeight: 600 }}>86</span></span>
