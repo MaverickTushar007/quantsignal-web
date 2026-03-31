@@ -7,7 +7,7 @@ import { fetchAllSignals, fetchMarketMood, fetchSignal, UpgradeRequiredError } f
 import TradingChart from "../components/TradingChart";
 import TutorialModal from "../components/TutorialModal";
 import AgentChat from "../components/AgentChat";
-import { LayoutDashboard, MessageSquare, Calendar, Database, List, ChevronLeft, Newspaper } from "lucide-react";
+import { LayoutDashboard, MessageSquare, Calendar, Database, List, ChevronLeft, Newspaper, Bell, Bookmark, BarChart2, Settings } from "lucide-react";
 import EconomicCalendar from "../components/EconomicCalendar";
 import TradeGuardian from "../components/TradeGuardian";
 import NewsTab from "../components/NewsTab";
@@ -1399,7 +1399,30 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <span>SIGNALS <span style={{ color: "#00ff88", fontWeight: 600 }}>86</span></span>
             <span>BUY / SELL <span style={{ color: "#00ff88" }}>{mood.buy_count}</span> / <span style={{ color: "#ff4466" }}>{mood.sell_count}</span></span>
             <span>MOOD <span style={{ color: mood.mood === "BULLISH" ? "#00ff88" : mood.mood === "BEARISH" ? "#ff4466" : "#ffd700", fontWeight: 600 }}>{mood.mood}</span></span>
-            <span style={{ color: "rgba(255,255,255,0.3)" }}>yfinance · Groq · RAG</span>
+            {/* Navbar icons */}
+            <div style={{ display: "flex", alignItems: "center", gap: 2, borderLeft: "1px solid rgba(255,255,255,0.06)", paddingLeft: 12, marginLeft: 4 }}>
+              <div title="Notifications" style={{ padding: "5px 7px", borderRadius: 5, cursor: "pointer", color: "rgba(255,255,255,0.35)", position: "relative", transition: "color 0.15s, background 0.15s" }}
+                onMouseEnter={e => { e.currentTarget.style.color="#fff"; e.currentTarget.style.background="rgba(255,255,255,0.06)"; }}
+                onMouseLeave={e => { e.currentTarget.style.color="rgba(255,255,255,0.35)"; e.currentTarget.style.background="transparent"; }}>
+                <Bell size={13} strokeWidth={1.5} />
+                <div style={{ position: "absolute", top: 4, right: 5, width: 5, height: 5, borderRadius: "50%", background: "#ff4466", border: "1px solid #060608" }} />
+              </div>
+              <div title="Saved signals" style={{ padding: "5px 7px", borderRadius: 5, cursor: "pointer", color: "rgba(255,255,255,0.35)", transition: "color 0.15s, background 0.15s" }}
+                onMouseEnter={e => { e.currentTarget.style.color="#ffd700"; e.currentTarget.style.background="rgba(255,215,0,0.06)"; }}
+                onMouseLeave={e => { e.currentTarget.style.color="rgba(255,255,255,0.35)"; e.currentTarget.style.background="transparent"; }}>
+                <Bookmark size={13} strokeWidth={1.5} />
+              </div>
+              <div title="Quick stats" style={{ padding: "5px 7px", borderRadius: 5, cursor: "pointer", color: "rgba(255,255,255,0.35)", transition: "color 0.15s, background 0.15s" }}
+                onMouseEnter={e => { e.currentTarget.style.color="#00ff88"; e.currentTarget.style.background="rgba(0,255,136,0.06)"; }}
+                onMouseLeave={e => { e.currentTarget.style.color="rgba(255,255,255,0.35)"; e.currentTarget.style.background="transparent"; }}>
+                <BarChart2 size={13} strokeWidth={1.5} />
+              </div>
+              <div title="Settings" style={{ padding: "5px 7px", borderRadius: 5, cursor: "pointer", color: "rgba(255,255,255,0.35)", transition: "color 0.15s, background 0.15s" }}
+                onMouseEnter={e => { e.currentTarget.style.color="#fff"; e.currentTarget.style.background="rgba(255,255,255,0.06)"; }}
+                onMouseLeave={e => { e.currentTarget.style.color="rgba(255,255,255,0.35)"; e.currentTarget.style.background="transparent"; }}>
+                <Settings size={13} strokeWidth={1.5} />
+              </div>
+            </div>
           </>}
         </div>
       </div>
