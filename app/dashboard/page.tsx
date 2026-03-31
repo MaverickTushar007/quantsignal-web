@@ -11,7 +11,6 @@ import { LayoutDashboard, MessageSquare, Calendar, Database, List, ChevronLeft, 
 import EconomicCalendar from "../components/EconomicCalendar";
 import TradeGuardian from "../components/TradeGuardian";
 import NewsTab from "../components/NewsTab";
-import MarketSentiment from "../components/MarketSentiment";
 import UpgradeModal from "../components/UpgradeModal";
 
 
@@ -1412,8 +1411,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         </div>
       </div>
 
-      <MarketSentiment />
-      <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+            <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
         {/* Left panel — Analyst Sidebar */}
         <div style={{ width: 300, borderRight: "1px solid rgba(255,255,255,0.06)", background: "#0a0a0c", overflowY: "auto", padding: "16px", flexShrink: 0, scrollbarWidth: "thin" as const }}>
           {selected && detail ? <SidebarContent /> : <div style={{ color: "rgba(255,255,255,0.1)", fontSize: 11, marginTop: 60, textAlign: "center", letterSpacing: "0.12em" }}>SELECT AN ASSET</div>}
