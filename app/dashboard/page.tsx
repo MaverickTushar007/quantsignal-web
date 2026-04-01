@@ -1275,7 +1275,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         </div>
 
         {/* Mobile content area */}
-        <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+        <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column" }}>
           {mobilePanel === "LIST" && <AssetList />}
 
           {mobilePanel !== "LIST" && selected && (
