@@ -1451,22 +1451,22 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
               {activeTab === "SIGNAL" && <SignalTab />}
               {activeTab === "CHAT" && (
-              <>
-              {briefing && (
-                <div style={{ padding: "10px 16px 0" }}>
-                  <div style={{ background: "rgba(0,170,255,0.05)", border: "1px solid rgba(0,170,255,0.12)", borderRadius: 8, padding: "10px 14px", marginBottom: 0 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-                      <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#00aaff" }} />
-                      <span style={{ fontSize: 8, fontWeight: 700, color: "rgba(0,170,255,0.6)", letterSpacing: "0.1em" }}>MORNING BRIEFING · {briefing.date}</span>
+                <>
+                  {briefing && (
+                    <div style={{ padding: "10px 16px 0" }}>
+                      <div style={{ background: "rgba(0,170,255,0.05)", border: "1px solid rgba(0,170,255,0.12)", borderRadius: 8, padding: "10px 14px", marginBottom: 0 }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+                          <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#00aaff" }} />
+                          <span style={{ fontSize: 8, fontWeight: 700, color: "rgba(0,170,255,0.6)", letterSpacing: "0.1em" }}>MORNING BRIEFING · {briefing.date}</span>
+                        </div>
+                        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.55)", lineHeight: 1.6, fontFamily: "'IBM Plex Mono', monospace" }}>{briefing.briefing_text}</div>
+                      </div>
                     </div>
-                    <div style={{ fontSize: 10, color: "rgba(255,255,255,0.55)", lineHeight: 1.6, fontFamily: "'IBM Plex Mono', monospace" }}>{briefing.briefing_text}</div>
+                  )}
+                  <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", padding: "0 24px 24px" }}>
+                    <AgentChat symbol={selected.symbol} />
                   </div>
-                </div>
-              )}
-              {true && (
-                <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", padding: "0 24px 24px" }}>
-                  <AgentChat symbol={selected.symbol} />
-                </div>
+                </>
               )}
               {activeTab === "CALENDAR" && <EconomicCalendar />}
               {activeTab === "NEWS" && selected && <NewsTab symbol={selected.symbol} />}
