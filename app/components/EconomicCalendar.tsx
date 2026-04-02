@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Calendar, TrendingUp, TrendingDown, RefreshCw, Bell, BellOff, X } from "lucide-react";
-import { motion } from "framer-motion";
+import { Calendar, TrendingUp, TrendingDown, RefreshCw, Bell, BellOff, X, Info } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
 
@@ -31,6 +31,9 @@ export default function EconomicCalendar() {
   const [reminderStatus, setReminderStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [subscribedIds, setSubscribedIds] = useState<Set<string>>(new Set());
   const [impactFilter, setImpactFilter] = useState<"ALL"|"High"|"Medium">("ALL");
+  const [infoEvent, setInfoEvent] = useState<any | null>(null);
+  const [infoText, setInfoText] = useState("");
+  const [infoLoading, setInfoLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -92,6 +95,43 @@ export default function EconomicCalendar() {
       setReminderStatus("error");
     }
   };
+
+  const openInfo = async (e: React.MouseEvent, event: any) => {
+    e.stopPropagation();
+    setInfoEvent(event);
+    setInfoText("");
+    setInfoLoading(true);
+    const isPastEvent = isPast(event.date || "");
+    const prompt = isPastEvent
+      ? `Give a 3-sentence plain English explanation of "${event.title}": (1) what this indicator measures, (2) what the forecast of ${event.forecast ?? "N/A"} vs previous ${event.previous ?? "N/A"} means for markets, (3) a quick post-release take on what traders should watch next.`
+      : `Give a 3-sentence plain English explanation of "${event.title}": (1) what this indicator measures, (2) why it matters for traders right now, (3) what a beat vs miss vs in-line result typically means for ${(event.affected_assets || []).join(", ") || "markets"}.`;
+    try {
+      const response = await fetch(\`\${API_BASE}/chat/GENERIC\`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ symbol: "GENERIC", message: prompt, history: [], user_id: "calendar" }),
+      });
+      if (!response.body) throw new Error("no body");
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let text = "";
+      while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        for (const line of decoder.decode(value).split("\n")) {
+          if (line.startsWith("data: ")) {
+            try {
+              const d = JSON.parse(line.slice(6));
+              if (d.type === "token") { text += d.content; setInfoText(text); }
+            } catch {}
+          }
+        }
+      }
+    } catch { setInfoText("Could not load explanation. Please try again."); }
+    setInfoLoading(false);
+  };
+
+  const closeInfo = () => { setInfoEvent(null); setInfoText(""); };
 
   const leadTime = (impact: string) => {
     if (impact === "High") return "60 min";
@@ -160,6 +200,20 @@ export default function EconomicCalendar() {
             }}>
               {event.impact === "High" ? "HIGH" : event.impact?.toUpperCase()}
             </div>
+
+            {/* Info button — always visible */}
+            <motion.button
+              onClick={(e) => openInfo(e, event)}
+              whileHover={{ scale: 1.15 }}
+              whileTap={{ scale: 0.9 }}
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                borderRadius: 6, padding: "5px 7px",
+                cursor: "pointer", display: "flex", alignItems: "center",
+              }}>
+              <Info size={11} color="rgba(0,170,255,0.7)" />
+            </motion.button>
 
             {/* Bell icon — only for upcoming events */}
             {!isPastEvent && (
@@ -264,6 +318,67 @@ export default function EconomicCalendar() {
           )}
         </div>
       )}
+
+      {/* Info Bottom Sheet */}
+      <AnimatePresence>
+      {infoEvent && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onClick={closeInfo}
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 100 }}
+          />
+          <motion.div
+            initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            style={{
+              position: "fixed", bottom: 0, left: 0, right: 0,
+              background: "#0f1117",
+              border: "1px solid rgba(0,170,255,0.2)",
+              borderRadius: "20px 20px 0 0",
+              padding: "24px 24px 40px",
+              zIndex: 101, maxWidth: 600, margin: "0 auto",
+              maxHeight: "70vh", overflowY: "auto",
+            }}>
+            <div style={{ width: 36, height: 4, background: "rgba(255,255,255,0.15)", borderRadius: 2, margin: "0 auto 20px" }} />
+            <button onClick={closeInfo} style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", cursor: "pointer", padding: 4 }}>
+              <X size={16} color="rgba(255,255,255,0.4)" />
+            </button>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+              <Info size={14} color="#00aaff" />
+              <span style={{ fontSize: 11, fontWeight: 700, color: "#00aaff", letterSpacing: "0.1em" }}>INDICATOR GUIDE</span>
+            </div>
+            <div style={{ fontSize: 16, fontWeight: 700, color: "#fff", marginBottom: 4 }}>{infoEvent.title}</div>
+            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginBottom: 20 }}>{formatDate(infoEvent)} · Impact: {infoEvent.impact}</div>
+
+            {infoEvent.forecast && (
+              <div style={{ display: "flex", gap: 12, marginBottom: 20 }}>
+                <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "10px 16px", flex: 1, textAlign: "center" }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>FORECAST</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: "#ffd700" }}>{infoEvent.forecast}</div>
+                </div>
+                <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: "10px 16px", flex: 1, textAlign: "center" }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginBottom: 4 }}>PREVIOUS</div>
+                  <div style={{ fontSize: 18, fontWeight: 800, color: "rgba(255,255,255,0.6)" }}>{infoEvent.previous}</div>
+                </div>
+              </div>
+            )}
+
+            <div style={{ background: "rgba(0,170,255,0.04)", border: "1px solid rgba(0,170,255,0.1)", borderRadius: 12, padding: "16px 18px", minHeight: 80 }}>
+              {infoLoading && !infoText && (
+                <div style={{ display: "flex", alignItems: "center", gap: 8, color: "rgba(255,255,255,0.3)", fontSize: 11 }}>
+                  <RefreshCw size={11} style={{ animation: "spin 1s linear infinite" }} />
+                  Perseus is analyzing...
+                </div>
+              )}
+              {infoText && (
+                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.8, margin: 0, whiteSpace: "pre-wrap" }}>{infoText}</p>
+              )}
+            </div>
+          </motion.div>
+        </>
+      )}
+      </AnimatePresence>
 
       {/* Reminder Bottom Sheet */}
       {reminderEvent && (
