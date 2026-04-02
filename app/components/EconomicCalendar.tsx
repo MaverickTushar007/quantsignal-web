@@ -101,12 +101,14 @@ export default function EconomicCalendar() {
     setInfoEvent(event);
     setInfoText("");
     setInfoLoading(true);
-    const isPastEvent = isPast(event.date || "");
-    const prompt = isPastEvent
-      ? `Give a 3-sentence plain English explanation of "${event.title}": (1) what this indicator measures, (2) what the forecast of ${event.forecast ?? "N/A"} vs previous ${event.previous ?? "N/A"} means for markets, (3) a quick post-release take on what traders should watch next.`
-      : `Give a 3-sentence plain English explanation of "${event.title}": (1) what this indicator measures, (2) why it matters for traders right now, (3) what a beat vs miss vs in-line result typically means for ${(event.affected_assets || []).join(", ") || "markets"}.`;
+    const isPastEvt = isPast(event.date || "");
+    const assets = (event.affected_assets || []).join(", ") || "markets";
+    const prompt = isPastEvt
+      ? "Give a 3-sentence plain English explanation of " + JSON.stringify(event.title) + ": (1) what this indicator measures, (2) what forecast " + (event.forecast ?? "N/A") + " vs previous " + (event.previous ?? "N/A") + " means for markets, (3) a quick post-release take on what traders should watch next."
+      : "Give a 3-sentence plain English explanation of " + JSON.stringify(event.title) + ": (1) what this indicator measures, (2) why it matters for traders right now, (3) what a beat vs miss vs in-line result typically means for " + assets + ".";
     try {
-      const response = await fetch(\`\${API_BASE}/chat/GENERIC\`, {
+      const url = API_BASE + "/chat/GENERIC";
+      const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ symbol: "GENERIC", message: prompt, history: [], user_id: "calendar" }),
@@ -131,7 +133,7 @@ export default function EconomicCalendar() {
     setInfoLoading(false);
   };
 
-  const closeInfo = () => { setInfoEvent(null); setInfoText(""); };
+    const closeInfo = () => { setInfoEvent(null); setInfoText(""); };
 
   const leadTime = (impact: string) => {
     if (impact === "High") return "60 min";
