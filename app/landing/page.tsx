@@ -228,21 +228,56 @@ export default function Landing() {
             <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".16em",fontFamily:"DM Mono,monospace",marginBottom:12}}>WHAT MAKES IT DIFFERENT</div>
             <h2 style={{fontSize:48,fontWeight:900,letterSpacing:"-1.5px",color:"#f0fdf4",lineHeight:1.05}}>Not just signals.<br/><span style={{color:"rgba(226,240,226,.2)"}}>Signals with receipts.</span></h2>
           </div>
-          <motion.div className="fg" initial="hidden" whileInView="visible" viewport={{once:true,amount:0.2}} variants={{visible:{transition:{staggerChildren:0.1}}}} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
-            {[
-              {icon:"M",title:"ML Ensemble",desc:"XGBoost + LightGBM trained on 180 days of OHLCV. Walk-forward validated. No curve-fitting.",a:"#4ade80"},
-              {icon:"9",title:"9-Factor Confluence",desc:"RSI, MACD, Bollinger, Stochastic, Volume, SMA Cross, 52W, Momentum — all scored together.",a:"#60a5fa"},
-              {icon:"⏪",title:"Historical Replay",desc:"Pick any date in the last 175 days and see exactly what the model would have fired.",a:"#fbbf24"},
-              {icon:"S",title:"Trade Guardian",desc:"Enter your position. Get worst-case loss, recommended size, and AI verdict instantly.",a:"#f87171"},
-              {icon:"L",title:"Liquidity Levels",desc:"Live OI, funding rates, L/S ratio and liquidation clusters from OKX. Every 30 seconds.",a:"#c084fc"},
-              {icon:"P",title:"Portfolio Lab",desc:"Black-Litterman optimization using ML signal probabilities. Stress test 3 crash scenarios.",a:"#4ade80"},
-            ].map(f=>(
-              <motion.div key={f.title} variants={{hidden:{opacity:0,y:20},visible:{opacity:1,y:0,transition:{duration:0.4,ease:"easeOut"}}}} className="ch" style={{background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.05)",borderRadius:16,padding:"24px 20px"}}>
-                <div style={{width:36,height:36,borderRadius:9,background:`${f.a}14`,border:`1px solid ${f.a}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,color:f.a,marginBottom:13,fontFamily:"DM Mono,monospace"}}>{f.icon}</div>
-                <div style={{fontSize:14,fontWeight:700,color:"#f0fdf4",marginBottom:7}}>{f.title}</div>
-                <div style={{fontSize:12,color:"rgba(226,240,226,.33)",lineHeight:1.8}}>{f.desc}</div>
-              </motion.div>
-            ))}
+          <motion.div initial="hidden" whileInView="visible" viewport={{once:true,amount:0.15}} variants={{visible:{transition:{staggerChildren:0.09}}}} style={{display:"grid",gridTemplateColumns:"repeat(12,1fr)",gridTemplateRows:"auto",gap:10}}>
+
+            {/* CARD 1 — wide, spans 7 cols */}
+            <motion.div variants={{hidden:{opacity:0,y:20},visible:{opacity:1,y:0,transition:{duration:0.4,ease:"easeOut"}}}} className="ch" style={{gridColumn:"span 7",background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.06)",borderRadius:20,padding:"32px 28px",position:"relative",overflow:"hidden",minHeight:200}}>
+              <div style={{position:"absolute",right:-20,bottom:-20,fontSize:120,opacity:0.04,fontFamily:"DM Mono,monospace",fontWeight:900,lineHeight:1,userSelect:"none"}}>ML</div>
+              <div style={{fontSize:10,fontWeight:700,color:"rgba(74,222,128,0.5)",letterSpacing:"0.14em",fontFamily:"DM Mono,monospace",marginBottom:16}}>01 // INTELLIGENCE</div>
+              <div style={{fontSize:22,fontWeight:800,color:"#f0fdf4",marginBottom:10,letterSpacing:"-0.5px"}}>ML Ensemble</div>
+              <div style={{fontSize:13,color:"rgba(226,240,226,.38)",lineHeight:1.8,maxWidth:340}}>XGBoost + LightGBM trained on 180 days of OHLCV. Walk-forward validated. No curve-fitting. Ever.</div>
+            </motion.div>
+
+            {/* CARD 2 — narrow, spans 5 cols */}
+            <motion.div variants={{hidden:{opacity:0,y:20},visible:{opacity:1,y:0,transition:{duration:0.4,ease:"easeOut"}}}} className="ch" style={{gridColumn:"span 5",background:"rgba(96,165,250,.04)",border:"1px solid rgba(96,165,250,.1)",borderRadius:20,padding:"32px 28px",position:"relative",overflow:"hidden",minHeight:200}}>
+              <div style={{position:"absolute",right:-10,bottom:-24,fontSize:110,opacity:0.05,fontFamily:"DM Mono,monospace",fontWeight:900,lineHeight:1,userSelect:"none",color:"#60a5fa"}}>9×</div>
+              <div style={{fontSize:10,fontWeight:700,color:"rgba(96,165,250,0.6)",letterSpacing:"0.14em",fontFamily:"DM Mono,monospace",marginBottom:16}}>02 // CONFLUENCE</div>
+              <div style={{fontSize:22,fontWeight:800,color:"#f0fdf4",marginBottom:10,letterSpacing:"-0.5px"}}>9-Factor Score</div>
+              <div style={{fontSize:13,color:"rgba(226,240,226,.38)",lineHeight:1.8}}>RSI, MACD, Bollinger, Stochastic, Volume, SMA Cross, 52W, Momentum — all scored together.</div>
+            </motion.div>
+
+            {/* CARD 3 — narrow, spans 4 cols */}
+            <motion.div variants={{hidden:{opacity:0,y:20},visible:{opacity:1,y:0,transition:{duration:0.4,ease:"easeOut"}}}} className="ch" style={{gridColumn:"span 4",background:"rgba(251,191,36,.03)",border:"1px solid rgba(251,191,36,.1)",borderRadius:20,padding:"32px 28px",position:"relative",overflow:"hidden",minHeight:190}}>
+              <div style={{position:"absolute",right:-14,bottom:-20,fontSize:100,opacity:0.05,lineHeight:1,userSelect:"none"}}>⏪</div>
+              <div style={{fontSize:10,fontWeight:700,color:"rgba(251,191,36,0.6)",letterSpacing:"0.14em",fontFamily:"DM Mono,monospace",marginBottom:16}}>03 // REPLAY</div>
+              <div style={{fontSize:20,fontWeight:800,color:"#f0fdf4",marginBottom:10,letterSpacing:"-0.5px"}}>Historical Replay</div>
+              <div style={{fontSize:13,color:"rgba(226,240,226,.38)",lineHeight:1.8}}>Pick any date in the last 175 days and see exactly what the model fired.</div>
+            </motion.div>
+
+            {/* CARD 4 — wide, spans 8 cols */}
+            <motion.div variants={{hidden:{opacity:0,y:20},visible:{opacity:1,y:0,transition:{duration:0.4,ease:"easeOut"}}}} className="ch" style={{gridColumn:"span 8",background:"rgba(248,113,113,.03)",border:"1px solid rgba(248,113,113,.1)",borderRadius:20,padding:"32px 28px",position:"relative",overflow:"hidden",minHeight:190}}>
+              <div style={{position:"absolute",right:-10,bottom:-20,fontSize:110,opacity:0.04,fontFamily:"DM Mono,monospace",fontWeight:900,lineHeight:1,userSelect:"none",color:"#f87171"}}>🛡️</div>
+              <div style={{fontSize:10,fontWeight:700,color:"rgba(248,113,113,0.6)",letterSpacing:"0.14em",fontFamily:"DM Mono,monospace",marginBottom:16}}>04 // RISK</div>
+              <div style={{fontSize:22,fontWeight:800,color:"#f0fdf4",marginBottom:10,letterSpacing:"-0.5px"}}>Trade Guardian</div>
+              <div style={{fontSize:13,color:"rgba(226,240,226,.38)",lineHeight:1.8,maxWidth:380}}>Enter your position. Get worst-case loss, recommended size, and AI verdict instantly. Before you pull the trigger.</div>
+            </motion.div>
+
+            {/* CARD 5 — spans 6 cols */}
+            <motion.div variants={{hidden:{opacity:0,y:20},visible:{opacity:1,y:0,transition:{duration:0.4,ease:"easeOut"}}}} className="ch" style={{gridColumn:"span 6",background:"rgba(192,132,252,.03)",border:"1px solid rgba(192,132,252,.1)",borderRadius:20,padding:"32px 28px",position:"relative",overflow:"hidden",minHeight:190}}>
+              <div style={{position:"absolute",right:-10,bottom:-20,fontSize:110,opacity:0.04,fontFamily:"DM Mono,monospace",fontWeight:900,lineHeight:1,userSelect:"none",color:"#c084fc"}}>◈</div>
+              <div style={{fontSize:10,fontWeight:700,color:"rgba(192,132,252,0.6)",letterSpacing:"0.14em",fontFamily:"DM Mono,monospace",marginBottom:16}}>05 // LIQUIDITY</div>
+              <div style={{fontSize:22,fontWeight:800,color:"#f0fdf4",marginBottom:10,letterSpacing:"-0.5px"}}>Liquidity Levels</div>
+              <div style={{fontSize:13,color:"rgba(226,240,226,.38)",lineHeight:1.8}}>Live OI, funding rates, L/S ratio and liquidation clusters from OKX. Every 30 seconds.</div>
+            </motion.div>
+
+            {/* CARD 6 — spans 6 cols */}
+            <motion.div variants={{hidden:{opacity:0,y:20},visible:{opacity:1,y:0,transition:{duration:0.4,ease:"easeOut"}}}} className="ch" style={{gridColumn:"span 6",background:"rgba(74,222,128,.03)",border:"1px solid rgba(74,222,128,.1)",borderRadius:20,padding:"32px 28px",position:"relative",overflow:"hidden",minHeight:190}}>
+              <div style={{position:"absolute",right:-10,bottom:-20,fontSize:110,opacity:0.04,fontFamily:"DM Mono,monospace",fontWeight:900,lineHeight:1,userSelect:"none",color:"#4ade80"}}>∑</div>
+              <div style={{fontSize:10,fontWeight:700,color:"rgba(74,222,128,0.6)",letterSpacing:"0.14em",fontFamily:"DM Mono,monospace",marginBottom:16}}>06 // PORTFOLIO</div>
+              <div style={{fontSize:22,fontWeight:800,color:"#f0fdf4",marginBottom:10,letterSpacing:"-0.5px"}}>Portfolio Lab</div>
+              <div style={{fontSize:13,color:"rgba(226,240,226,.38)",lineHeight:1.8}}>Black-Litterman optimization using ML signal probabilities. Stress test 3 crash scenarios.</div>
+            </motion.div>
+
           </motion.div>
         </div>
       </section>
