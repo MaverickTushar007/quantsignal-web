@@ -117,14 +117,19 @@ export default function EconomicCalendar() {
       const reader = response.body.getReader();
       const decoder = new TextDecoder();
       let text = "";
+      let buffer = "";
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
-        for (const line of decoder.decode(value).split("\n")) {
-          if (line.startsWith("data: ")) {
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || "";
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (trimmed.startsWith("data: ")) {
             try {
-              const d = JSON.parse(line.slice(6));
-              if (d.type === "token") { text += d.content; setInfoText(text); }
+              const d = JSON.parse(trimmed.slice(6));
+              if (d.type === "token") { text += d.content; setInfoText(t => t + d.content); }
             } catch {}
           }
         }
@@ -331,18 +336,22 @@ export default function EconomicCalendar() {
             style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 100 }}
           />
           <motion.div
-            initial={{ y: "100%" }} animate={{ y: 0 }} exit={{ y: "100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
             style={{
-              position: "fixed", bottom: 0, left: 0, right: 0,
+              position: "fixed",
+              top: "50%", left: "50%",
+              transform: "translate(-50%, -50%)",
               background: "#0f1117",
               border: "1px solid rgba(0,170,255,0.2)",
-              borderRadius: "20px 20px 0 0",
-              padding: "24px 24px 40px",
-              zIndex: 101, maxWidth: 600, margin: "0 auto",
-              maxHeight: "70vh", overflowY: "auto",
+              borderRadius: 20,
+              padding: "28px 28px 32px",
+              zIndex: 101,
+              width: "min(580px, 90vw)",
+              maxHeight: "80vh",
+              overflowY: "auto",
+              boxShadow: "0 24px 80px rgba(0,0,0,0.6)",
             }}>
-            <div style={{ width: 36, height: 4, background: "rgba(255,255,255,0.15)", borderRadius: 2, margin: "0 auto 20px" }} />
             <button onClick={closeInfo} style={{ position: "absolute", top: 20, right: 20, background: "none", border: "none", cursor: "pointer", padding: 4 }}>
               <X size={16} color="rgba(255,255,255,0.4)" />
             </button>
