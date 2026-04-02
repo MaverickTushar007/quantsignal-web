@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Calendar, TrendingUp, TrendingDown, RefreshCw, Bell, BellOff, X } from "lucide-react";
+import { motion } from "framer-motion";
 
 const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
 
@@ -107,9 +108,12 @@ export default function EconomicCalendar() {
     const isSubscribed = subscribedIds.has(event.title);
 
     return (
-      <div
+      <motion.div
         key={key}
         onClick={() => setExpanded(isExpanded ? null : key)}
+        whileHover={{ y: -2, boxShadow: isExpanded ? "0 4px 24px rgba(0,255,136,0.12)" : "0 4px 20px rgba(255,255,255,0.06)" }}
+        whileTap={{ scale: 0.995 }}
+        transition={{ duration: 0.18, ease: "easeOut" }}
         style={{
           background: isPastEvent ? "rgba(255,255,255,0.01)" : "rgba(255,255,255,0.02)",
           border: `1px solid ${isExpanded ? "rgba(0,255,136,0.25)" : "rgba(255,255,255,0.07)"}`,
@@ -117,7 +121,6 @@ export default function EconomicCalendar() {
           padding: "14px 16px",
           cursor: "pointer",
           opacity: isPastEvent ? 0.75 : 1,
-          transition: "all 0.15s",
         }}>
 
         {/* Event header */}
@@ -160,20 +163,21 @@ export default function EconomicCalendar() {
 
             {/* Bell icon — only for upcoming events */}
             {!isPastEvent && (
-              <button
+              <motion.button
                 onClick={(e) => openReminder(e, event)}
+                whileHover={{ scale: 1.15 }}
+                whileTap={{ scale: 0.9 }}
                 style={{
                   background: isSubscribed ? "rgba(0,255,136,0.1)" : "rgba(255,255,255,0.04)",
                   border: `1px solid ${isSubscribed ? "rgba(0,255,136,0.3)" : "rgba(255,255,255,0.1)"}`,
                   borderRadius: 6, padding: "5px 7px",
                   cursor: "pointer", display: "flex", alignItems: "center",
-                  transition: "all 0.15s",
                 }}>
                 {isSubscribed
                   ? <BellOff size={11} color="#00ff88" />
                   : <Bell size={11} color="rgba(255,255,255,0.4)" />
                 }
-              </button>
+              </motion.button>
             )}
           </div>
         </div>
@@ -206,7 +210,7 @@ export default function EconomicCalendar() {
             </div>
           </div>
         )}
-      </div>
+      </motion.div>
     );
   };
 
@@ -240,13 +244,13 @@ export default function EconomicCalendar() {
           {/* Impact filter */}
           <div style={{ display: "flex", gap: 6, marginBottom: 12 }}>
             {(["ALL","High","Medium"] as const).map(f => (
-              <button key={f} onClick={() => setImpactFilter(f)} style={{
+              <motion.button key={f} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }} onClick={() => setImpactFilter(f)} style={{
                 fontSize: 9, fontWeight: 700, padding: "3px 10px", borderRadius: 4,
                 border: impactFilter === f ? (f === "High" ? "1px solid rgba(255,68,102,0.5)" : f === "Medium" ? "1px solid rgba(255,215,0,0.5)" : "1px solid rgba(0,255,136,0.4)") : "1px solid rgba(255,255,255,0.08)",
                 background: impactFilter === f ? (f === "High" ? "rgba(255,68,102,0.1)" : f === "Medium" ? "rgba(255,215,0,0.08)" : "rgba(0,255,136,0.06)") : "transparent",
                 color: impactFilter === f ? (f === "High" ? "#ff4466" : f === "Medium" ? "#ffd700" : "#00ff88") : "rgba(255,255,255,0.3)",
                 cursor: "pointer", fontFamily: "inherit", letterSpacing: "0.08em"
-              }}>{f === "ALL" ? "ALL" : f === "High" ? "🔴 HIGH" : "🟡 MEDIUM"}</button>
+              }}>{f === "ALL" ? "ALL" : f === "High" ? "🔴 HIGH" : "🟡 MEDIUM"}</motion.button>
             ))}
           </div>
           {upcoming.length > 0 && <div style={{ fontSize: 9, color: "#00ff88", letterSpacing: "0.15em", fontWeight: 700, padding: "4px 0 8px" }}>▶ UPCOMING EVENTS</div>}
