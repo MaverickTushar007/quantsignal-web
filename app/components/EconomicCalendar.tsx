@@ -105,8 +105,8 @@ export default function EconomicCalendar() {
     const isPastEvt = isPast(event.date || "");
     const assets = (event.affected_assets || []).join(", ") || "markets";
     const prompt = isPastEvt
-      ? "Give a 3-sentence plain English explanation of " + JSON.stringify(event.title) + ": (1) what this indicator measures, (2) what forecast " + (event.forecast ?? "N/A") + " vs previous " + (event.previous ?? "N/A") + " means for markets, (3) a quick post-release take on what traders should watch next."
-      : "Give a 3-sentence plain English explanation of " + JSON.stringify(event.title) + ": (1) what this indicator measures, (2) why it matters for traders right now, (3) what a beat vs miss vs in-line result typically means for " + assets + ".";
+      ? "You are a macro-aware quant analyst. For the economic event " + JSON.stringify(event.title) + " with forecast " + (event.forecast ?? "N/A") + " vs previous " + (event.previous ?? "N/A") + ", provide: (1) What this indicator measures in 1 sentence, (2) Post-release analysis — did it beat/miss and what does that mean RIGHT NOW considering current macro conditions (Fed stance, VIX, yield curve, banking stress, geopolitical risk), (3) Actionable zones — specific price levels or % moves to watch as buy/sell triggers for " + assets + " based on this result. Be specific with numbers. Format with markdown headers."
+      : "You are a macro-aware quant analyst. For the upcoming event " + JSON.stringify(event.title) + " (forecast: " + (event.forecast ?? "N/A") + ", previous: " + (event.previous ?? "N/A") + "), provide: (1) What this indicator measures in 1 sentence, (2) Why it matters RIGHT NOW — connect it to current macro regime (Fed policy, VIX, yield curve, global banking stress, geopolitical risk), (3) Pre-event playbook — if it BEATS: likely reaction and buy zones for " + assets + "; if it MISSES: likely reaction and sell zones; if IN-LINE: expected muted reaction. Use specific % moves and price context. Format with markdown headers.";
     try {
       const url = API_BASE + "/chat/GENERIC";
       const response = await fetch(url, {
