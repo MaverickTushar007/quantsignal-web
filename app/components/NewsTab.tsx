@@ -89,7 +89,7 @@ export default function NewsTab({ symbol }: { symbol: string }) {
 
       {/* News items */}
       {!loading && !error && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <motion.div initial="hidden" animate="visible" variants={{visible:{transition:{staggerChildren:0.05}}}} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {news.length === 0 && (
             <div style={{ color: "rgba(255,255,255,0.3)", fontSize: 12, padding: "20px 0", textAlign: "center" }}>
               No recent news found for {symbol}
