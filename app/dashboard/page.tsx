@@ -412,71 +412,49 @@ function PushBell() {
 // ── Track Record Component ────────────────────────────────────────────────
 const API_BASE_TR = "https://quantsignal-api-production.up.railway.app/api/v1";
 
-function TrackRecordTab({ symbol }: { symbol: string }) {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: string; allTrades: any[]; evStats: any[]; briefing: any }) {
   const mono = "'IBM Plex Mono', monospace";
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`${API_BASE_TR}/history/trades?limit=200`)
-      .then(r => r.json())
-      .then(d => {
-        const trades = d.trades || [];
-        // Filter for this symbol
-        const sym = trades.filter((t: any) => t.symbol === symbol);
-        // All trades stats
-        const all = trades;
-        const wins = all.filter((t: any) => t.outcome === "TP_HIT");
-        const losses = all.filter((t: any) => t.outcome === "SL_HIT");
-        const winRate = all.length ? (wins.length / all.length * 100) : 0;
-        const avgPnl = all.length ? all.reduce((s: number, t: any) => s + (t.pnl_pct || 0), 0) / all.length : 0;
-        const avgWin = wins.length ? wins.reduce((s: number, t: any) => s + t.pnl_pct, 0) / wins.length : 0;
-        const avgLoss = losses.length ? losses.reduce((s: number, t: any) => s + t.pnl_pct, 0) / losses.length : 0;
+  const trades = allTrades;
+  const sym = trades.filter((t: any) => t.symbol === symbol);
+  const wins = trades.filter((t: any) => t.outcome === "TP_HIT");
+  const losses = trades.filter((t: any) => t.outcome === "SL_HIT");
+  const winRate = trades.length ? (wins.length / trades.length * 100) : 0;
+  const avgPnl = trades.length ? trades.reduce((s: number, t: any) => s + (t.pnl_pct || 0), 0) / trades.length : 0;
+  const avgWin = wins.length ? wins.reduce((s: number, t: any) => s + t.pnl_pct, 0) / wins.length : 0;
+  const avgLoss = losses.length ? losses.reduce((s: number, t: any) => s + t.pnl_pct, 0) / losses.length : 0;
 
-        // By probability bucket
-        const buckets: Record<string, {tp:number,sl:number,pnl:number[]}> = {
-          "35-45%": {tp:0,sl:0,pnl:[]},
-          "45-55%": {tp:0,sl:0,pnl:[]},
-          "55-65%": {tp:0,sl:0,pnl:[]},
-          "65%+":   {tp:0,sl:0,pnl:[]},
-        };
-        all.forEach((t: any) => {
-          const p = (t.probability || 0) * 100;
-          const b = p < 45 ? "35-45%" : p < 55 ? "45-55%" : p < 65 ? "55-65%" : "65%+";
-          if (t.outcome === "TP_HIT") buckets[b].tp++;
-          else buckets[b].sl++;
-          buckets[b].pnl.push(t.pnl_pct || 0);
-        });
+  const buckets: Record<string, {tp:number,sl:number,pnl:number[]}> = {
+    "35-45%": {tp:0,sl:0,pnl:[]},
+    "45-55%": {tp:0,sl:0,pnl:[]},
+    "55-65%": {tp:0,sl:0,pnl:[]},
+    "65%+":   {tp:0,sl:0,pnl:[]},
+  };
+  trades.forEach((t: any) => {
+    const p = (t.probability || 0) * 100;
+    const b = p < 45 ? "35-45%" : p < 55 ? "45-55%" : p < 65 ? "55-65%" : "65%+";
+    if (t.outcome === "TP_HIT") buckets[b].tp++;
+    else buckets[b].sl++;
+    buckets[b].pnl.push(t.pnl_pct || 0);
+  });
 
-        // By direction
-        const byDir: Record<string, {tp:number,sl:number}> = { BUY:{tp:0,sl:0}, SELL:{tp:0,sl:0} };
-        all.forEach((t: any) => {
-          const d = t.direction;
-          if (byDir[d]) {
-            if (t.outcome === "TP_HIT") byDir[d].tp++;
-            else byDir[d].sl++;
-          }
-        });
+  const byDir: Record<string, {tp:number,sl:number}> = { BUY:{tp:0,sl:0}, SELL:{tp:0,sl:0} };
+  trades.forEach((t: any) => {
+    const d = t.direction;
+    if (byDir[d]) {
+      if (t.outcome === "TP_HIT") byDir[d].tp++;
+      else byDir[d].sl++;
+    }
+  });
 
-        // This symbol's recent trades
-        const symRecent = sym.slice(0, 8);
+  const symRecent = sym.slice(0, 8);
+  const data = { total: trades.length, wins: wins.length, losses: losses.length, winRate, avgPnl, avgWin, avgLoss, buckets, byDir, symRecent, symTotal: sym.length, evStats, briefing };
 
-        setData({ total: all.length, wins: wins.length, losses: losses.length, winRate, avgPnl, avgWin, avgLoss, buckets, byDir, symRecent, symTotal: sym.length, evStats: [], briefing: null });
-
-        // Fetch EV stats and morning briefing separately
-        Promise.allSettled([
-          fetch(`${API_BASE_TR}/system/ev-stats`).then(r => r.json()),
-          fetch(`${API_BASE_TR}/system/morning-briefing`).then(r => r.json()),
-        ]).then(([evRes, briefingRes]) => {
-          const evStats = evRes.status === "fulfilled" ? (evRes.value?.ev_stats || []) : [];
-          const briefing = briefingRes.status === "fulfilled" ? briefingRes.value : null;
-          setData((prev: any) => prev ? { ...prev, evStats, briefing } : prev);
-        });
-      })
-      .catch(() => setData(null))
-      .finally(() => setLoading(false));
-  }, [symbol]);
+  if (!trades.length) return (
+    <div style={{ padding: 20, textAlign: "center", color: "rgba(255,255,255,0.3)", fontSize: 11, fontFamily: mono }}>
+      Loading track record...
+    </div>
+  );
 
   if (loading) return (
     <div style={{ padding: 20, textAlign: "center", color: "rgba(255,255,255,0.3)", fontSize: 11, fontFamily: mono }}>
@@ -598,16 +576,7 @@ function TrackRecordTab({ symbol }: { symbol: string }) {
         )}
       </div>
 
-      {/* Morning Briefing */}
-      {data.briefing && (
-        <>
-          <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>PERSEUS MORNING BRIEFING</div>
-          <div style={{ background: "rgba(0,170,255,0.05)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 6, padding: "10px 12px", marginBottom: 18 }}>
-            <div style={{ fontSize: 8, color: "rgba(0,170,255,0.6)", marginBottom: 6, letterSpacing: "0.08em" }}>{data.briefing.date} — AUTO GENERATED</div>
-            <div style={{ fontSize: 9, color: "rgba(255,255,255,0.6)", lineHeight: 1.6 }}>{data.briefing.briefing_text}</div>
-          </div>
-        </>
-      )}
+
 
       {/* This symbol's recent trades */}
       {data.symRecent.length > 0 && (
@@ -653,6 +622,9 @@ export default function Dashboard() {
   const [upgradeError, setUpgradeError] = useState<{kind:"signals"|"perseus",used:number,limit:number}|null>(null);
   const [signals, setSignals] = useState<any[]>([]);
   const [outcomeMap, setOutcomeMap] = useState<Record<string, {outcome: string, pnl: number}>>({});
+  const [allTrades, setAllTrades] = useState<any[]>([]);
+  const [evStats, setEvStats] = useState<any[]>([]);
+  const [briefing, setBriefing] = useState<any>(null);
   const [mood, setMood] = useState<any>(null);
   const [filter, setFilter] = useState("ALL");
   const { user, isPro } = useAuth();
@@ -683,23 +655,25 @@ export default function Dashboard() {
 
   // Fetch outcome map — shows ✓/✗ badges on signal list
   useEffect(() => {
-    fetch(`${API_BASE}/history/trades?limit=500`)
-      .then(r => r.json())
-      .then(data => {
-        const trades = data.trades || [];
+    Promise.allSettled([
+      fetch(`${API_BASE}/history/trades?limit=500`).then(r => r.json()),
+      fetch(`${API_BASE_TR}/system/ev-stats`).then(r => r.json()),
+      fetch(`${API_BASE_TR}/system/morning-briefing`).then(r => r.json()),
+    ]).then(([tradesRes, evRes, briefingRes]) => {
+      if (tradesRes.status === "fulfilled") {
+        const trades = tradesRes.value?.trades || [];
+        setAllTrades(trades);
         const map: Record<string, {outcome: string, pnl: number}> = {};
-        // Keep most recent trade per symbol
         trades.forEach((t: any) => {
           if (!map[t.symbol] && t.outcome && t.outcome !== "open") {
-            map[t.symbol] = {
-              outcome: t.outcome,
-              pnl: t.pnl_pct || 0,
-            };
+            map[t.symbol] = { outcome: t.outcome, pnl: t.pnl_pct || 0 };
           }
         });
         setOutcomeMap(map);
-      })
-      .catch(() => {});
+      }
+      if (evRes.status === "fulfilled") setEvStats(evRes.value?.ev_stats || []);
+      if (briefingRes.status === "fulfilled") setBriefing(briefingRes.value);
+    }).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -1477,13 +1451,26 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
               {activeTab === "SIGNAL" && <SignalTab />}
               {activeTab === "CHAT" && (
+              <>
+              {briefing && (
+                <div style={{ padding: "10px 16px 0" }}>
+                  <div style={{ background: "rgba(0,170,255,0.05)", border: "1px solid rgba(0,170,255,0.12)", borderRadius: 8, padding: "10px 14px", marginBottom: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+                      <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#00aaff" }} />
+                      <span style={{ fontSize: 8, fontWeight: 700, color: "rgba(0,170,255,0.6)", letterSpacing: "0.1em" }}>MORNING BRIEFING · {briefing.date}</span>
+                    </div>
+                    <div style={{ fontSize: 10, color: "rgba(255,255,255,0.55)", lineHeight: 1.6, fontFamily: "'IBM Plex Mono', monospace" }}>{briefing.briefing_text}</div>
+                  </div>
+                </div>
+              )}
+              {true && (
                 <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", padding: "0 24px 24px" }}>
                   <AgentChat symbol={selected.symbol} />
                 </div>
               )}
               {activeTab === "CALENDAR" && <EconomicCalendar />}
               {activeTab === "NEWS" && selected && <NewsTab symbol={selected.symbol} />}
-              {activeTab === "TRACK" && selected && <TrackRecordTab symbol={selected.symbol} />}
+              {activeTab === "TRACK" && selected && <TrackRecordTab symbol={selected.symbol} allTrades={allTrades} evStats={evStats} briefing={briefing} />}
             </div>
             </div>
           </SlideInRight>
