@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Calendar, TrendingUp, TrendingDown, RefreshCw, Bell, BellOff, X, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from "react-markdown";
 
 const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
 
@@ -341,7 +342,7 @@ export default function EconomicCalendar() {
             style={{
               position: "fixed",
               top: "50%", left: "50%",
-              transform: "translate(-50%, -50%)",
+              translate: "-50% -50%",
               background: "#0f1117",
               border: "1px solid rgba(0,170,255,0.2)",
               borderRadius: 20,
@@ -383,7 +384,9 @@ export default function EconomicCalendar() {
                 </div>
               )}
               {infoText && (
-                <p style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.8, margin: 0, whiteSpace: "pre-wrap" }}>{infoText}</p>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.8 }}>
+                  <ReactMarkdown>{infoText}</ReactMarkdown>
+                </div>
               )}
             </div>
           </motion.div>
