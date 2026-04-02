@@ -1308,7 +1308,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                   { href: "/guardian", icon: "🛡️", label: "Trade Guardian", desc: "Risk check before entering" },
                   { href: "/performance", icon: "📈", label: "Performance", desc: "90-day signal track record" },
                   { href: "/agents", icon: "🤖", label: "Agents", desc: "Virtual paper trading" },
-                  { href: "/portfolio", icon: "📊", label: "Portfolio Lab", desc: "Optimize your holdings" },
+
                   { id: "NEWS", icon: "📰", label: "News Feed", desc: "Live market news" },
                   { id: "ANALYSIS", icon: "📈", label: "Signal Analysis", desc: "Full ML breakdown" },
                 ].map(item => (
@@ -1371,7 +1371,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <a href="/performance" style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", textDecoration: "none", padding: "3px 10px", borderRadius: 4, letterSpacing: "0.06em", transition: "color 0.15s" }} onMouseEnter={e => (e.currentTarget.style.color="#fff")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.5)")}>PERFORMANCE</a>
             <a href="/guardian" style={{ fontSize: 10, color: "#00ff88", textDecoration: "none", border: "1px solid rgba(0,255,136,0.2)", borderRadius: 4, padding: "3px 10px", background: "rgba(0,255,136,0.06)", letterSpacing: "0.06em" }}>GUARDIAN</a>
             <a href="/agents" style={{ fontSize: 10, color: "#ffc107", textDecoration: "none", border: "1px solid rgba(255,193,7,0.2)", borderRadius: 4, padding: "3px 10px", background: "rgba(255,193,7,0.06)", letterSpacing: "0.06em" }}>AGENTS</a>
-            <a href="/portfolio" style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", textDecoration: "none", padding: "3px 10px", borderRadius: 4, letterSpacing: "0.06em" }} onMouseEnter={e => (e.currentTarget.style.color="#fff")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.5)")}>PORTFOLIO</a>
+
 
           </div>
           <span style={{ color: activeWindow ? activeWindow.color : "rgba(255,255,255,0.2)", fontSize: 10, fontWeight: 600 }}>
