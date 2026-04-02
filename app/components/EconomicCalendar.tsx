@@ -104,9 +104,48 @@ export default function EconomicCalendar() {
     setInfoLoading(true);
     const isPastEvt = isPast(event.date || "");
     const assets = (event.affected_assets || []).join(", ") || "markets";
+    const nl = "\n";
     const prompt = isPastEvt
-      ? "You are a trading desk analyst. Be direct and concise — traders need conclusions, not theory. For " + JSON.stringify(event.title) + " (forecast: " + (event.forecast ?? "N/A") + " vs previous: " + (event.previous ?? "N/A") + ") respond in this EXACT format:\n\n**📌 WHAT IT IS** (1 line max)\n\n**⚡ BOTTOM LINE** (1-2 sentences — what does this result mean for markets RIGHT NOW, given current VIX, Fed stance, yield curve)\n\n**🎯 TRADE ZONES**\n- **" + assets + " Buy zone:** $X–$Y (trigger: [condition])\n- **" + assets + " Sell zone:** $X–$Y (trigger: [condition])\n- **Stop:** $X\n\n**⚠️ KEY RISK** (1 line — what would invalidate this)"
-      : "You are a trading desk analyst. Be direct and concise — traders need conclusions, not theory. For upcoming event " + JSON.stringify(event.title) + " (forecast: " + (event.forecast ?? "N/A") + " vs previous: " + (event.previous ?? "N/A") + ") respond in this EXACT format:\n\n**📌 WHAT IT IS** (1 line max)\n\n**⚡ CURRENT MACRO CONTEXT** (2 lines max — only what's relevant: VIX level, Fed stance, yield curve, any banking/geopolitical stress)\n\n**🎯 PRE-EVENT PLAYBOOK**\n🟢 **BEAT** → [specific % move] on " + assets + " | Buy zone: $X–$Y\n🔴 **MISS** → [specific % move] on " + assets + " | Sell zone: $X–$Y\n⚪ **IN-LINE** → [expected reaction, 1 line]\n\n**⚠️ KEY RISK** (1 line — what would invalidate the expected move)";
+      ? [
+          "You are a trading desk analyst. Traders need conclusions not theory. Be extremely concise.",
+          "For: " + event.title + " | Forecast: " + (event.forecast ?? "N/A") + " | Previous: " + (event.previous ?? "N/A"),
+          "",
+          "Respond in this EXACT format (use these exact headers):",
+          "",
+          "## 📌 What It Is",
+          "(1 line only)",
+          "",
+          "## ⚡ Bottom Line",
+          "(2 lines max — what this result means NOW given VIX, Fed, yield curve)",
+          "",
+          "## 🎯 Trade Zones",
+          "| Asset | Buy Zone | Sell Zone | Stop |",
+          "|-------|----------|-----------|------|",
+          "(fill rows for " + assets + ")",
+          "",
+          "## ⚠️ Key Risk",
+          "(1 line)",
+        ].join(nl)
+      : [
+          "You are a trading desk analyst. Traders need conclusions not theory. Be extremely concise.",
+          "Upcoming event: " + event.title + " | Forecast: " + (event.forecast ?? "N/A") + " | Previous: " + (event.previous ?? "N/A"),
+          "",
+          "Respond in this EXACT format (use these exact headers):",
+          "",
+          "## 📌 What It Is",
+          "(1 line only)",
+          "",
+          "## ⚡ Macro Context",
+          "(2 lines max — VIX level, Fed stance, yield curve only)",
+          "",
+          "## 🎯 Pre-Event Playbook",
+          "🟢 **BEAT** → % move + buy zone for " + assets,
+          "🔴 **MISS** → % move + sell zone for " + assets,
+          "⚪ **IN-LINE** → expected reaction",
+          "",
+          "## ⚠️ Key Risk",
+          "(1 line)",
+        ].join(nl);
     try {
       const url = API_BASE + "/chat/GENERIC";
       const response = await fetch(url, {
@@ -384,8 +423,19 @@ export default function EconomicCalendar() {
                 </div>
               )}
               {infoText && (
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.8 }}>
-                  <ReactMarkdown>{infoText}</ReactMarkdown>
+                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.8 }} className="prose-info">
+                  <ReactMarkdown
+                    components={{
+                      h2: ({children}) => <div style={{fontSize:11,fontWeight:700,color:"#00aaff",letterSpacing:"0.1em",margin:"16px 0 8px",textTransform:"uppercase"}}>{children}</div>,
+                      p: ({children}) => <p style={{margin:"0 0 10px",color:"rgba(255,255,255,0.75)"}}>{children}</p>,
+                      strong: ({children}) => <strong style={{color:"#fff",fontWeight:700}}>{children}</strong>,
+                      table: ({children}) => <table style={{width:"100%",borderCollapse:"collapse",marginBottom:12,fontSize:11}}>{children}</table>,
+                      th: ({children}) => <th style={{textAlign:"left",padding:"4px 8px",borderBottom:"1px solid rgba(255,255,255,0.1)",color:"rgba(255,255,255,0.4)",fontWeight:600}}>{children}</th>,
+                      td: ({children}) => <td style={{padding:"6px 8px",borderBottom:"1px solid rgba(255,255,255,0.06)",color:"rgba(255,255,255,0.75)"}}>{children}</td>,
+                      li: ({children}) => <li style={{marginBottom:4,color:"rgba(255,255,255,0.75)"}}>{children}</li>,
+                      ul: ({children}) => <ul style={{paddingLeft:16,margin:"0 0 10px"}}>{children}</ul>,
+                    }}
+                  >{infoText}</ReactMarkdown>
                 </div>
               )}
             </div>
