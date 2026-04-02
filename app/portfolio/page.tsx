@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
 
@@ -127,9 +128,9 @@ export default function PortfolioPage() {
               <span style={{ fontSize: 9, marginTop: 4, display: "block" }}>Minimum 2 assets required</span>
             </div>
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
+            <motion.div initial="hidden" animate="visible" variants={{visible:{transition:{staggerChildren:0.06}}}} style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 16 }}>
               {portfolio.map(asset => (
-                <div key={asset.symbol} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, padding: "10px 12px" }}>
+                <motion.div key={asset.symbol} variants={{hidden:{opacity:0,x:-12},visible:{opacity:1,x:0,transition:{duration:0.25,ease:"easeOut"}}}} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, padding: "10px 12px" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                       <div style={{ width: 8, height: 8, borderRadius: "50%", background: TYPE_COLORS[asset.type] || "#fff" }} />
@@ -148,9 +149,9 @@ export default function PortfolioPage() {
                       {totalInvested > 0 ? Math.round((parseFloat(asset.amount)||0)/totalInvested*100) : 0}%
                     </span>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
 
           {/* Summary */}
@@ -178,22 +179,22 @@ export default function PortfolioPage() {
               </div>
             </div>
           ) : (
-            <div>
+            <motion.div initial={{opacity:0,x:20}} animate={{opacity:1,x:0}} transition={{duration:0.4,ease:"easeOut"}}>
               {/* Health Score */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 12, marginBottom: 24 }}>
+              <motion.div initial="hidden" animate="visible" variants={{visible:{transition:{staggerChildren:0.07}}}} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 12, marginBottom: 24 }}>
                 {[
                   { label: "HEALTH SCORE", value: `${result.health_score}/100`, color: result.health_color, sub: result.health_label },
                   { label: "SHARPE RATIO", value: result.current_metrics.sharpe_ratio.toFixed(2), color: "#00aaff", sub: "current" },
                   { label: "OPTIMIZED", value: result.optimal_metrics.sharpe_ratio.toFixed(2), color: "#00ff88", sub: "sharpe ratio" },
                   { label: "EXP. RETURN", value: `${result.optimal_metrics.expected_return}%`, color: "#ffd700", sub: "annual" },
                 ].map(m => (
-                  <div key={m.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "14px 16px" }}>
+                  <motion.div key={m.label} variants={{hidden:{opacity:0,y:12},visible:{opacity:1,y:0,transition:{duration:0.3}}}} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 12, padding: "14px 16px" }}>
                     <div style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", marginBottom: 6, letterSpacing: "0.1em" }}>{m.label}</div>
                     <div style={{ fontSize: 20, fontWeight: 800, color: m.color }}>{m.value}</div>
                     <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>{m.sub}</div>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
 
               {/* AI Summary */}
               {result.ai_summary && (
@@ -221,12 +222,12 @@ export default function PortfolioPage() {
               {activeTab === "optimize" && (
                 <div>
                   <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)", marginBottom: 12 }}>RECOMMENDED ALLOCATION vs CURRENT</div>
-                  <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  <motion.div initial="hidden" animate="visible" variants={{visible:{transition:{staggerChildren:0.07}}}} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                     {result.optimal_allocation.map((a: any) => {
                       const change = a.change;
                       const changeColor = change > 0 ? "#00ff88" : change < 0 ? "#ff4466" : "rgba(255,255,255,0.4)";
                       return (
-                        <div key={a.symbol} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, padding: "12px 16px" }}>
+                        <motion.div key={a.symbol} variants={{hidden:{opacity:0,y:10},visible:{opacity:1,y:0,transition:{duration:0.25}}}} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 10, padding: "12px 16px" }}>
                           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                               <div style={{ width: 8, height: 8, borderRadius: "50%", background: TYPE_COLORS[a.type] || "#fff" }} />
@@ -249,10 +250,10 @@ export default function PortfolioPage() {
                               <div style={{ fontSize: 9, color: "rgba(0,255,136,0.5)" }}>{a.optimal_weight}% of portfolio</div>
                             </div>
                           </div>
-                        </div>
+                        </motion.div>
                       );
                     })}
-                  </div>
+                  </motion.div>
                 </div>
               )}
 
@@ -321,7 +322,7 @@ export default function PortfolioPage() {
                   </div>
                 </div>
               )}
-            </div>
+            </motion.div>
           )}
         </div>
       </div>

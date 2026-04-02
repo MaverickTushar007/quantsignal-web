@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const API = "https://quantsignal-api-production.up.railway.app/api/v1";
 const USER_ID = "demo_user"; // Replace with real auth later
@@ -95,7 +96,7 @@ export default function AgentsPage() {
       fontFamily: "'Inter', sans-serif", padding: "32px 24px" }}>
 
       {/* Header */}
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+      <motion.div initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{duration:0.4,ease:"easeOut"}} style={{ maxWidth: 900, margin: "0 auto" }}>
         <div style={{ display: "flex", justifyContent: "space-between",
           alignItems: "flex-start", marginBottom: 32 }}>
           <div>
@@ -118,7 +119,9 @@ export default function AgentsPage() {
         </div>
 
         {/* Create Form */}
+        <AnimatePresence>
         {showForm && (
+          <motion.div initial={{opacity:0,y:-12,height:0}} animate={{opacity:1,y:0,height:"auto"}} exit={{opacity:0,y:-8,height:0}} transition={{duration:0.3,ease:"easeOut"}} style={{ overflow:"hidden" }}>
           <div style={{ background: "rgba(255,255,255,0.03)",
             border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12,
             padding: 24, marginBottom: 24 }}>
@@ -214,7 +217,9 @@ export default function AgentsPage() {
               {creating ? "Creating..." : "🚀 Launch Agent"}
             </button>
           </div>
+          </motion.div>
         )}
+        </AnimatePresence>
 
         {/* Agents List */}
         {loading ? (
@@ -235,13 +240,13 @@ export default function AgentsPage() {
             </div>
           </div>
         ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <motion.div initial="hidden" animate="visible" variants={{visible:{transition:{staggerChildren:0.08}}}} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {agents.map(agent => {
               const pnl = agent.total_pnl_inr || 0;
               const pnlPct = agent.budget_inr > 0
                 ? (pnl / agent.budget_inr * 100).toFixed(2) : "0.00";
               return (
-                <div key={agent.id} style={{
+                <motion.div key={agent.id} variants={{hidden:{opacity:0,y:16},visible:{opacity:1,y:0,transition:{duration:0.3,ease:"easeOut"}}}} style={{
                   background: "rgba(255,255,255,0.03)",
                   border: "1px solid rgba(255,255,255,0.07)",
                   borderRadius: 12, padding: 20,
@@ -353,12 +358,12 @@ export default function AgentsPage() {
                       </div>
                     </div>
                   )}
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }

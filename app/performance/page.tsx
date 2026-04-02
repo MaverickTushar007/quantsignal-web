@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
   ResponsiveContainer, BarChart, Bar, Cell, ReferenceLine,
@@ -174,41 +175,51 @@ export default function PerformancePage() {
       <div style={{ maxWidth: 1300, margin: "0 auto", padding: "24px 20px" }}>
 
         {/* ── STAT CARDS ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 10, marginBottom: 24 }}>
-          <StatCard
-            label="TOTAL P&L"
-            value={`${pnlPos ? "+" : ""}${summary?.total_pnl?.toFixed(2) ?? "--"}%`}
-            sub={`${summary?.total_trades ?? "--"} trades closed`}
-            color={pnlPos ? "#00ff88" : "#ff4466"}
-          />
-          <StatCard
-            label="WIN RATE"
-            value={`${summary?.win_rate?.toFixed(1) ?? "--"}%`}
-            sub={`${perf?.wins ?? "--"} W · ${perf?.losses ?? "--"} L`}
-            color={(summary?.win_rate ?? 0) >= 40 ? "#00ff88" : "#ffd700"}
-          />
-          <StatCard
-            label="HIGH CONF WIN RATE"
-            value={`${summary?.high_conf_win_rate?.toFixed(1) ?? "--"}%`}
-            sub={`${summary?.high_conf_trades ?? "--"} trades`}
-            color={(summary?.high_conf_win_rate ?? 0) > (summary?.win_rate ?? 0) ? "#00ff88" : "#ffd700"}
-          />
-          <StatCard
-            label="TP HITS"
-            value={`${summary?.tp_hits ?? "--"}`}
-            sub="take profit reached"
-            color="#00ff88"
-          />
-          <StatCard
-            label="SL HITS"
-            value={`${summary?.sl_hits ?? "--"}`}
-            sub="stop loss hit"
-            color="#ff4466"
-          />
-        </div>
+        <motion.div initial="hidden" animate="visible" variants={{visible:{transition:{staggerChildren:0.08}}}} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 10, marginBottom: 24 }}>
+          <motion.div variants={{hidden:{opacity:0,y:16},visible:{opacity:1,y:0,transition:{duration:0.3,ease:"easeOut"}}}}>
+            <StatCard
+              label="TOTAL P&L"
+              value={`${pnlPos ? "+" : ""}${summary?.total_pnl?.toFixed(2) ?? "--"}%`}
+              sub={`${summary?.total_trades ?? "--"} trades closed`}
+              color={pnlPos ? "#00ff88" : "#ff4466"}
+            />
+          </motion.div>
+          <motion.div variants={{hidden:{opacity:0,y:16},visible:{opacity:1,y:0,transition:{duration:0.3,ease:"easeOut"}}}}>
+            <StatCard
+              label="WIN RATE"
+              value={`${summary?.win_rate?.toFixed(1) ?? "--"}%`}
+              sub={`${perf?.wins ?? "--"} W · ${perf?.losses ?? "--"} L`}
+              color={(summary?.win_rate ?? 0) >= 40 ? "#00ff88" : "#ffd700"}
+            />
+          </motion.div>
+          <motion.div variants={{hidden:{opacity:0,y:16},visible:{opacity:1,y:0,transition:{duration:0.3,ease:"easeOut"}}}}>
+            <StatCard
+              label="HIGH CONF WIN RATE"
+              value={`${summary?.high_conf_win_rate?.toFixed(1) ?? "--"}%`}
+              sub={`${summary?.high_conf_trades ?? "--"} trades`}
+              color={(summary?.high_conf_win_rate ?? 0) > (summary?.win_rate ?? 0) ? "#00ff88" : "#ffd700"}
+            />
+          </motion.div>
+          <motion.div variants={{hidden:{opacity:0,y:16},visible:{opacity:1,y:0,transition:{duration:0.3,ease:"easeOut"}}}}>
+            <StatCard
+              label="TP HITS"
+              value={`${summary?.tp_hits ?? "--"}`}
+              sub="take profit reached"
+              color="#00ff88"
+            />
+          </motion.div>
+          <motion.div variants={{hidden:{opacity:0,y:16},visible:{opacity:1,y:0,transition:{duration:0.3,ease:"easeOut"}}}}>
+            <StatCard
+              label="SL HITS"
+              value={`${summary?.sl_hits ?? "--"}`}
+              sub="stop loss hit"
+              color="#ff4466"
+            />
+          </motion.div>
+        </motion.div>
 
         {/* ── CHARTS ROW ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 10, marginBottom: 24 }}>
+        <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.5,delay:0.3,ease:"easeOut"}} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 10, marginBottom: 24 }}>
 
           {/* Equity Curve */}
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 8, padding: "16px 18px" }}>
@@ -247,7 +258,7 @@ export default function PerformancePage() {
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </motion.div>
 
         {/* ── REGIME PERFORMANCE ── */}
         {evStats.length > 0 && (
@@ -325,7 +336,7 @@ export default function PerformancePage() {
             {filtered.length === 0 ? (
               <div style={{ padding: "40px 0", textAlign: "center", color: "rgba(255,255,255,0.2)", fontSize: 11 }}>No trades</div>
             ) : filtered.map((t, i) => (
-              <div key={i} style={{
+              <motion.div key={i} initial={{opacity:0,x:-8}} animate={{opacity:1,x:0}} transition={{duration:0.2,delay:i*0.02,ease:"easeOut"}} style={{
                 display: "grid", gridTemplateColumns: "90px 60px 70px 70px 80px 80px 80px 80px 80px", minWidth: 700,
                 gap: 8, padding: "8px 10px",
                 borderBottom: "1px solid rgba(255,255,255,0.03)",
@@ -345,7 +356,7 @@ export default function PerformancePage() {
                 <span style={{ color: t.cumulative_pnl >= 0 ? "rgba(0,255,136,0.6)" : "rgba(255,68,102,0.6)", fontSize: 9 }}>
                   {t.cumulative_pnl >= 0 ? "+" : ""}{t.cumulative_pnl?.toFixed(2)}%
                 </span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
