@@ -1460,10 +1460,10 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <div style={{ display: "flex", background: "#0c0c0f", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "0 24px" }}>
               {[
                 { id: "SIGNAL", label: "SIGNAL ANALYSIS", icon: LayoutDashboard },
-                { id: "NEWS", label: "NEWS", icon: Newspaper },
                 { id: "CHAT", label: "PERSEUS ENGINE", icon: MessageSquare },
-                { id: "TRACK", label: "TRACK RECORD", icon: Database },
                 { id: "CALENDAR", label: "ECON CALENDAR", icon: Calendar },
+                { id: "NEWS", label: "NEWS", icon: Newspaper },
+                { id: "TRACK", label: "TRACK RECORD", icon: Database },
               ].map(tab => (
                 <button key={tab.id} onClick={() => setActiveTab(tab.id)}
                   style={{ display: "flex", alignItems: "center", gap: 6, padding: "12px 18px", background: "transparent", border: "none", borderBottom: `2px solid ${activeTab === tab.id ? "#00ff88" : "transparent"}`, color: activeTab === tab.id ? "#fff" : "rgba(255,255,255,0.35)", fontSize: 10, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", letterSpacing: "0.05em" }}>
