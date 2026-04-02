@@ -457,7 +457,7 @@ export default function EconomicCalendar() {
                       li: ({children}) => <li style={{marginBottom:6,color:"rgba(255,255,255,0.75)",fontSize:12,lineHeight:1.6}}>{children}</li>,
                       ul: ({children}) => <ul style={{paddingLeft:16,margin:"0 0 10px"}}>{children}</ul>,
                     }}
-                  >{infoText}</ReactMarkdown>
+                  >{("\n" + infoText)}</ReactMarkdown>
                 </div>
               )}
             </div>
