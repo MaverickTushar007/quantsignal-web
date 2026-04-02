@@ -456,11 +456,7 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
     </div>
   );
 
-  if (loading) return (
-    <div style={{ padding: 20, textAlign: "center", color: "rgba(255,255,255,0.3)", fontSize: 11, fontFamily: mono }}>
-      Loading track record...
-    </div>
-  );
+
   if (!data) return (
     <div style={{ padding: 20, color: "#ff4466", fontSize: 11, fontFamily: mono }}>Failed to load</div>
   );
