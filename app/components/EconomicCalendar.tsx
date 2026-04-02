@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Calendar, TrendingUp, TrendingDown, RefreshCw, Bell, BellOff, X, Info } from "lucide-react";
+import { Calendar, TrendingUp, TrendingDown, RefreshCw, Bell, BellOff, X, Info, Zap, Activity, Target, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 
@@ -119,9 +119,10 @@ export default function EconomicCalendar() {
           "(2 lines max — what this result means NOW given VIX, Fed, yield curve)",
           "",
           "## 🎯 Trade Zones",
+          "",
           "| Asset | Buy Zone | Sell Zone | Stop |",
           "|-------|----------|-----------|------|",
-          "(fill rows for " + assets + ")",
+          "(fill in rows for each asset in: " + assets + ")",
           "",
           "## ⚠️ Key Risk",
           "(1 line)",
@@ -139,9 +140,12 @@ export default function EconomicCalendar() {
           "(2 lines max — VIX level, Fed stance, yield curve only)",
           "",
           "## 🎯 Pre-Event Playbook",
-          "🟢 **BEAT** → % move + buy zone for " + assets,
-          "🔴 **MISS** → % move + sell zone for " + assets,
-          "⚪ **IN-LINE** → expected reaction",
+          "",
+          "🟢 **BEAT:** [% move] | Buy zone: [price range] for " + assets,
+          "",
+          "🔴 **MISS:** [% move] | Sell zone: [price range] for " + assets,
+          "",
+          "⚪ **IN-LINE:** [expected reaction]",
           "",
           "## ⚠️ Key Risk",
           "(1 line)",
@@ -426,13 +430,31 @@ export default function EconomicCalendar() {
                 <div style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.8 }} className="prose-info">
                   <ReactMarkdown
                     components={{
-                      h2: ({children}) => <div style={{fontSize:11,fontWeight:700,color:"#00aaff",letterSpacing:"0.1em",margin:"16px 0 8px",textTransform:"uppercase"}}>{children}</div>,
-                      p: ({children}) => <p style={{margin:"0 0 10px",color:"rgba(255,255,255,0.75)"}}>{children}</p>,
+                      h2: ({children}) => {
+                        const text = String(children);
+                        const iconMap: Record<string, React.ReactNode> = {
+                          "What It Is":    <Info size={12} color="#00aaff" />,
+                          "Bottom Line":   <Zap size={12} color="#ffd700" />,
+                          "Macro Context": <Activity size={12} color="#ffd700" />,
+                          "Pre-Event Playbook": <Target size={12} color="#00ff88" />,
+                          "Trade Zones":   <Target size={12} color="#00ff88" />,
+                          "Key Risk":      <AlertTriangle size={12} color="#ff4444" />,
+                        };
+                        const clean = text.replace(/[^a-zA-Z\s]/g, "").trim();
+                        const match = Object.keys(iconMap).find(k => clean.includes(k));
+                        return (
+                          <div style={{display:"flex",alignItems:"center",gap:6,fontSize:10,fontWeight:700,color:"rgba(255,255,255,0.5)",letterSpacing:"0.1em",margin:"18px 0 8px",textTransform:"uppercase",borderBottom:"1px solid rgba(255,255,255,0.06)",paddingBottom:6}}>
+                            {match ? iconMap[match] : <Info size={12} color="#00aaff" />}
+                            {clean}
+                          </div>
+                        );
+                      },
+                      p: ({children}) => <p style={{margin:"0 0 10px",fontSize:12,color:"rgba(255,255,255,0.8)",lineHeight:1.7}}>{children}</p>,
                       strong: ({children}) => <strong style={{color:"#fff",fontWeight:700}}>{children}</strong>,
-                      table: ({children}) => <table style={{width:"100%",borderCollapse:"collapse",marginBottom:12,fontSize:11}}>{children}</table>,
-                      th: ({children}) => <th style={{textAlign:"left",padding:"4px 8px",borderBottom:"1px solid rgba(255,255,255,0.1)",color:"rgba(255,255,255,0.4)",fontWeight:600}}>{children}</th>,
-                      td: ({children}) => <td style={{padding:"6px 8px",borderBottom:"1px solid rgba(255,255,255,0.06)",color:"rgba(255,255,255,0.75)"}}>{children}</td>,
-                      li: ({children}) => <li style={{marginBottom:4,color:"rgba(255,255,255,0.75)"}}>{children}</li>,
+                      table: ({children}) => <div style={{overflowX:"auto",marginBottom:12}}><table style={{width:"100%",borderCollapse:"collapse",fontSize:11}}>{children}</table></div>,
+                      th: ({children}) => <th style={{textAlign:"left",padding:"6px 10px",borderBottom:"1px solid rgba(255,255,255,0.12)",color:"rgba(255,255,255,0.35)",fontWeight:600,fontSize:9,letterSpacing:"0.08em",textTransform:"uppercase"}}>{children}</th>,
+                      td: ({children}) => <td style={{padding:"7px 10px",borderBottom:"1px solid rgba(255,255,255,0.05)",color:"rgba(255,255,255,0.8)",fontSize:11}}>{children}</td>,
+                      li: ({children}) => <li style={{marginBottom:6,color:"rgba(255,255,255,0.75)",fontSize:12,lineHeight:1.6}}>{children}</li>,
                       ul: ({children}) => <ul style={{paddingLeft:16,margin:"0 0 10px"}}>{children}</ul>,
                     }}
                   >{infoText}</ReactMarkdown>
