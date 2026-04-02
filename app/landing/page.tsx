@@ -382,7 +382,7 @@ export default function Landing() {
             <span style={{fontSize:12,fontWeight:700,color:"rgba(226,240,226,.28)"}}>QuantSignal</span>
           </div>
           <div style={{display:"flex",gap:22}}>
-            {[["Dashboard","/dashboard"],["Guardian","/guardian"],["Portfolio","/portfolio"],["Agents","/agents"]].map(([l,h])=>(
+            {[["Dashboard","/dashboard"],["Guardian","/guardian"],["Agents","/agents"]].map(([l,h])=>(
               <a key={l} href={h} style={{fontSize:11,color:"rgba(226,240,226,.17)",textDecoration:"none"}}>{l}</a>
             ))}
           </div>
