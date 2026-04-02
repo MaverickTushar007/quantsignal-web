@@ -28,7 +28,7 @@ export const SlideInRight = ({ children, style = {} }: { children: React.ReactNo
     initial={{ opacity: 0, x: 24 }}
     animate={{ opacity: 1, x: 0 }}
     transition={{ duration: 0.3, ease: "easeOut" }}
-    style={style}
+    style={{ minHeight: 0, minWidth: 0, ...style }}
   >
     {children}
   </motion.div>

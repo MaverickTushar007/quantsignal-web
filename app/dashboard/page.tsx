@@ -1296,11 +1296,11 @@ Give a punchy, honest explanation of why the model made this call, what the mark
               </div>
 
               {/* Tab content */}
-              <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column" }}>
                 {mobilePanel === "SIGNAL" && <SignalTab />}
                 {mobilePanel === "NEWS" && selected && <NewsTab symbol={selected.symbol} />}
                 {mobilePanel === "CHAT" && (
-                  <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", padding: "0 16px 16px" }}>
+                  <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", padding: "0 16px 16px" }}>
                     <AgentChat symbol={selected.symbol} userId={user?.id} />
                   </div>
                 )}
@@ -1477,7 +1477,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
               {activeTab === "SIGNAL" && <SignalTab />}
               {activeTab === "CHAT" && (
-                <div style={{ flex: 1, overflow: "hidden", display: "flex", flexDirection: "column", padding: "0 24px 24px" }}>
+                <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", padding: "0 24px 24px" }}>
                   <AgentChat symbol={selected.symbol} />
                 </div>
               )}
