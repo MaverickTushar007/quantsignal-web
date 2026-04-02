@@ -1448,17 +1448,46 @@ Give a punchy, honest explanation of why the model made this call, what the mark
               {activeTab === "SIGNAL" && <SignalTab />}
               {activeTab === "CHAT" && (
                 <>
-                  {briefing && (
-                    <div style={{ padding: "10px 16px 0" }}>
-                      <div style={{ background: "rgba(0,170,255,0.05)", border: "1px solid rgba(0,170,255,0.12)", borderRadius: 8, padding: "10px 14px", marginBottom: 0 }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-                          <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#00aaff" }} />
-                          <span style={{ fontSize: 8, fontWeight: 700, color: "rgba(0,170,255,0.6)", letterSpacing: "0.1em" }}>MORNING BRIEFING · {briefing.date}</span>
+                  {/* Floating Morning Briefing pill — overlays engine, never pushes content */}
+                  {briefing && (() => {
+                    const [briefingOpen, setBriefingOpen] = React.useState(false);
+                    return (
+                      <div style={{ position: "absolute", top: 12, left: 16, right: 16, zIndex: 20, pointerEvents: "none" }}>
+                        <div style={{ pointerEvents: "auto" }}>
+                          {/* Collapsed pill */}
+                          <div
+                            onClick={() => setBriefingOpen(o => !o)}
+                            style={{
+                              display: "flex", alignItems: "center", gap: 8,
+                              background: "rgba(0,10,20,0.85)", backdropFilter: "blur(12px)",
+                              border: "1px solid rgba(0,170,255,0.2)", borderRadius: briefingOpen ? "8px 8px 0 0" : 8,
+                              padding: "6px 12px", cursor: "pointer",
+                              transition: "border-radius 0.2s"
+                            }}
+                          >
+                            <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#00aaff", flexShrink: 0 }} />
+                            <span style={{ fontSize: 8, fontWeight: 700, color: "rgba(0,170,255,0.7)", letterSpacing: "0.12em", flex: 1 }}>
+                              MORNING BRIEFING · {briefing.date}
+                            </span>
+                            <span style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", transform: briefingOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", display: "inline-block" }}>▼</span>
+                          </div>
+                          {/* Expanded panel — floats over engine */}
+                          {briefingOpen && (
+                            <div style={{
+                              background: "rgba(0,10,20,0.92)", backdropFilter: "blur(16px)",
+                              border: "1px solid rgba(0,170,255,0.2)", borderTop: "none",
+                              borderRadius: "0 0 8px 8px", padding: "12px 14px",
+                              maxHeight: 220, overflowY: "auto"
+                            }}>
+                              <div style={{ fontSize: 10, color: "rgba(255,255,255,0.6)", lineHeight: 1.7, fontFamily: "'IBM Plex Mono', monospace", whiteSpace: "pre-wrap" }}>
+                                {briefing.briefing_text}
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.55)", lineHeight: 1.6, fontFamily: "'IBM Plex Mono', monospace" }}>{briefing.briefing_text}</div>
                       </div>
-                    </div>
-                  )}
+                    );
+                  })()}
                   <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", padding: "0 24px 24px" }}>
                     <AgentChat symbol={selected.symbol} />
                   </div>
