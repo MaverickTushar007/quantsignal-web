@@ -228,7 +228,7 @@ export default function Landing() {
             <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".16em",fontFamily:"DM Mono,monospace",marginBottom:12}}>WHAT MAKES IT DIFFERENT</div>
             <h2 style={{fontSize:48,fontWeight:900,letterSpacing:"-1.5px",color:"#f0fdf4",lineHeight:1.05}}>Not just signals.<br/><span style={{color:"rgba(226,240,226,.2)"}}>Signals with receipts.</span></h2>
           </div>
-          <div className="fg" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
+          <motion.div className="fg" initial="hidden" whileInView="visible" viewport={{once:true,amount:0.2}} variants={{visible:{transition:{staggerChildren:0.1}}}} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
             {[
               {icon:"M",title:"ML Ensemble",desc:"XGBoost + LightGBM trained on 180 days of OHLCV. Walk-forward validated. No curve-fitting.",a:"#4ade80"},
               {icon:"9",title:"9-Factor Confluence",desc:"RSI, MACD, Bollinger, Stochastic, Volume, SMA Cross, 52W, Momentum — all scored together.",a:"#60a5fa"},
@@ -237,13 +237,13 @@ export default function Landing() {
               {icon:"L",title:"Liquidity Levels",desc:"Live OI, funding rates, L/S ratio and liquidation clusters from OKX. Every 30 seconds.",a:"#c084fc"},
               {icon:"P",title:"Portfolio Lab",desc:"Black-Litterman optimization using ML signal probabilities. Stress test 3 crash scenarios.",a:"#4ade80"},
             ].map(f=>(
-              <div key={f.title} className="ch" style={{background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.05)",borderRadius:16,padding:"24px 20px"}}>
+              <motion.div key={f.title} variants={{hidden:{opacity:0,y:20},visible:{opacity:1,y:0,transition:{duration:0.4,ease:"easeOut"}}}} className="ch" style={{background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.05)",borderRadius:16,padding:"24px 20px"}}>
                 <div style={{width:36,height:36,borderRadius:9,background:`${f.a}14`,border:`1px solid ${f.a}20`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,fontWeight:800,color:f.a,marginBottom:13,fontFamily:"DM Mono,monospace"}}>{f.icon}</div>
                 <div style={{fontSize:14,fontWeight:700,color:"#f0fdf4",marginBottom:7}}>{f.title}</div>
                 <div style={{fontSize:12,color:"rgba(226,240,226,.33)",lineHeight:1.8}}>{f.desc}</div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -254,15 +254,15 @@ export default function Landing() {
             <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".16em",fontFamily:"DM Mono,monospace",marginBottom:12}}>THE PROOF</div>
             <h2 style={{fontSize:48,fontWeight:900,letterSpacing:"-1.5px",color:"#f0fdf4"}}>Every claim is verifiable.</h2>
           </div>
-          <div className="st" style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10}}>
+          <motion.div className="st" initial="hidden" whileInView="visible" viewport={{once:true,amount:0.3}} variants={{visible:{transition:{staggerChildren:0.1}}}} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10}}>
             {[["+39.5%","Total P&L","262 closed trades"],["2.57","Sharpe Ratio","across all asset classes"],["2:1","Risk/Reward","ATR-based targets"],["133","Live Assets","crypto, stocks, forex"]].map(([v,l,s])=>(
-              <div key={l} style={{textAlign:"center",padding:"32px 12px",background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.05)",borderRadius:16}}>
+              <motion.div key={l} variants={{hidden:{opacity:0,scale:0.9},visible:{opacity:1,scale:1,transition:{duration:0.35,ease:"easeOut"}}}} style={{textAlign:"center",padding:"32px 12px",background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.05)",borderRadius:16}}>
                 <div style={{fontSize:44,fontWeight:900,color:"#4ade80",letterSpacing:"-1px",marginBottom:6}}>{v}</div>
                 <div style={{fontSize:12,fontWeight:700,color:"#f0fdf4",marginBottom:4}}>{l}</div>
                 <div style={{fontSize:10,color:"rgba(226,240,226,.26)",fontFamily:"DM Mono,monospace"}}>{s}</div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -273,15 +273,15 @@ export default function Landing() {
             <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".16em",fontFamily:"DM Mono,monospace",marginBottom:12}}>GET STARTED</div>
             <h2 style={{fontSize:48,fontWeight:900,letterSpacing:"-1.5px",color:"#f0fdf4",lineHeight:1.05}}>Your financial partner<br/>in 3 easy steps.</h2>
           </div>
-          <div className="sg" style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
+          <motion.div className="sg" initial="hidden" whileInView="visible" viewport={{once:true,amount:0.3}} variants={{visible:{transition:{staggerChildren:0.12}}}} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
             {[["01","Create your account","Sign up free. No credit card. Access 133 live signals across crypto, stocks and macro instantly."],["02","Set your strategy","Configure your risk profile. Let an AI agent trade for you, or follow signals manually."],["03","Track your edge","Monitor your virtual portfolio, win rate and P&L. Every trade tracked with full reasoning."]].map(([n,t,d])=>(
-              <div key={n} className="ch" style={{background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.05)",borderRadius:16,padding:"28px 20px"}}>
+              <motion.div key={n} variants={{hidden:{opacity:0,y:16},visible:{opacity:1,y:0,transition:{duration:0.4,ease:"easeOut"}}}} className="ch" style={{background:"rgba(255,255,255,.015)",border:"1px solid rgba(255,255,255,.05)",borderRadius:16,padding:"28px 20px"}}>
                 <div style={{fontSize:34,fontWeight:900,color:"rgba(74,222,128,.18)",marginBottom:13,fontFamily:"DM Mono,monospace"}}>{n}</div>
                 <div style={{fontSize:14,fontWeight:700,color:"#f0fdf4",marginBottom:8}}>{t}</div>
                 <div style={{fontSize:12,color:"rgba(226,240,226,.33)",lineHeight:1.8}}>{d}</div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -329,14 +329,14 @@ export default function Landing() {
       {/* CTA */}
       <section style={{padding:"96px 40px",textAlign:"center",borderTop:"1px solid rgba(255,255,255,.03)",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-50%)",width:520,height:260,background:"radial-gradient(ellipse,rgba(74,222,128,.055) 0%,transparent 70%)",pointerEvents:"none"}}/>
-        <div style={{position:"relative"}}>
+        <motion.div initial={{opacity:0,y:24}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:0.5,ease:"easeOut"}} style={{position:"relative"}}>
           <h2 style={{fontSize:54,fontWeight:900,letterSpacing:"-2px",color:"#f0fdf4",marginBottom:14,lineHeight:1.0}}>Ready to trade with<br/><span style={{color:"#4ade80"}}>actual edge?</span></h2>
           <p style={{fontSize:13,color:"rgba(226,240,226,.32)",marginBottom:30,fontFamily:"DM Mono,monospace"}}>No credit card required · 186 live signals · Start in 10 seconds</p>
           <a href="/dashboard" className="bp" style={{display:"inline-flex",alignItems:"center",gap:10,background:"#4ade80",color:"#050c05",fontWeight:700,fontSize:15,padding:"15px 34px",borderRadius:12,textDecoration:"none"}}>
             Launch QuantSignal free
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="#050c05" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </a>
-        </div>
+        </motion.div>
       </section>
 
       {/* FOOTER */}

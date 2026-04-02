@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useCallback } from "react";
+import { motion } from "framer-motion";
 
 const API = "https://quantsignal-api-production.up.railway.app/api/v1";
 function getUserId(): string {
@@ -124,32 +125,32 @@ export default function GuardianPage() {
 
       <div style={{ maxWidth:1200, margin:"0 auto", padding:"28px 24px" }}>
         {briefing && (
-          <div style={{ background:"rgba(0,255,136,0.04)", border:"1px solid rgba(0,255,136,0.12)", borderRadius:12, padding:"14px 18px", marginBottom:24, display:"flex", gap:12 }}>
+          <motion.div initial={{opacity:0,y:-10}} animate={{opacity:1,y:0}} transition={{duration:0.4,ease:"easeOut"}} style={{ background:"rgba(0,255,136,0.04)", border:"1px solid rgba(0,255,136,0.12)", borderRadius:12, padding:"14px 18px", marginBottom:24, display:"flex", gap:12 }}>
             <span style={{ fontSize:18 }}>📋</span>
             <div>
               <div style={{ fontSize:9, color:"#00ff88", letterSpacing:"0.1em", marginBottom:6, fontWeight:700 }}>MORNING BRIEFING</div>
               <div style={{ fontSize:12, color:"rgba(255,255,255,0.65)", lineHeight:1.7 }}>{briefing}</div>
             </div>
-          </div>
+          </motion.div>
         )}
 
-        <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))", gap:12, marginBottom:28 }}>
+        <motion.div initial="hidden" animate="visible" variants={{visible:{transition:{staggerChildren:0.08}}}} style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(130px,1fr))", gap:12, marginBottom:28 }}>
           {[
             { label:"RISK LEVEL", value:riskLevel.toUpperCase(), color:riskColor, sub:"market-wide", icon:"⚡" },
             { label:"WATCHING", value:String(guardian?.watched?.length??0), color:"#00aaff", sub:"symbols", icon:"👁" },
             { label:"ALERTS FIRED", value:String(alertCount), color:alertCount>0?"#ffd700":"#00ff88", sub:"this cycle", icon:"🔔" },
             { label:"AGENTS LIVE", value:String(Object.keys(agents?.agents??{}).length), color:"#aa88ff", sub:"running", icon:"🤖" },
           ].map(s => (
-            <div key={s.label} style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.07)", borderRadius:12, padding:"16px 18px" }}>
+            <motion.div key={s.label} variants={{hidden:{opacity:0,y:14},visible:{opacity:1,y:0,transition:{duration:0.3,ease:"easeOut"}}}} style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.07)", borderRadius:12, padding:"16px 18px" }}>
               <div style={{ display:"flex", justifyContent:"space-between", marginBottom:8 }}>
                 <span style={{ fontSize:8, color:"rgba(255,255,255,0.3)", letterSpacing:"0.1em" }}>{s.label}</span>
                 <span style={{ fontSize:14 }}>{s.icon}</span>
               </div>
               <div style={{ fontSize:24, fontWeight:800, color:s.color, marginBottom:2 }}>{loading&&!guardian?"…":s.value}</div>
               <div style={{ fontSize:9, color:"rgba(255,255,255,0.3)" }}>{s.sub}</div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))", gap:20 }}>
           <div>
@@ -188,8 +189,8 @@ export default function GuardianPage() {
                 </a>
               </div>
             )}
-            {!guardian?.note && (guardian?.watched??[]).map((w: any) => (
-              <div key={w.symbol} style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.07)", borderRadius:10, padding:"14px 16px", marginBottom:8 }}>
+            {!guardian?.note && (guardian?.watched??[]).map((w: any, wi: number) => (
+              <motion.div key={w.symbol} initial={{opacity:0,x:-12}} animate={{opacity:1,x:0}} transition={{duration:0.25,delay:wi*0.05,ease:"easeOut"}} style={{ background:"rgba(255,255,255,0.03)", border:"1px solid rgba(255,255,255,0.07)", borderRadius:10, padding:"14px 16px", marginBottom:8 }}>
                 <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:8 }}>
                   <span style={{ fontSize:13, fontWeight:700, color:"#fff", minWidth:90 }}>{w.symbol}</span>
                   <span style={{ fontSize:9, fontWeight:700, color:DIR_COLOR[w.direction], background:DIR_COLOR[w.direction]+"15", padding:"2px 8px", borderRadius:4 }}>{w.direction}</span>
@@ -201,7 +202,7 @@ export default function GuardianPage() {
                   <span>Expected value</span>
                   <span style={{ color:w.ev>0?"#00ff88":"rgba(255,255,255,0.3)", fontWeight:600 }}>{w.ev>0?"+":""}{w.ev?.toFixed(3)}%</span>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -211,14 +212,14 @@ export default function GuardianPage() {
               const d = agents?.agents?.[name];
               const alive = d && (Date.now()-new Date(d.run_at).getTime()) < 3600000;
               return (
-                <div key={name} style={{ background:"rgba(255,255,255,0.03)", border:"1px solid "+(alive?"rgba(0,255,136,0.12)":"rgba(255,255,255,0.06)"), borderRadius:10, padding:"12px 14px", display:"flex", alignItems:"center", gap:10, marginBottom:6 }}>
+                <motion.div key={name} initial={{opacity:0,x:12}} animate={{opacity:1,x:0}} transition={{duration:0.25,ease:"easeOut"}} style={{ background:"rgba(255,255,255,0.03)", border:"1px solid "+(alive?"rgba(0,255,136,0.12)":"rgba(255,255,255,0.06)"), borderRadius:10, padding:"12px 14px", display:"flex", alignItems:"center", gap:10, marginBottom:6 }}>
                   <span style={{ fontSize:16 }}>{icon}</span>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:10, fontWeight:700, color:"#fff", marginBottom:2 }}>{name}</div>
                     <div style={{ fontSize:9, color:"rgba(255,255,255,0.3)" }}>{d?timeAgo(d.run_at):"never run"}</div>
                   </div>
-                  <div style={{ width:7, height:7, borderRadius:"50%", background:alive?"#00ff88":"rgba(255,255,255,0.2)", boxShadow:alive?"0 0 6px rgba(0,255,136,0.5)":"none" }} />
-                </div>
+                  <motion.div animate={alive?{scale:[1,1.3,1],opacity:[1,0.7,1]}:{}} transition={{duration:2,repeat:Infinity,ease:"easeInOut"}} style={{ width:7, height:7, borderRadius:"50%", background:alive?"#00ff88":"rgba(255,255,255,0.2)", boxShadow:alive?"0 0 6px rgba(0,255,136,0.5)":"none" }} />
+                </motion.div>
               );
             })}
 

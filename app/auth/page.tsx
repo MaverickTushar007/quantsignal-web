@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const SIGNALS = [
   { symbol:"RELIANCE", dir:"BUY",  prob:87, price:"₹2,847"  },
@@ -176,7 +176,7 @@ export default function AuthPage() {
           )}
 
           {/* Form card */}
-          <div style={{background:"#0d1117",border:"1px solid #21262d",borderRadius:16,padding:"32px 28px",boxShadow:"0 8px 32px rgba(1,4,9,0.6)"}}>
+          <motion.div initial={{opacity:0,y:20}} animate={{opacity:1,y:0}} transition={{duration:0.45,ease:"easeOut"}} style={{background:"#0d1117",border:"1px solid #21262d",borderRadius:16,padding:"32px 28px",boxShadow:"0 8px 32px rgba(1,4,9,0.6)"}}>
             <h2 style={{fontSize:24,fontWeight:800,color:"#e6edf3",fontFamily:"Sora,sans-serif",letterSpacing:"-.5px",marginBottom:5}}>
               {mode==="login"?"Welcome back":"Create account"}
             </h2>
@@ -187,9 +187,9 @@ export default function AuthPage() {
             {/* Tabs */}
             <div style={{display:"flex",background:"#010409",borderRadius:8,padding:3,marginBottom:22,border:"1px solid #21262d"}}>
               {(["login","signup"] as const).map(m=>(
-                <button key={m} className="tab-btn" onClick={()=>setMode(m)} style={{flex:1,padding:"8px 0",borderRadius:6,border:"none",background:mode===m?"#161b22":"transparent",color:mode===m?"#e6edf3":"#484f58",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:mono,letterSpacing:".07em",transition:"all .2s",boxShadow:mode===m?"0 1px 3px rgba(1,4,9,0.4)":"none"}}>
+                <motion.button key={m} whileTap={{scale:0.97}} className="tab-btn" onClick={()=>setMode(m)} style={{flex:1,padding:"8px 0",borderRadius:6,border:"none",background:mode===m?"#161b22":"transparent",color:mode===m?"#e6edf3":"#484f58",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:mono,letterSpacing:".07em",transition:"all .2s",boxShadow:mode===m?"0 1px 3px rgba(1,4,9,0.4)":"none"}}>
                   {m==="login"?"SIGN IN":"CREATE ACCOUNT"}
-                </button>
+                </motion.button>
               ))}
             </div>
 
@@ -209,7 +209,7 @@ export default function AuthPage() {
             </div>
 
             {/* Error */}
-            {error&&<div style={{background:"rgba(248,81,73,0.1)",border:"1px solid rgba(248,81,73,0.3)",borderRadius:8,padding:"10px 14px",fontSize:11,color:"#f85149",marginBottom:16,lineHeight:1.5}}>{error}</div>}
+            <AnimatePresence>{error&&<motion.div initial={{opacity:0,height:0}} animate={{opacity:1,height:"auto"}} exit={{opacity:0,height:0}} transition={{duration:0.2}} style={{overflow:"hidden",background:"rgba(248,81,73,0.1)",border:"1px solid rgba(248,81,73,0.3)",borderRadius:8,padding:"10px 14px",fontSize:11,color:"#f85149",marginBottom:16,lineHeight:1.5}}>{error}</motion.div>}</AnimatePresence>
 
             {/* Submit */}
             <button onClick={handleSubmit} disabled={loading} className="abtn" style={{width:"100%",padding:"12px 0",background:loading?"#238636":"#2ea043",border:"1px solid rgba(63,185,80,0.3)",borderRadius:8,color:"#fff",fontSize:13,fontWeight:700,cursor:loading?"not-allowed":"pointer",fontFamily:mono,letterSpacing:".05em",marginBottom:14}}>
@@ -233,7 +233,7 @@ export default function AuthPage() {
             <button onClick={()=>router.push("/dashboard")} className="gbtn" style={{width:"100%",padding:"10px 0",background:"transparent",border:"1px solid #21262d",borderRadius:8,color:"#484f58",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:mono,letterSpacing:".04em"}}>
               CONTINUE AS GUEST →
             </button>
-          </div>
+          </motion.div>
 
           {/* Switch + disclaimer */}
           <div style={{textAlign:"center",marginTop:16,fontSize:11,color:"#484f58"}}>
