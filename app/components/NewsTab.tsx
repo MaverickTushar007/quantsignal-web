@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 const API = process.env.NEXT_PUBLIC_API_URL;
 
@@ -96,62 +98,62 @@ export default function NewsTab({ symbol }: { symbol: string }) {
           {news.map((item, i) => {
             const cfg = SENTIMENT_CONFIG[item.sentiment as keyof typeof SENTIMENT_CONFIG] || SENTIMENT_CONFIG.NEUTRAL;
             return (
-              <a
+              <motion.a
                 key={i}
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ textDecoration: "none" }}
-              >
-                <div style={{
+                variants={{hidden:{opacity:0,y:10},visible:{opacity:1,y:0,transition:{duration:0.25,ease:"easeOut"}}}}
+                whileHover={{ y: -2, boxShadow: `0 4px 20px ${cfg.color}18` }}
+                whileTap={{ scale: 0.98 }}
+                style={{ textDecoration: "none", display: "block",
                   background: cfg.bg,
                   border: `1px solid ${cfg.border}`,
                   borderRadius: 10,
                   padding: "12px 14px",
                   cursor: "pointer",
-                  transition: "border-color 0.15s",
                 }}>
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                    {/* Sentiment badge */}
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                  {/* Sentiment badge */}
+                  <div style={{
+                    flexShrink: 0,
+                    background: cfg.bg,
+                    border: `1px solid ${cfg.border}`,
+                    borderRadius: 4,
+                    padding: "2px 6px",
+                    fontSize: 8,
+                    fontWeight: 800,
+                    color: cfg.color,
+                    letterSpacing: "0.1em",
+                    marginTop: 2,
+                  }}>
+                    {cfg.label}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    {/* Title */}
                     <div style={{
-                      flexShrink: 0,
-                      background: cfg.bg,
-                      border: `1px solid ${cfg.border}`,
-                      borderRadius: 4,
-                      padding: "2px 6px",
-                      fontSize: 8,
-                      fontWeight: 800,
-                      color: cfg.color,
-                      letterSpacing: "0.1em",
-                      marginTop: 2,
+                      fontSize: 12,
+                      fontWeight: 600,
+                      color: "#e2e8f0",
+                      lineHeight: 1.4,
+                      marginBottom: 6,
                     }}>
-                      {cfg.label}
+                      {item.title}
                     </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      {/* Title */}
-                      <div style={{
-                        fontSize: 12,
-                        fontWeight: 600,
-                        color: "#e2e8f0",
-                        lineHeight: 1.4,
-                        marginBottom: 6,
-                      }}>
-                        {item.title}
-                      </div>
-                      {/* Source */}
-                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                        <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", fontWeight: 600 }}>
-                          {item.source}
-                        </span>
-                        <span style={{ fontSize: 9, color: "rgba(255,255,255,0.15)" }}>↗ READ</span>
-                      </div>
+                    {/* Source */}
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", fontWeight: 600 }}>
+                        {item.source}
+                      </span>
+                      <span style={{ fontSize: 9, color: "rgba(255,255,255,0.15)" }}>↗ READ</span>
                     </div>
                   </div>
+                </div>
               </motion.a>
             );
           })}
-        </div>
-      )}
-    </div>
-  );
-}
+          </motion.div>
+        )}
+      </div>
+    );
+  }

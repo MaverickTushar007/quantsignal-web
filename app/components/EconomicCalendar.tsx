@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Calendar, TrendingUp, TrendingDown, RefreshCw, Bell, BellOff, X } from "lucide-react";
 import { motion } from "framer-motion";
+import { motion } from "framer-motion";
 
 const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
 
