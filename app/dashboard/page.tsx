@@ -65,7 +65,7 @@ function LiquidityCard({ symbol }: { symbol: string }) {
   const oiColor = data.oi_change_24h_pct >= 0 ? "#00ff88" : "#ff4466";
 
   return (
-    <div style={{ marginBottom: 20, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 14 }}>
+    <div style={{ marginBottom: 20, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 18 }}>
       <div onClick={() => setOpen(o => !o)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: open ? 12 : 0, cursor: "pointer" }}>
         <span style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", letterSpacing: "0.1em" }}>⚡ LIQUIDITY LEVELS</span>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -713,7 +713,7 @@ export default function Dashboard() {
     <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
       <div style={{ padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="SEARCH..."
-          style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 4, padding: "6px 10px", color: "#e2e8f0", fontSize: 9, outline: "none", fontFamily: "inherit", boxSizing: "border-box" }} />
+          style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 4, padding: "6px 10px", color: "#cbd5e1", fontSize: 9, outline: "none", fontFamily: "inherit", boxSizing: "border-box" }} />
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 4, padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         {TYPE_FILTERS.map(t => (
@@ -752,7 +752,7 @@ export default function Dashboard() {
                     border: `1px solid ${selected?.symbol === sig.symbol ? "rgba(0,255,136,0.3)" : "rgba(255,255,255,0.08)"}`,
                     borderRadius: 4, padding: "5px 4px", cursor: "pointer", fontFamily: "inherit", textAlign: "center"
                   }}>
-                    <div style={{ fontSize: 9, fontWeight: 700, color: "#e2e8f0", marginBottom: 2 }}>{sig.display}</div>
+                    <div style={{ fontSize: 9, fontWeight: 700, color: "#cbd5e1", marginBottom: 2 }}>{sig.display}</div>
                     <div style={{ fontSize: 10, fontWeight: 800, color: sig.direction === "BUY" ? "#00ff88" : "#ff4466" }}>{sig.direction}</div>
                     <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>{(sig.probability * 100).toFixed(0)}%</div>
                   </button>
@@ -793,7 +793,7 @@ export default function Dashboard() {
           <div key={sig.symbol} onClick={() => selectAsset(sig)} 
             style={{ padding: isMobile ? "12px 16px" : "7px 12px", borderBottom: "1px solid rgba(255,255,255,0.04)", cursor: "pointer", background: selected?.symbol === sig.symbol ? "rgba(0,255,136,0.05)" : "transparent", borderLeft: selected?.symbol === sig.symbol ? "3px solid #00ff88" : "3px solid transparent" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3 }}>
-              <span style={{ fontSize: isMobile ? 15 : 11, fontWeight: 700, color: selected?.symbol === sig.symbol ? "#00ff88" : "#e2e8f0" }}>{sig.display}</span>
+              <span style={{ fontSize: isMobile ? 15 : 11, fontWeight: 700, color: selected?.symbol === sig.symbol ? "#00ff88" : "#cbd5e1" }}>{sig.display}</span>
               <span style={badge(sig.direction)}>{sig.direction}</span>
               {outcomeMap[sig.symbol] && (
                 <span style={{
@@ -895,7 +895,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
   const activeDetail = replayMode && replayData ? replayData : detail;
 
   const SignalTab = () => (
-    <div style={{ flex: 1, overflowY: "auto", padding: isMobile ? "16px" : "20px 24px", background: "#060608" }}>
+    <div style={{ flex: 1, overflowY: "auto", padding: isMobile ? "16px" : "20px 24px", background: "#0d1117" }}>
       {/* LIVE / REPLAY toggle */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16, padding: "8px 0", borderBottom: "1px solid rgba(0,255,136,0.15)", minHeight: 36, background: "rgba(0,255,136,0.03)", flexWrap: "wrap" }}>
         <button onClick={() => { setReplayMode(false); setReplayData(null); }} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "none", background: !replayMode ? "#00ff88" : "rgba(255,255,255,0.06)", color: !replayMode ? "#000" : "rgba(255,255,255,0.4)" }}>● LIVE</button>
@@ -1223,10 +1223,10 @@ Give a punchy, honest explanation of why the model made this call, what the mark
   );
 
   // ── MOBILE LAYOUT ──────────────────────────────────────────────
-  if (isMobile && !mounted) return <div style={{ background: "#060608", height: "100dvh" }} />;
+  if (isMobile && !mounted) return <div style={{ background: "#0d1117", height: "100dvh" }} />;
   if (isMobile) {
     return (
-      <div style={{ display: "flex", flexDirection: "column", height: "100dvh", background: "#060608", fontFamily: "'IBM Plex Mono', monospace", color: "#e2e8f0", overflow: "hidden" }}>
+      <div style={{ display: "flex", flexDirection: "column", height: "100dvh", background: "#0d1117", fontFamily: "'IBM Plex Mono', monospace", color: "#cbd5e1", overflow: "hidden" }}>
         {/* Mobile top bar */}
         <div style={{ padding: "10px 16px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -1359,7 +1359,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
   // ── DESKTOP LAYOUT ─────────────────────────────────────────────
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden", background: "#060608", fontFamily: "'IBM Plex Mono', monospace", color: "#e2e8f0" }}>
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh", overflow: "hidden", background: "#0d1117", fontFamily: "'IBM Plex Mono', monospace", color: "#cbd5e1" }}>
       {/* Top bar */}
       <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "10px 20px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
@@ -1406,7 +1406,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           </div>
         ) : (
           <SlideInRight style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", borderRight: "1px solid rgba(255,255,255,0.06)" }}>
-            <div className="qs-scroll" style={{ flex: 1, display: "flex", flexDirection: "column", overflowY: "auto", background: "#060608" }}>
+            <div className="qs-scroll" style={{ flex: 1, display: "flex", flexDirection: "column", overflowY: "auto", background: "#0d1117" }}>
             {/* Asset header */}
             <div style={{ padding: "16px 24px", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#0c0c0f", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
