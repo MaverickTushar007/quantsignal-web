@@ -112,12 +112,29 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
     setShowSuggestions(false);
 
     try {
+      // Prefetch liquidity data to inject into context
+      let liquidityCtx = "";
+      if (symbol && symbol !== "GENERIC") {
+        try {
+          const liqRes = await fetch(`${API_BASE}/liquidity/${symbol}`);
+          if (liqRes.ok) {
+            const liq = await liqRes.json();
+            liquidityCtx = `LIQUIDITY: OI ${liq.oi_change_24h_pct > 0 ? "+" : ""}${liq.oi_change_24h_pct}% 24h | Funding ${liq.funding_trend} | L/S ${liq.long_ratio}% long | Bias: ${liq.bias}`;
+          }
+        } catch {}
+      }
+
+      const finalMsg = liquidityCtx ? `${contextualMsg}
+
+[LIQUIDITY DATA: ${liquidityCtx}]` : contextualMsg;
+
       const response = await fetch(`${API_BASE}/chat/${symbol}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           symbol,
-          message: contextualMsg,
+          message: finalMsg,
+          mode: quantMode ? "quant" : "simple",
           history: GLOBAL_MEMORY.history.slice(-10).map(m => ({ role: m.role, content: m.content }))
         }),
       });
