@@ -56,7 +56,7 @@ export default function AuthPage() {
   }
 
   async function handleGoogle() {
-    await supabase.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: window.location.origin+"/onboarding" } });
+    await supabase.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: window.location.origin+"/dashboard" } });
   }
 
   const dc = (d: string) => d==="BUY"?"#3fb950":d==="SELL"?"#f85149":"#e3b341";
