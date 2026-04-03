@@ -819,6 +819,7 @@ export default function Dashboard() {
   const [replayMode, setReplayMode] = useState(false);
   const [guardianSignal, setGuardianSignal] = useState<any>(null);
   const [showReplayAI, setShowReplayAI] = useState(false);
+  const [showFactors, setShowFactors] = useState(false);
   const [replayAIText, setReplayAIText] = useState("");
   const [replayAILoading, setReplayAILoading] = useState(false);
 
@@ -1156,10 +1157,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           <span>SELL</span>
         </div>
       </div>
-      {(() => {
-        const [showFactors, setShowFactors] = useState(false);
-        return (
-          <div style={{ marginBottom: 20 }}>
+      <div style={{ marginBottom: 20 }}>
             <div onClick={() => setShowFactors(o => !o)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: showFactors ? 10 : 0, cursor: "pointer" }}>
               <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>9-FACTOR CONFLUENCE</div>
               <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
@@ -1180,8 +1178,6 @@ Give a punchy, honest explanation of why the model made this call, what the mark
               </div>
             ))}
           </div>
-        );
-      })()}
       <EarningsBadge flag={activeDetail.earnings_flag} />
       <MTFBar mtf={activeDetail?.mtf} direction={activeDetail?.direction} />
       <ShockWarning shock={activeDetail?.shock_warning} />
