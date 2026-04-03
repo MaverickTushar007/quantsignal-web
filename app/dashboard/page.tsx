@@ -467,41 +467,67 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
     <div style={{ padding: 20, color: "#ff4466", fontSize: 9, fontFamily: mono }}>Failed to load</div>
   );
 
-  const statBox = (label: string, value: string, color: string) => (
-    <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 6, padding: "10px 12px", flex: 1, minWidth: 0 }}>
-      <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 4 }}>{label}</div>
-      <div style={{ fontSize: 16, fontWeight: 800, color, fontFamily: mono }}>{value}</div>
+  const expectancy = data.winRate/100 * data.avgWin + (1-data.winRate/100) * data.avgLoss;
+
+  // Primary stat box — bigger, more prominent
+  const primaryBox = (label: string, value: string, color: string, hint: string) => (
+    <div style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${color}22`, borderRadius: 8, padding: "12px 14px", flex: 1, minWidth: 0 }}>
+      <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 6 }}>{label}</div>
+      <div style={{ fontSize: 20, fontWeight: 800, color, fontFamily: mono, marginBottom: 4 }}>{value}</div>
+      <div style={{ fontSize: 8, color: "rgba(255,255,255,0.2)", lineHeight: 1.4 }}>{hint}</div>
     </div>
   );
+
+  // Secondary stat box — smaller, dimmer
+  const secondaryBox = (label: string, value: string, color: string) => (
+    <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 6, padding: "8px 12px", flex: 1, minWidth: 0 }}>
+      <div style={{ fontSize: 8, color: "rgba(255,255,255,0.25)", letterSpacing: "0.1em", marginBottom: 3 }}>{label}</div>
+      <div style={{ fontSize: 13, fontWeight: 700, color, fontFamily: mono }}>{value}</div>
+    </div>
+  );
+
+  // Performance insight — 1 sentence that tells the whole story
+  const getInsight = () => {
+    if (expectancy >= 0.5 && data.winRate >= 50) return { text: "System is performing well — positive expectancy with strong win rate.", color: "#00ff88", icon: "✓" };
+    if (expectancy >= 0 && data.winRate >= 40) return { text: "Marginal edge — avg win outpacing avg loss, but win rate needs improvement.", color: "#ffd700", icon: "◎" };
+    if (expectancy < 0 && data.avgWin > Math.abs(data.avgLoss) * 1.5) return { text: "Win size is strong but win rate is dragging expectancy negative — needs more data.", color: "#ffd700", icon: "⚠" };
+    return { text: "Negative expectancy — system is accumulating losses faster than wins. Consider recalibration.", color: "#ff4466", icon: "⚠" };
+  };
+  const insight = getInsight();
 
   return (
     <div style={{ padding: "14px 16px", fontFamily: mono, overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}>
 
       {/* Header */}
-      <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.12em", marginBottom: 12 }}>
+      <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.12em", marginBottom: 10 }}>
         SYSTEM TRACK RECORD — {data.total} TRADES
       </div>
 
-      {/* Top stats — Expectancy first, it's what matters */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 6 }}>
-        {statBox("EXPECTANCY", `${(data.winRate/100 * data.avgWin + (1-data.winRate/100) * data.avgLoss).toFixed(2)}%`,
-          (data.winRate/100 * data.avgWin + (1-data.winRate/100) * data.avgLoss) >= 0 ? "#00ff88" : "#ff4466")}
-        {statBox("AVG WIN", `+${data.avgWin.toFixed(2)}%`, "#00ff88")}
-        {statBox("AVG LOSS", `${data.avgLoss.toFixed(2)}%`, "#ff4466")}
+      {/* Performance insight strip */}
+      <div style={{ background: `${insight.color}0a`, border: `1px solid ${insight.color}25`, borderRadius: 7, padding: "8px 12px", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+        <span style={{ fontSize: 12, color: insight.color }}>{insight.icon}</span>
+        <span style={{ fontSize: 10, color: "rgba(255,255,255,0.6)", lineHeight: 1.5 }}>{insight.text}</span>
       </div>
-      <div style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", marginBottom: 14, paddingLeft: 2 }}>
-        {(data.winRate/100 * data.avgWin + (1-data.winRate/100) * data.avgLoss) >= 0
-          ? "✓ Positive expectancy — system is profitable per trade on average"
-          : "⚠ Negative expectancy — system needs more data or recalibration"}
+
+      {/* PRIMARY stats — Expectancy, Win Rate, Avg P&L */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+        {primaryBox("EXPECTANCY", `${expectancy.toFixed(2)}%`, expectancy >= 0 ? "#00ff88" : "#ff4466", "Avg edge per trade")}
+        {primaryBox("WIN RATE", `${data.winRate.toFixed(1)}%`, data.winRate >= 50 ? "#00ff88" : data.winRate >= 40 ? "#ffd700" : "rgba(255,255,255,0.4)", "Trades closed at TP")}
+        {primaryBox("AVG P&L", `${data.avgPnl >= 0 ? "+" : ""}${data.avgPnl.toFixed(2)}%`, data.avgPnl >= 0 ? "#00ff88" : "#ff4466", "Per-trade return")}
       </div>
-      <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
-        {statBox("WIN RATE", `${data.winRate.toFixed(1)}%`, data.winRate >= 50 ? "#00ff88" : data.winRate >= 40 ? "#ffd700" : "rgba(255,255,255,0.4)")}
-        {statBox("AVG P&L", `${data.avgPnl >= 0 ? "+" : ""}${data.avgPnl.toFixed(2)}%`, data.avgPnl >= 0 ? "#00ff88" : "#ff4466")}
-        {statBox("W / L", `${data.wins} / ${data.losses}`, "rgba(255,255,255,0.7)")}
+
+      {/* SECONDARY stats — smaller, less prominent */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+        {secondaryBox("AVG WIN", `+${data.avgWin.toFixed(2)}%`, "#00ff88")}
+        {secondaryBox("AVG LOSS", `${data.avgLoss.toFixed(2)}%`, "#ff4466")}
+        {secondaryBox("W / L", `${data.wins} / ${data.losses}`, "rgba(255,255,255,0.55)")}
       </div>
 
       {/* By Direction */}
-      <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>BY DIRECTION</div>
+      <div style={{ marginBottom: 6 }}>
+        <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>BY DIRECTION</div>
+        <div style={{ fontSize: 8, color: "rgba(255,255,255,0.2)", marginBottom: 8 }}>Win rate split between long and short signals</div>
+      </div>
       <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
         {["BUY","SELL"].map(dir => {
           const d = data.byDir[dir];
@@ -523,7 +549,10 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
       </div>
 
       {/* By Probability Bucket */}
-      <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>WIN RATE BY PROBABILITY</div>
+      <div style={{ marginBottom: 6 }}>
+        <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>WIN RATE BY PROBABILITY</div>
+        <div style={{ fontSize: 8, color: "rgba(255,255,255,0.2)", marginBottom: 8 }}>Higher ML confidence should produce higher win rates — check alignment</div>
+      </div>
       <div style={{ marginBottom: 18 }}>
         {Object.entries(data.buckets).map(([label, b]: [string, any]) => {
           const total = b.tp + b.sl;
@@ -549,30 +578,40 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
       </div>
 
       {/* Regime Performance Panel */}
-      <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>REGIME PERFORMANCE</div>
+      <div style={{ marginBottom: 6 }}>
+        <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>REGIME PERFORMANCE</div>
+        <div style={{ fontSize: 8, color: "rgba(255,255,255,0.2)", marginBottom: 8 }}>Where the system has real edge — focus on high EV regimes</div>
+      </div>
       <div style={{ marginBottom: 18 }}>
-        {data.evStats && data.evStats.map((ev: any, i: number) => {
-          if (ev.ev === null) return null;
-          const wr = ev.win_rate ? ev.win_rate * 100 : 0;
-          return (
-            <div key={i} style={{ marginBottom: 8 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-                <span style={{ fontSize: 9, color: "rgba(255,255,255,0.5)" }}>
-                  <span style={{ color: ev.direction === "BUY" ? "#00ff88" : "#ff4466", fontWeight: 700 }}>{ev.direction}</span>
-                  {" in "}{ev.regime.toUpperCase()}
-                </span>
-                <div style={{ display: "flex", gap: 10 }}>
-                  <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{ev.total_trades} trades</span>
-                  <span style={{ fontSize: 9, fontWeight: 700, color: ev.ev >= 0 ? "#00ff88" : "#ff4466" }}>EV {ev.ev >= 0 ? "+" : ""}{ev.ev?.toFixed(2)}%</span>
-                  <span style={{ fontSize: 9, fontWeight: 800, color: wr >= 50 ? "#00ff88" : wr >= 35 ? "#ffd700" : "#ff4466" }}>{wr.toFixed(0)}% WR</span>
+        {data.evStats && (() => {
+          const validStats = data.evStats.filter((ev: any) => ev.ev !== null);
+          const bestEv = validStats.length ? Math.max(...validStats.map((ev: any) => ev.ev || 0)) : 0;
+          return validStats.map((ev: any, i: number) => {
+            const wr = ev.win_rate ? ev.win_rate * 100 : 0;
+            const isBest = ev.ev === bestEv && bestEv > 0;
+            return (
+              <div key={i} style={{ marginBottom: 8, background: isBest ? "rgba(0,255,136,0.03)" : "transparent", border: isBest ? "1px solid rgba(0,255,136,0.15)" : "1px solid transparent", borderRadius: 6, padding: isBest ? "6px 8px" : "0" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3, alignItems: "center" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span style={{ fontSize: 9, color: "rgba(255,255,255,0.5)" }}>
+                      <span style={{ color: ev.direction === "BUY" ? "#00ff88" : "#ff4466", fontWeight: 700 }}>{ev.direction}</span>
+                      {" in "}{ev.regime.toUpperCase()}
+                    </span>
+                    {isBest && <span style={{ fontSize: 7, fontWeight: 700, color: "#00ff88", background: "rgba(0,255,136,0.12)", padding: "1px 5px", borderRadius: 3, letterSpacing: "0.08em" }}>BEST EDGE</span>}
+                  </div>
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <span style={{ fontSize: 9, color: "rgba(255,255,255,0.25)" }}>{ev.total_trades} trades</span>
+                    <span style={{ fontSize: 9, fontWeight: 700, color: ev.ev >= 0 ? "#00ff88" : "#ff4466" }}>EV {ev.ev >= 0 ? "+" : ""}{ev.ev?.toFixed(2)}%</span>
+                    <span style={{ fontSize: 9, fontWeight: 800, color: wr >= 50 ? "#00ff88" : wr >= 35 ? "#ffd700" : "#ff4466" }}>{wr.toFixed(0)}% WR</span>
+                  </div>
+                </div>
+                <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
+                  <div style={{ width: `${Math.min(wr, 100)}%`, height: "100%", background: wr >= 50 ? "#00ff88" : wr >= 35 ? "#ffd700" : "#ff4466", borderRadius: 2 }} />
                 </div>
               </div>
-              <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
-                <div style={{ width: `${Math.min(wr, 100)}%`, height: "100%", background: wr >= 50 ? "#00ff88" : wr >= 35 ? "#ffd700" : "#ff4466", borderRadius: 2 }} />
-              </div>
-            </div>
-          );
-        })}
+            );
+          });
+        })()}
         {(!data.evStats || data.evStats.length === 0) && (
           <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>No regime data yet</div>
         )}
