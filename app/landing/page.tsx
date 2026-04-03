@@ -97,27 +97,27 @@ export default function Landing() {
                     <div style={{width:6,height:6,borderRadius:"50%",background:"#4ade80"}}/>
                     <div style={{position:"absolute",width:6,height:6,borderRadius:"50%",border:"1px solid #4ade80",animation:"pr 2s ease-out infinite"}}/>
                   </div>
-                  <span style={{fontSize:11,fontWeight:600,color:"#4ade80",letterSpacing:".07em",fontFamily:"DM Mono,monospace"}}>186 live signals · Updated every cycle</span>
+                  <span style={{fontSize:11,fontWeight:600,color:"#4ade80",letterSpacing:".07em",fontFamily:"DM Mono,monospace"}}>Paper trade live signals · Zero real money risk</span>
                 </div>
               </div>
 
-              <h1 className="ht" style={{fontSize:66,fontWeight:900,lineHeight:1.0,letterSpacing:"-2.5px",color:"#f0fdf4",marginBottom:6,opacity:vis?1:0,animation:vis?"su .85s cubic-bezier(.22,1,.36,1) .18s forwards":"none"}}>The trading signal</h1>
-              <h1 className="ht" style={{fontSize:66,fontWeight:900,lineHeight:1.0,letterSpacing:"-2.5px",color:"#4ade80",marginBottom:26,opacity:vis?1:0,animation:vis?"su .85s cubic-bezier(.22,1,.36,1) .26s forwards":"none"}}>that shows its work.</h1>
+              <h1 className="ht" style={{fontSize:66,fontWeight:900,lineHeight:1.0,letterSpacing:"-2.5px",color:"#f0fdf4",marginBottom:6,opacity:vis?1:0,animation:vis?"su .85s cubic-bezier(.22,1,.36,1) .18s forwards":"none"}}>Test strategies live.</h1>
+              <h1 className="ht" style={{fontSize:66,fontWeight:900,lineHeight:1.0,letterSpacing:"-2.5px",color:"#4ade80",marginBottom:26,opacity:vis?1:0,animation:vis?"su .85s cubic-bezier(.22,1,.36,1) .26s forwards":"none"}}>Zero real money.</h1>
 
               <p style={{fontSize:15,color:"rgba(226,240,226,.42)",lineHeight:1.85,marginBottom:34,maxWidth:430,fontFamily:"DM Mono,monospace",opacity:vis?1:0,animation:vis?"su .85s cubic-bezier(.22,1,.36,1) .34s forwards":"none"}}>
-                AI-powered signals across crypto, stocks &amp; macro. ML ensemble + 9-factor confluence. Every signal shows its reasoning. Not a black box. Never.
+                Run AI agents that paper trade live signals across 186 assets — crypto, stocks &amp; macro. See exactly how strategies perform before risking real capital. Explainable signals. Honest track record. No black box.
               </p>
 
               <div style={{display:"flex",gap:12,flexWrap:"wrap",marginBottom:50,opacity:vis?1:0,animation:vis?"su .85s cubic-bezier(.22,1,.36,1) .42s forwards":"none"}}>
                 <a href="/dashboard" className="bp" style={{display:"inline-flex",alignItems:"center",gap:8,background:"#4ade80",color:"#050c05",fontWeight:700,fontSize:14,padding:"13px 28px",borderRadius:10,textDecoration:"none"}}>
-                  View live signals
+                  Start paper trading free →
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="#050c05" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </a>
                 <a href="#features" className="bg" style={{display:"inline-flex",alignItems:"center",gap:8,border:"1px solid rgba(226,240,226,.1)",color:"rgba(226,240,226,.42)",fontWeight:600,fontSize:14,padding:"13px 28px",borderRadius:10,textDecoration:"none",background:"transparent"}}>See the proof</a>
               </div>
 
               <div style={{display:"flex",gap:44,opacity:vis?1:0,animation:vis?"su .85s cubic-bezier(.22,1,.36,1) .5s forwards":"none"}}>
-                {[["133","Live Assets"],["9","Confluence Factors"],["47","ML Features"]].map(([v,l])=>(
+                {[["186","Live Assets"],["0","Real Money Needed"],["21.8%","Live Win Rate"]].map(([v,l])=>(
                   <div key={l}>
                     <div style={{fontSize:28,fontWeight:800,color:"#4ade80",letterSpacing:"-.5px"}}>{v}</div>
                     <div style={{fontSize:11,color:"rgba(226,240,226,.28)",marginTop:3,fontFamily:"DM Mono,monospace"}}>{l}</div>
