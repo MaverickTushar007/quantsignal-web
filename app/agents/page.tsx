@@ -97,6 +97,13 @@ export default function AgentsPage() {
 
       {/* Header */}
       <motion.div initial={{opacity:0,y:16}} animate={{opacity:1,y:0}} transition={{duration:0.4,ease:"easeOut"}} style={{ maxWidth: 900, margin: "0 auto" }}>
+        {/* Navbar */}
+        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 24, paddingBottom: 16, borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+          <span style={{ color: "#00ff88", fontSize: 13, fontWeight: 600, letterSpacing: "0.1em" }}>● QUANT SIGNALS</span>
+          <a href="/dashboard" style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", textDecoration: "none", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 4, padding: "2px 8px" }}>← DASHBOARD</a>
+          <span style={{ fontSize: 10, color: "#ffc107", border: "1px solid rgba(255,193,7,0.3)", borderRadius: 4, padding: "2px 8px", background: "rgba(255,193,7,0.06)" }}>🤖 AGENT LAB</span>
+        </div>
+
         <div style={{ display: "flex", justifyContent: "space-between",
           alignItems: "flex-start", marginBottom: 32 }}>
           <div>
@@ -104,7 +111,7 @@ export default function AgentsPage() {
               🤖 Agent Lab
             </div>
             <div style={{ fontSize: 13, color: "rgba(255,255,255,0.45)", marginTop: 4 }}>
-              Virtual paper trading — test strategies on live signals with no real money
+              Create AI agents that paper trade your signals with virtual money — zero real risk.
             </div>
           </div>
           <button onClick={() => setShowForm(!showForm)} style={{
@@ -247,8 +254,8 @@ export default function AgentsPage() {
                 ? (pnl / agent.budget_inr * 100).toFixed(2) : "0.00";
               return (
                 <motion.div key={agent.id} variants={{hidden:{opacity:0,y:16},visible:{opacity:1,y:0,transition:{duration:0.3,ease:"easeOut"}}}} style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.07)",
+                  background: pnl >= 0 ? "rgba(0,255,136,0.02)" : "rgba(255,68,102,0.02)",
+                  border: `1px solid ${pnl >= 0 ? "rgba(0,255,136,0.12)" : "rgba(255,68,102,0.1)"}`,
                   borderRadius: 12, padding: 20,
                 }}>
                   {/* Top row */}
