@@ -156,10 +156,10 @@ export default function NewsTab({ symbol }: { symbol: string }) {
                     </div>
                     {/* Source */}
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", fontWeight: 600 }}>
+                      <span style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>
                         {item.source}
                       </span>
-                      <span style={{ fontSize: 9, color: "rgba(255,255,255,0.15)" }}>↗ READ</span>
+                      <span style={{ fontSize: 9, color: "rgba(255,255,255,0.35)" }}>↗ READ</span>
                     </div>
                   </div>
                 </div>
