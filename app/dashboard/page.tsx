@@ -654,6 +654,13 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
           No trades recorded for {symbol} yet — system stats above are across all {data.total} trades
         </div>
       )}
+
+      {/* Full performance report link */}
+      <div style={{ borderTop: "1px solid rgba(255,255,255,0.05)", marginTop: 16, paddingTop: 12, textAlign: "center" }}>
+        <a href="/performance" style={{ fontSize: 9, color: "rgba(0,255,136,0.5)", textDecoration: "none", letterSpacing: "0.1em", fontFamily: mono }} onMouseEnter={e => (e.currentTarget.style.color="#00ff88")} onMouseLeave={e => (e.currentTarget.style.color="rgba(0,255,136,0.5)")}>
+          → VIEW FULL PERFORMANCE REPORT · EQUITY CURVE · ALL {data.total} TRADES
+        </a>
+      </div>
     </div>
   );
 }
@@ -1405,7 +1412,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           <span style={{ color: "#00ff88", fontSize: 13, fontWeight: 600, letterSpacing: "0.1em" }}>● QUANT SIGNALS</span>
           <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
             <div style={{ width: 1, height: 14, background: "rgba(255,255,255,0.08)", margin: "0 4px" }} />
-            <a href="/performance" style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", textDecoration: "none", padding: "3px 10px", borderRadius: 4, letterSpacing: "0.06em", transition: "color 0.15s" }} onMouseEnter={e => (e.currentTarget.style.color="#fff")} onMouseLeave={e => (e.currentTarget.style.color="rgba(255,255,255,0.5)")}>PERFORMANCE</a>
+
             <a href="/guardian" style={{ fontSize: 10, color: "#00ff88", textDecoration: "none", border: "1px solid rgba(0,255,136,0.2)", borderRadius: 4, padding: "3px 10px", background: "rgba(0,255,136,0.06)", letterSpacing: "0.06em" }}>GUARDIAN</a>
             <a href="/agents" style={{ fontSize: 10, color: "#ffc107", textDecoration: "none", border: "1px solid rgba(255,193,7,0.2)", borderRadius: 4, padding: "3px 10px", background: "rgba(255,193,7,0.06)", letterSpacing: "0.06em" }}>AGENTS</a>
 
