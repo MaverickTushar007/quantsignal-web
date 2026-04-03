@@ -161,7 +161,7 @@ export default function PerformancePage() {
           <span style={{ color: "#00ff88", fontSize: 13, fontWeight: 600, letterSpacing: "0.1em" }}>● QUANT SIGNALS</span>
           <div style={{ display: "flex", gap: 8 }}>
             <a href="/dashboard" style={{ fontSize: 10, color: "rgba(255,255,255,0.25)", textDecoration: "none", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 4, padding: "2px 8px" }}>← DASHBOARD</a>
-            <span style={{ fontSize: 10, color: "#00aaff", border: "1px solid rgba(0,170,255,0.3)", borderRadius: 4, padding: "2px 8px", background: "rgba(0,170,255,0.08)" }}>📈 PERFORMANCE</span>
+
             <a href="/guardian" style={{ fontSize: 10, color: "#00ff88", textDecoration: "none", border: "1px solid rgba(0,255,136,0.3)", borderRadius: 4, padding: "2px 8px", background: "rgba(0,255,136,0.08)" }}>🛡️ GUARDIAN</a>
             <a href="/agents" style={{ fontSize: 10, color: "#ffc107", textDecoration: "none", border: "1px solid rgba(255,193,7,0.3)", borderRadius: 4, padding: "2px 8px", background: "rgba(255,193,7,0.08)" }}>🤖 AGENTS</a>
 
