@@ -117,7 +117,7 @@ export default function Landing() {
               </div>
 
               <div style={{display:"flex",gap:44,opacity:vis?1:0,animation:vis?"su .85s cubic-bezier(.22,1,.36,1) .5s forwards":"none"}}>
-                {[["186","Live Assets"],["0","Real Money Needed"],["21.8%","Live Win Rate"]].map(([v,l])=>(
+                {[["186","Live Assets"],["0","Real Money Needed"],["+39.5%","Total P&L"]].map(([v,l])=>(
                   <div key={l}>
                     <div style={{fontSize:28,fontWeight:800,color:"#4ade80",letterSpacing:"-.5px"}}>{v}</div>
                     <div style={{fontSize:11,color:"rgba(226,240,226,.28)",marginTop:3,fontFamily:"DM Mono,monospace"}}>{l}</div>
@@ -382,7 +382,7 @@ export default function Landing() {
             <span style={{fontSize:12,fontWeight:700,color:"rgba(226,240,226,.28)"}}>QuantSignal</span>
           </div>
           <div style={{display:"flex",gap:22}}>
-            {[["Dashboard","/dashboard"],["Guardian","/guardian"],["Agents","/agents"]].map(([l,h])=>(
+            {[["Dashboard","/dashboard"],["Agents","/agents"],["Performance","/performance"]].map(([l,h])=>(
               <a key={l} href={h} style={{fontSize:11,color:"rgba(226,240,226,.17)",textDecoration:"none"}}>{l}</a>
             ))}
           </div>
