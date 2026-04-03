@@ -1411,6 +1411,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <span style={{ color: "#00ff88", fontSize: 13, fontWeight: 600, letterSpacing: "0.1em" }}>● QUANT SIGNALS</span>
           <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+            <a href="/agents" style={{ fontSize: 10, color: "#ffc107", textDecoration: "none", border: "1px solid rgba(255,193,7,0.2)", borderRadius: 4, padding: "3px 10px", background: "rgba(255,193,7,0.06)", letterSpacing: "0.06em" }}>AGENTS</a>
             <div style={{ width: 1, height: 14, background: "rgba(255,255,255,0.08)", margin: "0 4px" }} />
 
 
