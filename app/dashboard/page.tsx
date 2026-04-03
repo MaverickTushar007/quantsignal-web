@@ -992,7 +992,6 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           </div>
         ))}
       </div>
-      <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 10 }}>REALTIME PRICE ACTION</div>
       {!isMobile ? (
         <div style={{ height: 420, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", marginBottom: 20 }}>
           <TradingChart symbol={selected.symbol} />
