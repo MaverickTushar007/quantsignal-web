@@ -1418,7 +1418,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         <div style={{ display: "flex", gap: 24, fontSize: 9, alignItems: "center" }}>
           <EstClock />
           {mood && <>
-            <span>SIGNALS <span style={{ color: "#00ff88", fontWeight: 600 }}>86</span></span>
+            
 
             <span>MOOD <span style={{ color: mood.mood === "BULLISH" ? "#00ff88" : mood.mood === "BEARISH" ? "#ff4466" : "#ffd700", fontWeight: 600 }}>{mood.mood}</span></span>
                     </>}
