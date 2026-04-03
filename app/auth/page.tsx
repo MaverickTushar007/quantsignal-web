@@ -19,6 +19,7 @@ export default function AuthPage() {
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState("");
   const [tick, setTick]         = useState(0);
+  const [resetSent, setResetSent] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
   const mono = "'DM Mono', monospace";
@@ -40,6 +41,17 @@ export default function AuthPage() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) setError(error.message); else router.push("/dashboard");
     }
+    setLoading(false);
+  }
+
+  async function handleForgotPassword() {
+    if (!email) { setError("Enter your email above first."); return; }
+    setLoading(true); setError("");
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + "/auth/reset",
+    });
+    if (error) setError(error.message);
+    else setResetSent(true);
     setLoading(false);
   }
 
@@ -203,7 +215,7 @@ export default function AuthPage() {
             <div style={{marginBottom:20}}>
               <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
                 <div style={{fontSize:10,color:"#8b949e",letterSpacing:".08em"}}>PASSWORD</div>
-                {mode==="login"&&<span style={{fontSize:10,color:"#58a6ff",cursor:"pointer"}}>Forgot password?</span>}
+                {mode==="login"&&<span onClick={handleForgotPassword} style={{fontSize:10,color:"#58a6ff",cursor:"pointer"}}>{resetSent ? "✓ Reset email sent!" : "Forgot password?"}</span>}
               </div>
               <input value={password} onChange={e=>setPassword(e.target.value)} type="password" placeholder="••••••••" onKeyDown={e=>e.key==="Enter"&&handleSubmit()} style={inputStyle}/>
             </div>
