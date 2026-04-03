@@ -45,6 +45,7 @@ function formatPrice(price: number, type: string, symbol: string): string {
 function LiquidityCard({ symbol }: { symbol: string }) {
   const [data, setData] = useState<any>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [open, setOpen] = useState(false);
 
   const fetchLiquidity = async () => {
     try {
@@ -65,10 +66,14 @@ function LiquidityCard({ symbol }: { symbol: string }) {
 
   return (
     <div style={{ marginBottom: 20, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 14 }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+      <div onClick={() => setOpen(o => !o)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: open ? 12 : 0, cursor: "pointer" }}>
         <span style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", letterSpacing: "0.1em" }}>⚡ LIQUIDITY LEVELS</span>
-        {lastUpdated && <span style={{ fontSize: 8, color: "rgba(255,255,255,0.2)" }}>LIVE · {lastUpdated.toLocaleTimeString()}</span>}
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          {lastUpdated && <span style={{ fontSize: 8, color: "rgba(255,255,255,0.2)" }}>LIVE · {lastUpdated.toLocaleTimeString()}</span>}
+          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.2)" }}>{open ? "▲" : "▼"}</span>
+        </div>
       </div>
+      {open && <>
       <div style={{ background: `${data.bias_color}18`, border: `1px solid ${data.bias_color}30`, borderRadius: 6, padding: "7px 10px", marginBottom: 10 }}>
         <div style={{ fontSize: 8, fontWeight: 700, color: data.bias_color, letterSpacing: "0.08em", marginBottom: 2 }}>{data.bias.replace(/_/g, " ")}</div>
         <div style={{ fontSize: 9, color: "rgba(255,255,255,0.4)", lineHeight: 1.5 }}>{data.bias_desc}</div>
@@ -108,6 +113,7 @@ function LiquidityCard({ symbol }: { symbol: string }) {
           <span style={{ fontSize: 8, color: "rgba(255,255,255,0.25)" }}>{c.label}</span>
         </div>
       ))}
+      </>}
     </div>
   );
 }
