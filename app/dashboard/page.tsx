@@ -115,6 +115,146 @@ function LiquidityCard({ symbol }: { symbol: string }) {
       ))}
       </>}
     </div>
+
+      {/* Floating Feedback Button */}
+      <div
+        onClick={() => setShowFeedback(true)}
+        style={{
+          position: "fixed", bottom: 28, right: 28, zIndex: 1000,
+          width: 48, height: 48, borderRadius: "50%",
+          background: "linear-gradient(135deg, #00ff88, #00cc66)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: "pointer", boxShadow: "0 4px 20px rgba(0,255,136,0.35)",
+          fontSize: 20, transition: "transform 0.2s",
+        }}
+        onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.1)")}
+        onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+        title="Share feedback"
+      >
+        💬
+      </div>
+
+      {/* Feedback Modal */}
+      {showFeedback && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 2000,
+          background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: 20,
+        }}
+          onClick={e => { if (e.target === e.currentTarget) setShowFeedback(false); }}
+        >
+          <div style={{
+            background: "#0e0e12", border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: 16, padding: 28, width: "100%", maxWidth: 420,
+            fontFamily: "'IBM Plex Mono', monospace",
+          }}>
+            {/* Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: "#fff", marginBottom: 3 }}>Share Your Feedback</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>Help us improve QuantSignal</div>
+              </div>
+              <div onClick={() => setShowFeedback(false)} style={{ cursor: "pointer", fontSize: 18, color: "rgba(255,255,255,0.3)", lineHeight: 1 }}>✕</div>
+            </div>
+
+            {feedbackStatus === "sent" ? (
+              <div style={{ textAlign: "center", padding: "32px 0" }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>🎉</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#00ff88", marginBottom: 6 }}>Thank you!</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>Your feedback has been recorded.</div>
+              </div>
+            ) : (
+              <>
+                {/* Name */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>YOUR NAME</div>
+                  <input
+                    value={feedbackForm.name}
+                    onChange={e => setFeedbackForm({...feedbackForm, name: e.target.value})}
+                    placeholder="e.g. Rahul Sharma"
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Email */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>EMAIL ADDRESS</div>
+                  <input
+                    value={feedbackForm.email}
+                    onChange={e => setFeedbackForm({...feedbackForm, email: e.target.value})}
+                    placeholder="you@example.com"
+                    type="email"
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Rating */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 8 }}>RATING</div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {[1,2,3,4,5].map(star => (
+                      <div
+                        key={star}
+                        onClick={() => setFeedbackForm({...feedbackForm, rating: star})}
+                        style={{
+                          fontSize: 24, cursor: "pointer", transition: "transform 0.1s",
+                          opacity: star <= feedbackForm.rating ? 1 : 0.25,
+                          transform: star <= feedbackForm.rating ? "scale(1.1)" : "scale(1)",
+                        }}
+                      >⭐</div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>YOUR FEEDBACK</div>
+                  <textarea
+                    value={feedbackForm.message}
+                    onChange={e => setFeedbackForm({...feedbackForm, message: e.target.value})}
+                    placeholder="What do you think of QuantSignal? Any features you'd love to see?"
+                    rows={4}
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", resize: "none",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Submit */}
+                <div
+                  onClick={feedbackStatus === "sending" ? undefined : submitFeedback}
+                  style={{
+                    width: "100%", padding: "12px 0", borderRadius: 8, textAlign: "center",
+                    background: feedbackStatus === "sending" ? "rgba(0,255,136,0.2)" : "linear-gradient(135deg, #00ff88, #00cc66)",
+                    color: feedbackStatus === "sending" ? "rgba(255,255,255,0.5)" : "#000",
+                    fontSize: 11, fontWeight: 800, letterSpacing: "0.1em",
+                    cursor: feedbackStatus === "sending" ? "default" : "pointer",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {feedbackStatus === "sending" ? "SENDING..." : feedbackStatus === "error" ? "⚠ TRY AGAIN" : "SUBMIT FEEDBACK →"}
+                </div>
+                {feedbackStatus === "error" && (
+                  <div style={{ fontSize: 9, color: "#ff4466", textAlign: "center", marginTop: 8 }}>Something went wrong. Please try again.</div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -182,6 +322,146 @@ function EstClock() {
               <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginLeft: "auto" }}>{t.offset >= 0 ? "+" : ""}{t.offset}</span>
             </div>
           ))}
+        </div>
+      )}
+    </div>
+
+      {/* Floating Feedback Button */}
+      <div
+        onClick={() => setShowFeedback(true)}
+        style={{
+          position: "fixed", bottom: 28, right: 28, zIndex: 1000,
+          width: 48, height: 48, borderRadius: "50%",
+          background: "linear-gradient(135deg, #00ff88, #00cc66)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: "pointer", boxShadow: "0 4px 20px rgba(0,255,136,0.35)",
+          fontSize: 20, transition: "transform 0.2s",
+        }}
+        onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.1)")}
+        onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+        title="Share feedback"
+      >
+        💬
+      </div>
+
+      {/* Feedback Modal */}
+      {showFeedback && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 2000,
+          background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: 20,
+        }}
+          onClick={e => { if (e.target === e.currentTarget) setShowFeedback(false); }}
+        >
+          <div style={{
+            background: "#0e0e12", border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: 16, padding: 28, width: "100%", maxWidth: 420,
+            fontFamily: "'IBM Plex Mono', monospace",
+          }}>
+            {/* Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: "#fff", marginBottom: 3 }}>Share Your Feedback</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>Help us improve QuantSignal</div>
+              </div>
+              <div onClick={() => setShowFeedback(false)} style={{ cursor: "pointer", fontSize: 18, color: "rgba(255,255,255,0.3)", lineHeight: 1 }}>✕</div>
+            </div>
+
+            {feedbackStatus === "sent" ? (
+              <div style={{ textAlign: "center", padding: "32px 0" }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>🎉</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#00ff88", marginBottom: 6 }}>Thank you!</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>Your feedback has been recorded.</div>
+              </div>
+            ) : (
+              <>
+                {/* Name */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>YOUR NAME</div>
+                  <input
+                    value={feedbackForm.name}
+                    onChange={e => setFeedbackForm({...feedbackForm, name: e.target.value})}
+                    placeholder="e.g. Rahul Sharma"
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Email */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>EMAIL ADDRESS</div>
+                  <input
+                    value={feedbackForm.email}
+                    onChange={e => setFeedbackForm({...feedbackForm, email: e.target.value})}
+                    placeholder="you@example.com"
+                    type="email"
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Rating */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 8 }}>RATING</div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {[1,2,3,4,5].map(star => (
+                      <div
+                        key={star}
+                        onClick={() => setFeedbackForm({...feedbackForm, rating: star})}
+                        style={{
+                          fontSize: 24, cursor: "pointer", transition: "transform 0.1s",
+                          opacity: star <= feedbackForm.rating ? 1 : 0.25,
+                          transform: star <= feedbackForm.rating ? "scale(1.1)" : "scale(1)",
+                        }}
+                      >⭐</div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>YOUR FEEDBACK</div>
+                  <textarea
+                    value={feedbackForm.message}
+                    onChange={e => setFeedbackForm({...feedbackForm, message: e.target.value})}
+                    placeholder="What do you think of QuantSignal? Any features you'd love to see?"
+                    rows={4}
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", resize: "none",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Submit */}
+                <div
+                  onClick={feedbackStatus === "sending" ? undefined : submitFeedback}
+                  style={{
+                    width: "100%", padding: "12px 0", borderRadius: 8, textAlign: "center",
+                    background: feedbackStatus === "sending" ? "rgba(0,255,136,0.2)" : "linear-gradient(135deg, #00ff88, #00cc66)",
+                    color: feedbackStatus === "sending" ? "rgba(255,255,255,0.5)" : "#000",
+                    fontSize: 11, fontWeight: 800, letterSpacing: "0.1em",
+                    cursor: feedbackStatus === "sending" ? "default" : "pointer",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {feedbackStatus === "sending" ? "SENDING..." : feedbackStatus === "error" ? "⚠ TRY AGAIN" : "SUBMIT FEEDBACK →"}
+                </div>
+                {feedbackStatus === "error" && (
+                  <div style={{ fontSize: 9, color: "#ff4466", textAlign: "center", marginTop: 8 }}>Something went wrong. Please try again.</div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       )}
     </div>
@@ -294,6 +574,146 @@ function ShockWarning({ shock }: { shock?: any }) {
         </div>
       </div>
     </div>
+
+      {/* Floating Feedback Button */}
+      <div
+        onClick={() => setShowFeedback(true)}
+        style={{
+          position: "fixed", bottom: 28, right: 28, zIndex: 1000,
+          width: 48, height: 48, borderRadius: "50%",
+          background: "linear-gradient(135deg, #00ff88, #00cc66)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: "pointer", boxShadow: "0 4px 20px rgba(0,255,136,0.35)",
+          fontSize: 20, transition: "transform 0.2s",
+        }}
+        onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.1)")}
+        onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+        title="Share feedback"
+      >
+        💬
+      </div>
+
+      {/* Feedback Modal */}
+      {showFeedback && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 2000,
+          background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: 20,
+        }}
+          onClick={e => { if (e.target === e.currentTarget) setShowFeedback(false); }}
+        >
+          <div style={{
+            background: "#0e0e12", border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: 16, padding: 28, width: "100%", maxWidth: 420,
+            fontFamily: "'IBM Plex Mono', monospace",
+          }}>
+            {/* Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: "#fff", marginBottom: 3 }}>Share Your Feedback</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>Help us improve QuantSignal</div>
+              </div>
+              <div onClick={() => setShowFeedback(false)} style={{ cursor: "pointer", fontSize: 18, color: "rgba(255,255,255,0.3)", lineHeight: 1 }}>✕</div>
+            </div>
+
+            {feedbackStatus === "sent" ? (
+              <div style={{ textAlign: "center", padding: "32px 0" }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>🎉</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#00ff88", marginBottom: 6 }}>Thank you!</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>Your feedback has been recorded.</div>
+              </div>
+            ) : (
+              <>
+                {/* Name */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>YOUR NAME</div>
+                  <input
+                    value={feedbackForm.name}
+                    onChange={e => setFeedbackForm({...feedbackForm, name: e.target.value})}
+                    placeholder="e.g. Rahul Sharma"
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Email */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>EMAIL ADDRESS</div>
+                  <input
+                    value={feedbackForm.email}
+                    onChange={e => setFeedbackForm({...feedbackForm, email: e.target.value})}
+                    placeholder="you@example.com"
+                    type="email"
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Rating */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 8 }}>RATING</div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {[1,2,3,4,5].map(star => (
+                      <div
+                        key={star}
+                        onClick={() => setFeedbackForm({...feedbackForm, rating: star})}
+                        style={{
+                          fontSize: 24, cursor: "pointer", transition: "transform 0.1s",
+                          opacity: star <= feedbackForm.rating ? 1 : 0.25,
+                          transform: star <= feedbackForm.rating ? "scale(1.1)" : "scale(1)",
+                        }}
+                      >⭐</div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>YOUR FEEDBACK</div>
+                  <textarea
+                    value={feedbackForm.message}
+                    onChange={e => setFeedbackForm({...feedbackForm, message: e.target.value})}
+                    placeholder="What do you think of QuantSignal? Any features you'd love to see?"
+                    rows={4}
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", resize: "none",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Submit */}
+                <div
+                  onClick={feedbackStatus === "sending" ? undefined : submitFeedback}
+                  style={{
+                    width: "100%", padding: "12px 0", borderRadius: 8, textAlign: "center",
+                    background: feedbackStatus === "sending" ? "rgba(0,255,136,0.2)" : "linear-gradient(135deg, #00ff88, #00cc66)",
+                    color: feedbackStatus === "sending" ? "rgba(255,255,255,0.5)" : "#000",
+                    fontSize: 11, fontWeight: 800, letterSpacing: "0.1em",
+                    cursor: feedbackStatus === "sending" ? "default" : "pointer",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {feedbackStatus === "sending" ? "SENDING..." : feedbackStatus === "error" ? "⚠ TRY AGAIN" : "SUBMIT FEEDBACK →"}
+                </div>
+                {feedbackStatus === "error" && (
+                  <div style={{ fontSize: 9, color: "#ff4466", textAlign: "center", marginTop: 8 }}>Something went wrong. Please try again.</div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -334,6 +754,146 @@ function MTFBar({ mtf, direction }: { mtf?: any, direction?: string }) {
           );
         })}
       </div>
+    </div>
+
+      {/* Floating Feedback Button */}
+      <div
+        onClick={() => setShowFeedback(true)}
+        style={{
+          position: "fixed", bottom: 28, right: 28, zIndex: 1000,
+          width: 48, height: 48, borderRadius: "50%",
+          background: "linear-gradient(135deg, #00ff88, #00cc66)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: "pointer", boxShadow: "0 4px 20px rgba(0,255,136,0.35)",
+          fontSize: 20, transition: "transform 0.2s",
+        }}
+        onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.1)")}
+        onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+        title="Share feedback"
+      >
+        💬
+      </div>
+
+      {/* Feedback Modal */}
+      {showFeedback && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 2000,
+          background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: 20,
+        }}
+          onClick={e => { if (e.target === e.currentTarget) setShowFeedback(false); }}
+        >
+          <div style={{
+            background: "#0e0e12", border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: 16, padding: 28, width: "100%", maxWidth: 420,
+            fontFamily: "'IBM Plex Mono', monospace",
+          }}>
+            {/* Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: "#fff", marginBottom: 3 }}>Share Your Feedback</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>Help us improve QuantSignal</div>
+              </div>
+              <div onClick={() => setShowFeedback(false)} style={{ cursor: "pointer", fontSize: 18, color: "rgba(255,255,255,0.3)", lineHeight: 1 }}>✕</div>
+            </div>
+
+            {feedbackStatus === "sent" ? (
+              <div style={{ textAlign: "center", padding: "32px 0" }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>🎉</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#00ff88", marginBottom: 6 }}>Thank you!</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>Your feedback has been recorded.</div>
+              </div>
+            ) : (
+              <>
+                {/* Name */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>YOUR NAME</div>
+                  <input
+                    value={feedbackForm.name}
+                    onChange={e => setFeedbackForm({...feedbackForm, name: e.target.value})}
+                    placeholder="e.g. Rahul Sharma"
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Email */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>EMAIL ADDRESS</div>
+                  <input
+                    value={feedbackForm.email}
+                    onChange={e => setFeedbackForm({...feedbackForm, email: e.target.value})}
+                    placeholder="you@example.com"
+                    type="email"
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Rating */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 8 }}>RATING</div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {[1,2,3,4,5].map(star => (
+                      <div
+                        key={star}
+                        onClick={() => setFeedbackForm({...feedbackForm, rating: star})}
+                        style={{
+                          fontSize: 24, cursor: "pointer", transition: "transform 0.1s",
+                          opacity: star <= feedbackForm.rating ? 1 : 0.25,
+                          transform: star <= feedbackForm.rating ? "scale(1.1)" : "scale(1)",
+                        }}
+                      >⭐</div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>YOUR FEEDBACK</div>
+                  <textarea
+                    value={feedbackForm.message}
+                    onChange={e => setFeedbackForm({...feedbackForm, message: e.target.value})}
+                    placeholder="What do you think of QuantSignal? Any features you'd love to see?"
+                    rows={4}
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", resize: "none",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Submit */}
+                <div
+                  onClick={feedbackStatus === "sending" ? undefined : submitFeedback}
+                  style={{
+                    width: "100%", padding: "12px 0", borderRadius: 8, textAlign: "center",
+                    background: feedbackStatus === "sending" ? "rgba(0,255,136,0.2)" : "linear-gradient(135deg, #00ff88, #00cc66)",
+                    color: feedbackStatus === "sending" ? "rgba(255,255,255,0.5)" : "#000",
+                    fontSize: 11, fontWeight: 800, letterSpacing: "0.1em",
+                    cursor: feedbackStatus === "sending" ? "default" : "pointer",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {feedbackStatus === "sending" ? "SENDING..." : feedbackStatus === "error" ? "⚠ TRY AGAIN" : "SUBMIT FEEDBACK →"}
+                </div>
+                {feedbackStatus === "error" && (
+                  <div style={{ fontSize: 9, color: "#ff4466", textAlign: "center", marginTop: 8 }}>Something went wrong. Please try again.</div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -662,6 +1222,146 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
         </a>
       </div>
     </div>
+
+      {/* Floating Feedback Button */}
+      <div
+        onClick={() => setShowFeedback(true)}
+        style={{
+          position: "fixed", bottom: 28, right: 28, zIndex: 1000,
+          width: 48, height: 48, borderRadius: "50%",
+          background: "linear-gradient(135deg, #00ff88, #00cc66)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: "pointer", boxShadow: "0 4px 20px rgba(0,255,136,0.35)",
+          fontSize: 20, transition: "transform 0.2s",
+        }}
+        onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.1)")}
+        onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+        title="Share feedback"
+      >
+        💬
+      </div>
+
+      {/* Feedback Modal */}
+      {showFeedback && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 2000,
+          background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: 20,
+        }}
+          onClick={e => { if (e.target === e.currentTarget) setShowFeedback(false); }}
+        >
+          <div style={{
+            background: "#0e0e12", border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: 16, padding: 28, width: "100%", maxWidth: 420,
+            fontFamily: "'IBM Plex Mono', monospace",
+          }}>
+            {/* Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: "#fff", marginBottom: 3 }}>Share Your Feedback</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>Help us improve QuantSignal</div>
+              </div>
+              <div onClick={() => setShowFeedback(false)} style={{ cursor: "pointer", fontSize: 18, color: "rgba(255,255,255,0.3)", lineHeight: 1 }}>✕</div>
+            </div>
+
+            {feedbackStatus === "sent" ? (
+              <div style={{ textAlign: "center", padding: "32px 0" }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>🎉</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#00ff88", marginBottom: 6 }}>Thank you!</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>Your feedback has been recorded.</div>
+              </div>
+            ) : (
+              <>
+                {/* Name */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>YOUR NAME</div>
+                  <input
+                    value={feedbackForm.name}
+                    onChange={e => setFeedbackForm({...feedbackForm, name: e.target.value})}
+                    placeholder="e.g. Rahul Sharma"
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Email */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>EMAIL ADDRESS</div>
+                  <input
+                    value={feedbackForm.email}
+                    onChange={e => setFeedbackForm({...feedbackForm, email: e.target.value})}
+                    placeholder="you@example.com"
+                    type="email"
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Rating */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 8 }}>RATING</div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {[1,2,3,4,5].map(star => (
+                      <div
+                        key={star}
+                        onClick={() => setFeedbackForm({...feedbackForm, rating: star})}
+                        style={{
+                          fontSize: 24, cursor: "pointer", transition: "transform 0.1s",
+                          opacity: star <= feedbackForm.rating ? 1 : 0.25,
+                          transform: star <= feedbackForm.rating ? "scale(1.1)" : "scale(1)",
+                        }}
+                      >⭐</div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>YOUR FEEDBACK</div>
+                  <textarea
+                    value={feedbackForm.message}
+                    onChange={e => setFeedbackForm({...feedbackForm, message: e.target.value})}
+                    placeholder="What do you think of QuantSignal? Any features you'd love to see?"
+                    rows={4}
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", resize: "none",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Submit */}
+                <div
+                  onClick={feedbackStatus === "sending" ? undefined : submitFeedback}
+                  style={{
+                    width: "100%", padding: "12px 0", borderRadius: 8, textAlign: "center",
+                    background: feedbackStatus === "sending" ? "rgba(0,255,136,0.2)" : "linear-gradient(135deg, #00ff88, #00cc66)",
+                    color: feedbackStatus === "sending" ? "rgba(255,255,255,0.5)" : "#000",
+                    fontSize: 11, fontWeight: 800, letterSpacing: "0.1em",
+                    cursor: feedbackStatus === "sending" ? "default" : "pointer",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {feedbackStatus === "sending" ? "SENDING..." : feedbackStatus === "error" ? "⚠ TRY AGAIN" : "SUBMIT FEEDBACK →"}
+                </div>
+                {feedbackStatus === "error" && (
+                  <div style={{ fontSize: 9, color: "#ff4466", textAlign: "center", marginTop: 8 }}>Something went wrong. Please try again.</div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -675,6 +1375,26 @@ export default function Dashboard() {
   const [briefing, setBriefing] = useState<any>(null);
   const [briefingOpen, setBriefingOpen] = useState(false);
   const [mood, setMood] = useState<any>(null);
+  const [showFeedback, setShowFeedback] = useState(false);
+  const [feedbackForm, setFeedbackForm] = useState({ name: "", email: "", rating: 5, message: "" });
+  const [feedbackStatus, setFeedbackStatus] = useState<"idle"|"sending"|"sent"|"error">("idle");
+
+  const submitFeedback = async () => {
+    if (!feedbackForm.name.trim() || !feedbackForm.email.trim() || !feedbackForm.message.trim()) return;
+    setFeedbackStatus("sending");
+    try {
+      const res = await fetch("https://quantsignal-api-production.up.railway.app/api/v1/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(feedbackForm),
+      });
+      const data = await res.json();
+      if (data.status === "ok") {
+        setFeedbackStatus("sent");
+        setTimeout(() => { setShowFeedback(false); setFeedbackStatus("idle"); setFeedbackForm({ name: "", email: "", rating: 5, message: "" }); }, 2500);
+      } else { setFeedbackStatus("error"); }
+    } catch { setFeedbackStatus("error"); }
+  };
   const [filter, setFilter] = useState("ALL");
   const { user, isPro } = useAuth();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -1582,6 +2302,146 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       <TutorialModal />
       {guardianSignal && (
         <TradeGuardian signal={guardianSignal} onClose={() => setGuardianSignal(null)} />
+      )}
+    </div>
+
+      {/* Floating Feedback Button */}
+      <div
+        onClick={() => setShowFeedback(true)}
+        style={{
+          position: "fixed", bottom: 28, right: 28, zIndex: 1000,
+          width: 48, height: 48, borderRadius: "50%",
+          background: "linear-gradient(135deg, #00ff88, #00cc66)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: "pointer", boxShadow: "0 4px 20px rgba(0,255,136,0.35)",
+          fontSize: 20, transition: "transform 0.2s",
+        }}
+        onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.1)")}
+        onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
+        title="Share feedback"
+      >
+        💬
+      </div>
+
+      {/* Feedback Modal */}
+      {showFeedback && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 2000,
+          background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          padding: 20,
+        }}
+          onClick={e => { if (e.target === e.currentTarget) setShowFeedback(false); }}
+        >
+          <div style={{
+            background: "#0e0e12", border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: 16, padding: 28, width: "100%", maxWidth: 420,
+            fontFamily: "'IBM Plex Mono', monospace",
+          }}>
+            {/* Header */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: "#fff", marginBottom: 3 }}>Share Your Feedback</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>Help us improve QuantSignal</div>
+              </div>
+              <div onClick={() => setShowFeedback(false)} style={{ cursor: "pointer", fontSize: 18, color: "rgba(255,255,255,0.3)", lineHeight: 1 }}>✕</div>
+            </div>
+
+            {feedbackStatus === "sent" ? (
+              <div style={{ textAlign: "center", padding: "32px 0" }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>🎉</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: "#00ff88", marginBottom: 6 }}>Thank you!</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>Your feedback has been recorded.</div>
+              </div>
+            ) : (
+              <>
+                {/* Name */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>YOUR NAME</div>
+                  <input
+                    value={feedbackForm.name}
+                    onChange={e => setFeedbackForm({...feedbackForm, name: e.target.value})}
+                    placeholder="e.g. Rahul Sharma"
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Email */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>EMAIL ADDRESS</div>
+                  <input
+                    value={feedbackForm.email}
+                    onChange={e => setFeedbackForm({...feedbackForm, email: e.target.value})}
+                    placeholder="you@example.com"
+                    type="email"
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Rating */}
+                <div style={{ marginBottom: 14 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 8 }}>RATING</div>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {[1,2,3,4,5].map(star => (
+                      <div
+                        key={star}
+                        onClick={() => setFeedbackForm({...feedbackForm, rating: star})}
+                        style={{
+                          fontSize: 24, cursor: "pointer", transition: "transform 0.1s",
+                          opacity: star <= feedbackForm.rating ? 1 : 0.25,
+                          transform: star <= feedbackForm.rating ? "scale(1.1)" : "scale(1)",
+                        }}
+                      >⭐</div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Message */}
+                <div style={{ marginBottom: 20 }}>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", letterSpacing: "0.1em", marginBottom: 6 }}>YOUR FEEDBACK</div>
+                  <textarea
+                    value={feedbackForm.message}
+                    onChange={e => setFeedbackForm({...feedbackForm, message: e.target.value})}
+                    placeholder="What do you think of QuantSignal? Any features you'd love to see?"
+                    rows={4}
+                    style={{
+                      width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.1)",
+                      borderRadius: 8, padding: "10px 12px", color: "#fff", fontSize: 12,
+                      fontFamily: "'IBM Plex Mono', monospace", outline: "none", resize: "none",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                </div>
+
+                {/* Submit */}
+                <div
+                  onClick={feedbackStatus === "sending" ? undefined : submitFeedback}
+                  style={{
+                    width: "100%", padding: "12px 0", borderRadius: 8, textAlign: "center",
+                    background: feedbackStatus === "sending" ? "rgba(0,255,136,0.2)" : "linear-gradient(135deg, #00ff88, #00cc66)",
+                    color: feedbackStatus === "sending" ? "rgba(255,255,255,0.5)" : "#000",
+                    fontSize: 11, fontWeight: 800, letterSpacing: "0.1em",
+                    cursor: feedbackStatus === "sending" ? "default" : "pointer",
+                    boxSizing: "border-box",
+                  }}
+                >
+                  {feedbackStatus === "sending" ? "SENDING..." : feedbackStatus === "error" ? "⚠ TRY AGAIN" : "SUBMIT FEEDBACK →"}
+                </div>
+                {feedbackStatus === "error" && (
+                  <div style={{ fontSize: 9, color: "#ff4466", textAlign: "center", marginTop: 8 }}>Something went wrong. Please try again.</div>
+                )}
+              </>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
