@@ -236,7 +236,7 @@ export default function PerformancePage() {
                 <XAxis dataKey="date" tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 9, fontFamily: "inherit" }} tickLine={false} axisLine={false} interval="preserveStartEnd" />
                 <YAxis tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 9, fontFamily: "inherit" }} tickLine={false} axisLine={false} tickFormatter={v => `${v.toFixed(0)}%`} />
                 <ReferenceLine y={0} stroke="rgba(255,255,255,0.1)" strokeDasharray="4 4" />
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none", background: "transparent" }} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
                 <Area type="monotone" dataKey="cumulative_pnl" stroke="#00ff88" strokeWidth={2} fill="url(#eqGrad)" dot={false} />
               </AreaChart>
             </ResponsiveContainer>
@@ -246,12 +246,12 @@ export default function PerformancePage() {
           <div style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: 8, padding: "16px 18px" }}>
             <div style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 16 }}>MONTHLY P&L</div>
             <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={monthly} barCategoryGap="30%">
+              <BarChart data={monthly} barCategoryGap="30%" style={{ background: "transparent" }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" vertical={false} />
                 <XAxis dataKey="month" tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 9, fontFamily: "inherit" }} tickLine={false} axisLine={false} />
                 <YAxis tick={{ fill: "rgba(255,255,255,0.25)", fontSize: 9, fontFamily: "inherit" }} tickLine={false} axisLine={false} tickFormatter={v => `${v.toFixed(0)}%`} />
                 <ReferenceLine y={0} stroke="rgba(255,255,255,0.15)" />
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip content={<CustomTooltip />} wrapperStyle={{ outline: "none", background: "transparent" }} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
                 <Bar dataKey="pnl" radius={[3, 3, 0, 0]}>
                   {monthly.map((m, i) => <Cell key={i} fill={m.pnl >= 0 ? "#00ff88" : "#ff4466"} fillOpacity={0.8} />)}
                 </Bar>
