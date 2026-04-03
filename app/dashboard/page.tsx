@@ -1,4 +1,5 @@
 "use client";
+import FeedbackWidget from "../components/FeedbackWidget";
 import { usePushNotifications } from "../hooks/usePushNotifications";
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/useAuth";
@@ -115,6 +116,7 @@ function LiquidityCard({ symbol }: { symbol: string }) {
       ))}
       </>}
     </div>
+    <FeedbackWidget />
   );
 }
 
