@@ -241,10 +241,6 @@ export default function AuthPage() {
               CONTINUE WITH GOOGLE
             </button>
 
-            {/* Guest */}
-            <button onClick={()=>router.push("/dashboard")} className="gbtn" style={{width:"100%",padding:"10px 0",background:"transparent",border:"1px solid #21262d",borderRadius:8,color:"#484f58",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:mono,letterSpacing:".04em"}}>
-              CONTINUE AS GUEST →
-            </button>
           </motion.div>
 
           {/* Switch + disclaimer */}
