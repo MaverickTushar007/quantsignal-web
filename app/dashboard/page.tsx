@@ -785,9 +785,9 @@ export default function Dashboard() {
             {filtered.map(sig => (
           <StaggerItem key={sig.symbol}>
           <div key={sig.symbol} onClick={() => selectAsset(sig)} 
-            style={{ padding: isMobile ? "14px 16px" : "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)", cursor: "pointer", background: selected?.symbol === sig.symbol ? "rgba(0,255,136,0.05)" : "transparent", borderLeft: selected?.symbol === sig.symbol ? "3px solid #00ff88" : "3px solid transparent" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 5 }}>
-              <span style={{ fontSize: isMobile ? 15 : 12, fontWeight: 700, color: selected?.symbol === sig.symbol ? "#00ff88" : "#e2e8f0" }}>{sig.display}</span>
+            style={{ padding: isMobile ? "12px 16px" : "7px 12px", borderBottom: "1px solid rgba(255,255,255,0.04)", cursor: "pointer", background: selected?.symbol === sig.symbol ? "rgba(0,255,136,0.05)" : "transparent", borderLeft: selected?.symbol === sig.symbol ? "3px solid #00ff88" : "3px solid transparent" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3 }}>
+              <span style={{ fontSize: isMobile ? 15 : 11, fontWeight: 700, color: selected?.symbol === sig.symbol ? "#00ff88" : "#e2e8f0" }}>{sig.display}</span>
               <span style={badge(sig.direction)}>{sig.direction}</span>
               {outcomeMap[sig.symbol] && (
                 <span style={{
@@ -983,16 +983,14 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       )}
 
 
-      <div style={{ marginBottom: 20 }}>
-        <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 10 }}>EXECUTION WINDOWS</div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
-          {windows.map(w => (
-            <div key={w.label} style={{ background: w.active ? `${w.color}15` : "rgba(255,255,255,0.02)", border: `1px solid ${w.active ? `${w.color}40` : "rgba(255,255,255,0.06)"}`, borderRadius: 6, padding: "8px 10px" }}>
-              <div style={{ fontSize: 8, fontWeight: 700, color: w.active ? w.color : "rgba(255,255,255,0.3)", marginBottom: 3 }}>{w.active ? "● " : ""}{w.label}</div>
-              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{w.range}</div>
-            </div>
-          ))}
-        </div>
+      <div style={{ marginBottom: 16, display: "flex", alignItems: "center", gap: 6, padding: "6px 10px", background: "rgba(255,255,255,0.02)", borderRadius: 6, border: "1px solid rgba(255,255,255,0.05)" }}>
+        {windows.map((w, i) => (
+          <div key={w.label} style={{ display: "flex", alignItems: "center", gap: 5, flex: 1 }}>
+            {i > 0 && <div style={{ width: 1, height: 10, background: "rgba(255,255,255,0.07)", marginRight: 2 }} />}
+            <div style={{ width: 5, height: 5, borderRadius: "50%", background: w.active ? w.color : "rgba(255,255,255,0.12)", flexShrink: 0 }} />
+            <div style={{ fontSize: 8, fontWeight: w.active ? 700 : 400, color: w.active ? w.color : "rgba(255,255,255,0.25)", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>{w.label}</div>
+          </div>
+        ))}
       </div>
       <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.15em", marginBottom: 10 }}>REALTIME PRICE ACTION</div>
       {!isMobile ? (
