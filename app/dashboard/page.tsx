@@ -1,6 +1,5 @@
 "use client";
 import FeedbackWidget from "../components/FeedbackWidget";
-import OnboardingTour from "../components/OnboardingTour";
 import { usePushNotifications } from "../hooks/usePushNotifications";
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/useAuth";
@@ -1582,7 +1581,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           </div>
         </div>
       </div>
-      <TutorialModal />
+      
       {guardianSignal && (
         <TradeGuardian signal={guardianSignal} onClose={() => setGuardianSignal(null)} />
       )}
