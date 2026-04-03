@@ -115,8 +115,8 @@ function LiquidityCard({ symbol }: { symbol: string }) {
         </div>
       ))}
       </>}
+      <FeedbackWidget />
     </div>
-    <FeedbackWidget />
   );
 }
 
