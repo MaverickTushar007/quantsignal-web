@@ -339,15 +339,53 @@ export default function AgentsPage() {
                       : "↓ Currently losing — open positions may still recover. High-conviction strategies often underperform early."}
                   </div>
 
-                  {/* Recent trades */}
+                  {/* Open Positions */}
+                  {(() => {
+                    const open = (agent.recent_trades || []).filter((t: any) => !t.outcome);
+                    if (!open.length) return null;
+                    return (
+                      <div style={{ marginTop: 14, background: "rgba(0,170,255,0.03)", border: "1px solid rgba(0,170,255,0.1)", borderRadius: 8, padding: "10px 12px" }}>
+                        <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(0,170,255,0.6)", letterSpacing: "0.08em", marginBottom: 8 }}>
+                          ● {open.length} OPEN POSITION{open.length > 1 ? "S" : ""} — RUNNING
+                        </div>
+                        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                          {open.map((t: any) => (
+                            <div key={t.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "5px 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                              <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                                <span style={{ fontSize: 11, fontWeight: 700, color: "#fff" }}>{t.symbol.replace(".NS","")}</span>
+                                <span style={{ fontSize: 9, fontWeight: 700, color: t.direction === "BUY" ? "#00ff88" : "#ff4466", background: t.direction === "BUY" ? "rgba(0,255,136,0.08)" : "rgba(255,68,102,0.08)", padding: "1px 6px", borderRadius: 3 }}>{t.direction}</span>
+                              </div>
+                              <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                                <div style={{ textAlign: "right" }}>
+                                  <div style={{ fontSize: 8, color: "rgba(255,255,255,0.25)" }}>ENTRY</div>
+                                  <div style={{ fontSize: 10, color: "rgba(255,255,255,0.6)" }}>₹{t.entry_price?.toFixed(1)}</div>
+                                </div>
+                                <div style={{ textAlign: "right" }}>
+                                  <div style={{ fontSize: 8, color: "rgba(255,255,255,0.25)" }}>TARGET</div>
+                                  <div style={{ fontSize: 10, color: "#00ff88" }}>₹{t.take_profit?.toFixed(1)}</div>
+                                </div>
+                                <div style={{ textAlign: "right" }}>
+                                  <div style={{ fontSize: 8, color: "rgba(255,255,255,0.25)" }}>STOP</div>
+                                  <div style={{ fontSize: 10, color: "#ff4466" }}>₹{t.stop_loss?.toFixed(1)}</div>
+                                </div>
+                                <span style={{ fontSize: 9, color: "#ffd700", background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.15)", padding: "2px 6px", borderRadius: 3 }}>LIVE</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })()}
+
+                  {/* Recent trades — closed only */}
                   {agent.recent_trades?.length > 0 && (
                     <div style={{ marginTop: 14 }}>
                       <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)",
                         letterSpacing: "0.08em", marginBottom: 8 }}>
-                        RECENT TRADES
+                        LATEST ACTIVITY
                       </div>
                       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        {agent.recent_trades.slice(0, 3).map((t: any) => (
+                        {agent.recent_trades.filter((t: any) => t.outcome).slice(0, 3).map((t: any) => (
                           <div key={t.id} style={{ display: "flex",
                             justifyContent: "space-between", alignItems: "center",
                             padding: "6px 10px",
