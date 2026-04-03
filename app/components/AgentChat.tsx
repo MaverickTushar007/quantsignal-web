@@ -17,13 +17,36 @@ const GLOBAL_MEMORY: { history: Message[]; watchlist: string[] } = {
 };
 
 const SUGGESTED = [
-  "What's the risk on this trade?",
-  "Explain the signal in simple terms",
-  "What could go wrong?",
-  "Give me entry and exit levels",
-  "How does this compare to the market?",
-  "Is now a good time to enter?",
+  "Should I enter this trade now?",
+  "What invalidates this setup?",
+  "Give me the full trade plan",
+  "What's the strongest bearish factor?",
+  "Explain the signal in plain English",
+  "What event risk matters today?",
 ];
+
+const FOLLOWUPS = [
+  "What invalidates this?",
+  "Show key levels",
+  "Compare to market",
+  "What's the downside?",
+  "Turn this into a trade plan",
+];
+
+// Parse verdict card from assistant response
+function parseVerdict(content: string): { action: string; conviction: string; why: string; color: string } | null {
+  const lines = content.split("\n").map(l => l.trim()).filter(Boolean);
+  const actionLine = lines.find(l => /^\*{0,2}(action|verdict|signal|bias)\*{0,2}\s*[:–]/i.test(l));
+  const convLine = lines.find(l => /^\*{0,2}(conviction|confidence|strength)\*{0,2}\s*[:–]/i.test(l));
+  const whyLine = lines.find(l => /^\*{0,2}(why|reason|because|key driver)\*{0,2}\s*[:–]/i.test(l));
+  if (!actionLine) return null;
+  const action = actionLine.replace(/^\*{0,2}\w+\*{0,2}\s*[:–]\s*/i, "").trim().toUpperCase();
+  const conviction = convLine ? convLine.replace(/^\*{0,2}\w+\*{0,2}\s*[:–]\s*/i, "").trim() : "";
+  const why = whyLine ? whyLine.replace(/^\*{0,2}[\w\s]+\*{0,2}\s*[:–]\s*/i, "").trim() : "";
+  const color = action.includes("BUY") || action.includes("LONG") ? "#00ff88"
+    : action.includes("SELL") || action.includes("SHORT") ? "#ff4466" : "#ffd700";
+  return { action, conviction, why, color };
+}
 
 export default function AgentChat({ symbol, userId }: { symbol: string; userId?: string }) {
   const [messages, setMessages] = useState<Message[]>(GLOBAL_MEMORY.history);
@@ -227,14 +250,46 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
 
         {/* Messages */}
         {messages.map((m, i) => (
-          <div key={i} style={{ alignSelf: m.role === "user" ? "flex-end" : "flex-start", maxWidth: m.role === "user" ? "80%" : "92%" }}>
+          <div key={i} style={{ alignSelf: m.role === "user" ? "flex-end" : "flex-start", maxWidth: m.role === "user" ? "80%" : "95%", width: m.role === "assistant" ? "100%" : undefined }}>
             {m.role === "user" ? (
               <div style={{ background: "rgba(0,170,255,0.08)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 8, padding: "8px 14px", color: "#fff", fontSize: 12, lineHeight: 1.6 }}>
                 {m.content}
               </div>
             ) : (
-              <div style={{ color: "rgba(255,255,255,0.85)", fontSize: 12, lineHeight: 1.9, maxWidth: 680, letterSpacing: "0.01em" }}>
-                <ReactMarkdown>{m.content}</ReactMarkdown>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {/* Verdict card — shown if response contains action/verdict */}
+                {(() => {
+                  const verdict = parseVerdict(m.content);
+                  if (!verdict) return null;
+                  return (
+                    <div style={{ background: `${verdict.color}0d`, border: `1px solid ${verdict.color}30`, borderRadius: 8, padding: "10px 14px", display: "flex", alignItems: "center", gap: 12 }}>
+                      <div style={{ fontSize: 16, fontWeight: 800, color: verdict.color, fontFamily: mono, letterSpacing: "0.05em" }}>{verdict.action}</div>
+                      {verdict.conviction && (
+                        <div style={{ fontSize: 9, fontWeight: 700, color: verdict.color, background: `${verdict.color}15`, padding: "2px 8px", borderRadius: 3, letterSpacing: "0.1em" }}>
+                          {verdict.conviction.toUpperCase()}
+                        </div>
+                      )}
+                      {verdict.why && (
+                        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", flex: 1, lineHeight: 1.4 }}>{verdict.why}</div>
+                      )}
+                    </div>
+                  );
+                })()}
+                {/* Tool status strip — shown during/after streaming */}
+                {currentStatus.length > 0 && i === messages.length - 1 && (
+                  <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+                    {currentStatus.map((s, si) => (
+                      <div key={si} style={{ fontSize: 8, color: "rgba(0,255,136,0.6)", background: "rgba(0,255,136,0.05)", border: "1px solid rgba(0,255,136,0.12)", padding: "2px 7px", borderRadius: 3, letterSpacing: "0.08em", display: "flex", alignItems: "center", gap: 4 }}>
+                        <div style={{ width: 3, height: 3, borderRadius: "50%", background: "#00ff88" }} />
+                        {s}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {/* Main response body */}
+                <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 12, lineHeight: 1.9, letterSpacing: "0.01em" }}>
+                  <ReactMarkdown>{m.content}</ReactMarkdown>
+                </div>
               </div>
             )}
           </div>
@@ -262,11 +317,12 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
         {/* Quick suggestions when there are messages */}
         {messages.length > 0 && !loading && (
           <div style={{ display: "flex", gap: 6, marginBottom: 8, overflowX: "auto", paddingBottom: 4 }}>
-            {["What's the downside?", "Compare to sector", "Show key levels"].map(s => (
+            {FOLLOWUPS.map(s => (
               <button key={s} onClick={() => sendMessage(s)} style={{
-                background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: 4, padding: "4px 10px", fontSize: 9, color: "rgba(255,255,255,0.4)",
+                background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)",
+                borderRadius: 4, padding: "4px 10px", fontSize: 9, color: "rgba(255,255,255,0.35)",
                 cursor: "pointer", fontFamily: mono, whiteSpace: "nowrap", flexShrink: 0,
+                transition: "all 0.15s",
               }}>
                 {s}
               </button>
