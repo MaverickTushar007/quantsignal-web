@@ -52,21 +52,29 @@ export default function NewsTab({ symbol }: { symbol: string }) {
         )}
       </div>
 
-      {/* Sentiment bar */}
-      {!loading && total > 0 && (
-        <div style={{ marginBottom: 20 }}>
-          <div style={{ height: 4, borderRadius: 2, background: "rgba(255,255,255,0.06)", overflow: "hidden", display: "flex" }}>
-            <div style={{ width: `${(bullish/total)*100}%`, background: "#00ff88", transition: "width 0.5s" }} />
-            <div style={{ width: `${(neutral/total)*100}%`, background: "rgba(255,255,255,0.15)" }} />
-            <div style={{ width: `${(bearish/total)*100}%`, background: "#ff4466" }} />
+      {/* Sentiment bar — News Bias summary */}
+      {!loading && total > 0 && (() => {
+        const bullPct = Math.round((bullish/total)*100);
+        const bearPct = Math.round((bearish/total)*100);
+        const bias = bullPct >= 50 ? "BULLISH" : bearPct >= 50 ? "BEARISH" : bullPct > bearPct + 10 ? "SLIGHTLY BULLISH" : bearPct > bullPct + 10 ? "RISK-OFF" : "NEUTRAL";
+        const biasColor = bias.includes("BULL") ? "#00ff88" : bias === "RISK-OFF" || bias === "BEARISH" ? "#ff4466" : "#ffd700";
+        return (
+          <div style={{ marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 12px", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: 6 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.08em" }}>NEWS BIAS</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: biasColor, letterSpacing: "0.1em" }}>{bias}</span>
+            </div>
+            <div style={{ display: "flex", gap: 10 }}>
+              {[["BULL", bullish, "#00ff88"], ["NEUT", neutral, "rgba(255,255,255,0.3)"], ["BEAR", bearish, "#ff4466"]].map(([l, n, col]) => (
+                <div key={l as string} style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 11, fontWeight: 700, color: col as string }}>{n as number}</div>
+                  <div style={{ fontSize: 8, color: "rgba(255,255,255,0.2)", letterSpacing: "0.06em" }}>{l}</div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, fontSize: 9, color: "rgba(255,255,255,0.3)" }}>
-            <span style={{ color: "#00ff88" }}>{Math.round((bullish/total)*100)}% BULLISH</span>
-            <span>SENTIMENT DISTRIBUTION</span>
-            <span style={{ color: "#ff4466" }}>{Math.round((bearish/total)*100)}% BEARISH</span>
-          </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Loading */}
       {loading && (
@@ -95,6 +103,7 @@ export default function NewsTab({ symbol }: { symbol: string }) {
           )}
           {news.map((item, i) => {
             const cfg = SENTIMENT_CONFIG[item.sentiment as keyof typeof SENTIMENT_CONFIG] || SENTIMENT_CONFIG.NEUTRAL;
+            const isLead = i === 0;
             return (
               <motion.a
                 key={i}
@@ -105,12 +114,18 @@ export default function NewsTab({ symbol }: { symbol: string }) {
                 whileHover={{ y: -2, boxShadow: `0 4px 20px ${cfg.color}18` }}
                 whileTap={{ scale: 0.98 }}
                 style={{ textDecoration: "none", display: "block",
-                  background: cfg.bg,
-                  border: `1px solid ${cfg.border}`,
+                  background: isLead ? `${cfg.bg}` : cfg.bg,
+                  border: isLead ? `1px solid ${cfg.color}35` : `1px solid ${cfg.border}`,
                   borderRadius: 10,
-                  padding: "12px 14px",
+                  padding: isLead ? "16px 16px" : "12px 14px",
                   cursor: "pointer",
+                  boxShadow: isLead ? `0 0 16px ${cfg.color}08` : "none",
                 }}>
+                {isLead && (
+                  <div style={{ fontSize: 8, fontWeight: 700, color: cfg.color, letterSpacing: "0.12em", marginBottom: 6, opacity: 0.7 }}>
+                    ● LEAD STORY
+                  </div>
+                )}
                 <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
                   {/* Sentiment badge */}
                   <div style={{
