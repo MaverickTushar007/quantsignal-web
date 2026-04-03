@@ -64,11 +64,11 @@ export default function NewsTab({ symbol }: { symbol: string }) {
               <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.08em" }}>NEWS BIAS</span>
               <span style={{ fontSize: 10, fontWeight: 700, color: biasColor, letterSpacing: "0.1em" }}>{bias}</span>
             </div>
-            <div style={{ display: "flex", gap: 10 }}>
-              {[["BULL", bullish, "#00ff88"], ["NEUT", neutral, "rgba(255,255,255,0.3)"], ["BEAR", bearish, "#ff4466"]].map(([l, n, col]) => (
-                <div key={l as string} style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: col as string }}>{n as number}</div>
-                  <div style={{ fontSize: 8, color: "rgba(255,255,255,0.2)", letterSpacing: "0.06em" }}>{l}</div>
+            <div style={{ display: "flex", gap: 14 }}>
+              {[["BULL", bullish, "#00ff88"], ["NEUT", neutral, "rgba(255,255,255,0.4)"], ["BEAR", bearish, "#ff4466"]].map(([l, n, col]) => (
+                <div key={l as string} style={{ textAlign: "center", minWidth: 24 }}>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: col as string, lineHeight: 1 }}>{n as number}</div>
+                  <div style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", letterSpacing: "0.08em", marginTop: 3 }}>{l}</div>
                 </div>
               ))}
             </div>
@@ -122,8 +122,9 @@ export default function NewsTab({ symbol }: { symbol: string }) {
                   boxShadow: isLead ? `0 0 16px ${cfg.color}08` : "none",
                 }}>
                 {isLead && (
-                  <div style={{ fontSize: 8, fontWeight: 700, color: cfg.color, letterSpacing: "0.12em", marginBottom: 6, opacity: 0.7 }}>
-                    ● LEAD STORY
+                  <div style={{ marginBottom: 8 }}>
+                    <div style={{ fontSize: 8, fontWeight: 700, color: cfg.color, letterSpacing: "0.12em", marginBottom: 3, opacity: 0.8 }}>● LEAD STORY</div>
+                    <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", fontStyle: "italic" }}>Macro + geopolitics · near-term volatility driver</div>
                   </div>
                 )}
                 <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
