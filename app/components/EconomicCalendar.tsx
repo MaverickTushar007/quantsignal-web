@@ -203,7 +203,7 @@ export default function EconomicCalendar() {
     return "15 min";
   };
 
-  const EventRow = ({ event, index, isPastEvent }: { event: any; index: number; isPastEvent?: boolean }) => {
+  const EventRow = ({ event, index, isPastEvent = false, isHero = false }: { event: any; index: number; isPastEvent?: boolean; isHero?: boolean }) => {
     const key = isPastEvent ? 1000 + index : index;
     const isExpanded = expanded === key;
     const forecastNum = parseFloat(event.forecast);
