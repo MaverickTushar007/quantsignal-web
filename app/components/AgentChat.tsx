@@ -34,20 +34,28 @@ const FOLLOWUPS = [
 ];
 
 // Parse verdict card from assistant response
-function parseVerdict(content: string): { action: string; conviction: string; why: string; color: string } | null {
-  const lines = content.split("\n").map(l => l.trim()).filter(Boolean);
-  const actionLine = lines.find(l => /^\*{0,2}(action|verdict|signal|bias)\*{0,2}\s*[:–]/i.test(l));
-  const convLine = lines.find(l => /^\*{0,2}(conviction|confidence|strength)\*{0,2}\s*[:–]/i.test(l));
-  const whyLine = lines.find(l => /^\*{0,2}(why|reason|because|key driver)\*{0,2}\s*[:–]/i.test(l));
-  if (!actionLine) return null;
+function parseVerdict(content: string): { action: string; conviction: string; kelly: string; entry: string; target: string; stop: string; color: string } | null {
+  const verdictIdx = content.indexOf("🤖 PERSEUS VERDICT");
+  if (verdictIdx === -1) return null;
+  const block = content.slice(verdictIdx);
+  const lines = block.split("\n").map(l => l.trim()).filter(Boolean);
   const clean = (s: string) => s.replace(/\*+/g, "").replace(/_{1,2}/g, "").trim();
-  const action = clean(actionLine.replace(/^\*{0,2}\w+\*{0,2}\s*[:–]\s*/i, "")).toUpperCase();
-  const convRaw = convLine ? clean(convLine.replace(/^\*{0,2}\w+\*{0,2}\s*[:–]\s*/i, "")) : "";
-  const conviction = convRaw.split(/[–—,.]/)[0].trim().slice(0, 20);
-  const why = whyLine ? clean(whyLine.replace(/^\*{0,2}[\w\s]+\*{0,2}\s*[:–]\s*/i, "")).slice(0, 90) : "";
+  const get = (key: string) => {
+    const l = lines.find(l => l.toLowerCase().startsWith(key.toLowerCase()));
+    return l ? clean(l.replace(new RegExp(`^${key}\\s*[:–]\\s*`, "i"), "")) : "";
+  };
+  const action = get("Action").toUpperCase().split(/[,.(]/)[0].trim();
+  if (!action) return null;
+  const convRaw = get("Conviction");
+  const conviction = convRaw.split(/[–—]/)[0].trim().slice(0, 18).toUpperCase();
   const color = action.includes("BUY") || action.includes("LONG") ? "#00ff88"
     : action.includes("SELL") || action.includes("SHORT") ? "#ff4466" : "#ffd700";
-  return { action, conviction, why, color };
+  return { action, conviction, kelly: get("Kelly-optimal size"), entry: get("Entry zone"), target: get("Target"), stop: get("Stop"), color };
+}
+
+function stripVerdictBlock(content: string): string {
+  const idx = content.indexOf("🤖 PERSEUS VERDICT");
+  return idx === -1 ? content : content.slice(0, idx).trim();
 }
 
 export default function AgentChat({ symbol, userId }: { symbol: string; userId?: string }) {
@@ -264,15 +272,27 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
                   const verdict = parseVerdict(m.content);
                   if (!verdict) return null;
                   return (
-                    <div style={{ background: `${verdict.color}0d`, border: `1px solid ${verdict.color}30`, borderRadius: 8, padding: "10px 14px", display: "flex", alignItems: "center", gap: 12 }}>
-                      <div style={{ fontSize: 16, fontWeight: 800, color: verdict.color, fontFamily: mono, letterSpacing: "0.05em" }}>{verdict.action}</div>
-                      {verdict.conviction && (
-                        <div style={{ fontSize: 9, fontWeight: 700, color: verdict.color, background: `${verdict.color}15`, padding: "2px 8px", borderRadius: 3, letterSpacing: "0.1em" }}>
-                          {verdict.conviction.toUpperCase()}
+                    <div style={{ background: `${verdict.color}08`, border: `1px solid ${verdict.color}35`, borderRadius: 8, padding: "12px 16px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: verdict.entry ? 10 : 0 }}>
+                        <div style={{ fontSize: 18, fontWeight: 800, color: verdict.color, fontFamily: mono, letterSpacing: "0.05em" }}>{verdict.action}</div>
+                        {verdict.conviction && (
+                          <div style={{ fontSize: 9, fontWeight: 700, color: verdict.color, background: `${verdict.color}18`, padding: "2px 8px", borderRadius: 3, letterSpacing: "0.1em" }}>
+                            {verdict.conviction}
+                          </div>
+                        )}
+                        {verdict.kelly && (
+                          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginLeft: "auto" }}>SIZE {verdict.kelly}</div>
+                        )}
+                      </div>
+                      {verdict.entry && (
+                        <div style={{ display: "flex", gap: 16, borderTop: `1px solid ${verdict.color}20`, paddingTop: 8 }}>
+                          {[["ENTRY", verdict.entry], ["TARGET", verdict.target], ["STOP", verdict.stop]].map(([label, val]) => val ? (
+                            <div key={label}>
+                              <div style={{ fontSize: 8, color: "rgba(255,255,255,0.25)", letterSpacing: "0.1em", marginBottom: 2 }}>{label}</div>
+                              <div style={{ fontSize: 11, fontWeight: 700, color: label === "TARGET" ? "#00ff88" : label === "STOP" ? "#ff4466" : "rgba(255,255,255,0.8)" }}>{val}</div>
+                            </div>
+                          ) : null)}
                         </div>
-                      )}
-                      {verdict.why && (
-                        <div style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", flex: 1, lineHeight: 1.4 }}>{verdict.why}</div>
                       )}
                     </div>
                   );
@@ -290,7 +310,7 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
                 )}
                 {/* Main response body */}
                 <div style={{ color: "rgba(255,255,255,0.8)", fontSize: 12, lineHeight: 1.9, letterSpacing: "0.01em" }}>
-                  <ReactMarkdown>{m.content}</ReactMarkdown>
+                  <ReactMarkdown>{stripVerdictBlock(m.content)}</ReactMarkdown>
                 </div>
               </div>
             )}
