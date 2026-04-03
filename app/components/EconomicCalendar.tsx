@@ -19,6 +19,19 @@ function isPast(dateStr: string) {
   try { return new Date(dateStr) < new Date(); } catch { return false; }
 }
 
+function getCountdown(event: any): string {
+  try {
+    const d = new Date(event.date);
+    const diff = d.getTime() - Date.now();
+    if (diff <= 0) return "";
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    if (h > 48) return `${Math.floor(h/24)}d`;
+    if (h > 0) return `${h}h ${m}m`;
+    return `${m}m`;
+  } catch { return ""; }
+}
+
 export default function EconomicCalendar() {
   const [upcoming, setUpcoming] = useState<any[]>([]);
   const [past, setPast] = useState<any[]>([]);
@@ -229,9 +242,19 @@ export default function EconomicCalendar() {
           </div>
 
           <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, marginLeft: 10 }}>
+            {/* Affected asset chips — visible on collapsed row */}
+            {!isExpanded && event.affected_assets?.slice(0,2).map((a: string) => (
+              <span key={a} style={{ fontSize: 8, fontWeight: 700, color: "#00aaff", background: "rgba(0,170,255,0.08)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 3, padding: "1px 5px" }}>{a}</span>
+            ))}
+            {/* Countdown for upcoming events */}
+            {!isPastEvent && (() => { const cd = getCountdown(event); return cd ? (
+              <div style={{ fontSize: 9, fontWeight: 700, color: event.impact === "High" ? "#ff4466" : "#ffd700", background: event.impact === "High" ? "rgba(255,68,102,0.08)" : "rgba(255,215,0,0.06)", border: `1px solid ${event.impact === "High" ? "rgba(255,68,102,0.2)" : "rgba(255,215,0,0.15)"}`, borderRadius: 4, padding: "2px 7px", letterSpacing: "0.05em" }}>
+                IN {cd}
+              </div>
+            ) : null; })()}
             {event.forecast && (
               <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>FORECAST</div>
+                <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>FCST</div>
                 <div style={{ fontSize: 11, fontWeight: 700, color: beatsForecast ? "#00ff88" : "#ffd700" }}>{event.forecast}</div>
               </div>
             )}
@@ -291,20 +314,28 @@ export default function EconomicCalendar() {
         {isExpanded && !isPastEvent && (
           <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 14 }}>
             <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 10 }}>QUANT PLAYBOOK</div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 12 }}>
+            {/* 3-scenario playbook: bullish / inline / bearish */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 12 }}>
               <div style={{ background: "rgba(0,255,136,0.05)", border: "1px solid rgba(0,255,136,0.15)", borderRadius: 8, padding: "10px 12px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-                  <TrendingUp size={10} color="#00ff88" />
-                  <span style={{ fontSize: 9, fontWeight: 700, color: "#00ff88", letterSpacing: "0.08em" }}>BULLISH SCENARIO</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 6 }}>
+                  <TrendingUp size={9} color="#00ff88" />
+                  <span style={{ fontSize: 8, fontWeight: 700, color: "#00ff88", letterSpacing: "0.08em" }}>↑ BEAT</span>
                 </div>
-                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}>{event.bullish_scenario}</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>{event.bullish_scenario || "Better than expected → positive reaction likely."}</div>
+              </div>
+              <div style={{ background: "rgba(255,215,0,0.04)", border: "1px solid rgba(255,215,0,0.12)", borderRadius: 8, padding: "10px 12px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 6 }}>
+                  <span style={{ fontSize: 9 }}>→</span>
+                  <span style={{ fontSize: 8, fontWeight: 700, color: "#ffd700", letterSpacing: "0.08em" }}>IN LINE</span>
+                </div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>{event.inline_scenario || "In-line with forecast → muted reaction, range-bound."}</div>
               </div>
               <div style={{ background: "rgba(255,68,102,0.05)", border: "1px solid rgba(255,68,102,0.15)", borderRadius: 8, padding: "10px 12px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-                  <TrendingDown size={10} color="#ff4466" />
-                  <span style={{ fontSize: 9, fontWeight: 700, color: "#ff4466", letterSpacing: "0.08em" }}>BEARISH SCENARIO</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 6 }}>
+                  <TrendingDown size={9} color="#ff4466" />
+                  <span style={{ fontSize: 8, fontWeight: 700, color: "#ff4466", letterSpacing: "0.08em" }}>↓ MISS</span>
                 </div>
-                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.6)", lineHeight: 1.7 }}>{event.bearish_scenario}</div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.65)", lineHeight: 1.6 }}>{event.bearish_scenario || "Worse than expected → negative reaction likely."}</div>
               </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
