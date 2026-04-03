@@ -337,7 +337,7 @@ export default function AgentsPage() {
                     {agent.total_trades === 0
                       ? "● Scanning live signals — no qualifying trades yet. Trades open automatically when a signal crosses your confidence threshold."
                       : pnl >= 0
-                        ? "↑ Agent is profitable — strategy is working on live signals."
+                        ? (agent.total_trades === 0 ? "● Scanning live signals — no qualifying trades yet. Try lowering confidence threshold if agent stays at 0." : "↑ Agent is profitable — strategy is working on live signals.")
                         : "↓ Currently losing — open positions may still recover. High-conviction strategies often underperform early."}
                   </div>
 
