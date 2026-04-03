@@ -92,9 +92,9 @@ function LiquidityCard({ symbol }: { symbol: string }) {
       </div>
       <div style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 6 }}>LIQUIDATION CLUSTERS</div>
       {data.clusters_above.map((c: any, i: number) => (
-        <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 8px", marginBottom: 3, background: "rgba(0,255,136,0.04)", border: "1px solid rgba(0,255,136,0.1)", borderRadius: 5 }}>
+        <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "3px 4px", marginBottom: 2 }}>
           <span style={{ fontSize: 9, color: "#00ff88" }}>▲ ${c.price.toLocaleString()}</span>
-          <span style={{ fontSize: 8, color: "rgba(255,255,255,0.3)" }}>{c.label}</span>
+          <span style={{ fontSize: 8, color: "rgba(255,255,255,0.25)" }}>{c.label}</span>
         </div>
       ))}
       <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 8px", background: "rgba(255,255,255,0.06)", borderRadius: 5, margin: "4px 0" }}>
@@ -103,9 +103,9 @@ function LiquidityCard({ symbol }: { symbol: string }) {
         <span style={{ fontSize: 8, color: "rgba(255,255,255,0.3)" }}>CURRENT</span>
       </div>
       {data.clusters_below.map((c: any, i: number) => (
-        <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 8px", marginBottom: 3, background: "rgba(255,68,102,0.04)", border: "1px solid rgba(255,68,102,0.1)", borderRadius: 5 }}>
+        <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "3px 4px", marginBottom: 2 }}>
           <span style={{ fontSize: 9, color: "#ff4466" }}>▼ ${c.price.toLocaleString()}</span>
-          <span style={{ fontSize: 8, color: "rgba(255,255,255,0.3)" }}>{c.label}</span>
+          <span style={{ fontSize: 8, color: "rgba(255,255,255,0.25)" }}>{c.label}</span>
         </div>
       ))}
     </div>
@@ -1156,24 +1156,32 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           <span>SELL</span>
         </div>
       </div>
-      <div style={{ marginBottom: 20 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-          <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", letterSpacing: "0.1em" }}>9-FACTOR CONFLUENCE</div>
-          <span style={{ fontSize: 9, fontWeight: 800, color: "#00ff88", background: "rgba(0,255,136,0.1)", padding: "2px 6px", borderRadius: 3 }}>{activeDetail.confluence_score}</span>
-          {activeDetail.volume_ratio >= 1.5 && (
-            <span style={{ fontSize: 9, fontWeight: 800, color: activeDetail.volume_ratio >= 2.5 ? "#ff5252" : "#ffc107", background: activeDetail.volume_ratio >= 2.5 ? "rgba(255,82,82,0.1)" : "rgba(255,193,7,0.1)", padding: "2px 6px", borderRadius: 3, marginLeft: 4 }}>
-              ↑ {activeDetail.volume_ratio}x VOL
-            </span>
-          )}
-        </div>
-        {activeDetail.confluence?.map((c: any) => (
-          <div key={c.name} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 7 }}>
-            <div style={{ width: 5, height: 5, borderRadius: "50%", background: c.signal === "BULLISH" ? "#00ff88" : "#ff4466", flexShrink: 0 }} />
-            <span style={{ flex: 1, color: "rgba(255,255,255,0.5)", fontSize: 9 }}>{c.name}</span>
-            <span style={{ fontSize: 9, fontWeight: 700, color: c.signal === "BULLISH" ? "#00ff88" : "#ff4466" }}>{c.signal === "BULLISH" ? "BULL" : "BEAR"}</span>
+      {(() => {
+        const [showFactors, setShowFactors] = useState(false);
+        return (
+          <div style={{ marginBottom: 20 }}>
+            <div onClick={() => setShowFactors(o => !o)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: showFactors ? 10 : 0, cursor: "pointer" }}>
+              <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>9-FACTOR CONFLUENCE</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                <span style={{ fontSize: 9, fontWeight: 800, color: "#00ff88", background: "rgba(0,255,136,0.1)", padding: "2px 6px", borderRadius: 3 }}>{activeDetail.confluence_score}</span>
+                {activeDetail.volume_ratio >= 1.5 && (
+                  <span style={{ fontSize: 9, fontWeight: 800, color: activeDetail.volume_ratio >= 2.5 ? "#ff5252" : "#ffc107", background: activeDetail.volume_ratio >= 2.5 ? "rgba(255,82,82,0.1)" : "rgba(255,193,7,0.1)", padding: "2px 6px", borderRadius: 3 }}>
+                    ↑ {activeDetail.volume_ratio}x VOL
+                  </span>
+                )}
+                <span style={{ fontSize: 9, color: "rgba(255,255,255,0.2)", marginLeft: 2 }}>{showFactors ? "▲" : "▼"}</span>
+              </div>
+            </div>
+            {showFactors && activeDetail.confluence?.map((c: any) => (
+              <div key={c.name} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <div style={{ width: 4, height: 4, borderRadius: "50%", background: c.signal === "BULLISH" ? "#00ff88" : "#ff4466", flexShrink: 0 }} />
+                <span style={{ flex: 1, color: "rgba(255,255,255,0.4)", fontSize: 9 }}>{c.name}</span>
+                <span style={{ fontSize: 9, fontWeight: 700, color: c.signal === "BULLISH" ? "#00ff88" : "#ff4466" }}>{c.signal === "BULLISH" ? "BULL" : "BEAR"}</span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        );
+      })()}
       <EarningsBadge flag={activeDetail.earnings_flag} />
       <MTFBar mtf={activeDetail?.mtf} direction={activeDetail?.direction} />
       <ShockWarning shock={activeDetail?.shock_warning} />
