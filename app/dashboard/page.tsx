@@ -67,38 +67,38 @@ function LiquidityCard({ symbol }: { symbol: string }) {
   return (
     <div style={{ marginBottom: 20, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12, padding: 14 }}>
       <div onClick={() => setOpen(o => !o)} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: open ? 12 : 0, cursor: "pointer" }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.5)", letterSpacing: "0.1em" }}>⚡ LIQUIDITY LEVELS</span>
+        <span style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", letterSpacing: "0.1em" }}>⚡ LIQUIDITY LEVELS</span>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           {lastUpdated && <span style={{ fontSize: 10, color: "rgba(255,255,255,0.2)" }}>LIVE · {lastUpdated.toLocaleTimeString()}</span>}
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.2)" }}>{open ? "▲" : "▼"}</span>
+          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.2)" }}>{open ? "▲" : "▼"}</span>
         </div>
       </div>
       {open && <>
       <div style={{ background: `${data.bias_color}18`, border: `1px solid ${data.bias_color}30`, borderRadius: 6, padding: "7px 10px", marginBottom: 10 }}>
         <div style={{ fontSize: 10, fontWeight: 700, color: data.bias_color, letterSpacing: "0.08em", marginBottom: 2 }}>{data.bias.replace(/_/g, " ")}</div>
-        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", lineHeight: 1.5 }}>{data.bias_desc}</div>
+        <div style={{ fontSize: 9, color: "rgba(255,255,255,0.4)", lineHeight: 1.5 }}>{data.bias_desc}</div>
       </div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: 6, marginBottom: 10 }}>
         <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 6, padding: "7px 8px" }}>
           <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginBottom: 3 }}>OPEN INTEREST</div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "#fff" }}>{data.open_interest.toLocaleString()}</div>
+          <div style={{ fontSize: 9, fontWeight: 700, color: "#fff" }}>{data.open_interest.toLocaleString()}</div>
           <div style={{ fontSize: 10, fontWeight: 700, color: oiColor }}>{data.oi_change_24h_pct > 0 ? "+" : ""}{data.oi_change_24h_pct}% 24h</div>
         </div>
         <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 6, padding: "7px 8px" }}>
           <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginBottom: 3 }}>FUNDING</div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: data.funding_color }}>{data.funding_rate.toFixed(4)}%</div>
+          <div style={{ fontSize: 9, fontWeight: 700, color: data.funding_color }}>{data.funding_rate.toFixed(4)}%</div>
           <div style={{ fontSize: 10, color: data.funding_color }}>{data.funding_trend.replace(/_/g, " ")}</div>
         </div>
         <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 6, padding: "7px 8px" }}>
           <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginBottom: 3 }}>L/S RATIO</div>
-          <div style={{ fontSize: 11, fontWeight: 700, color: data.long_ratio > 60 ? "#ff4466" : data.long_ratio < 40 ? "#00ff88" : "#fff" }}>{data.long_ratio}% L</div>
+          <div style={{ fontSize: 9, fontWeight: 700, color: data.long_ratio > 60 ? "#ff4466" : data.long_ratio < 40 ? "#00ff88" : "#fff" }}>{data.long_ratio}% L</div>
           <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>{data.short_ratio}% SHORT</div>
         </div>
       </div>
       <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 6 }}>LIQUIDATION CLUSTERS</div>
       {data.clusters_above.map((c: any, i: number) => (
         <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "3px 4px", marginBottom: 2 }}>
-          <span style={{ fontSize: 11, color: "#00ff88" }}>▲ ${c.price.toLocaleString()}</span>
+          <span style={{ fontSize: 9, color: "#00ff88" }}>▲ ${c.price.toLocaleString()}</span>
           <span style={{ fontSize: 10, color: "rgba(255,255,255,0.25)" }}>{c.label}</span>
         </div>
       ))}
@@ -109,7 +109,7 @@ function LiquidityCard({ symbol }: { symbol: string }) {
       </div>
       {data.clusters_below.map((c: any, i: number) => (
         <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "3px 4px", marginBottom: 2 }}>
-          <span style={{ fontSize: 11, color: "#ff4466" }}>▼ ${c.price.toLocaleString()}</span>
+          <span style={{ fontSize: 9, color: "#ff4466" }}>▼ ${c.price.toLocaleString()}</span>
           <span style={{ fontSize: 10, color: "rgba(255,255,255,0.25)" }}>{c.label}</span>
         </div>
       ))}
@@ -169,8 +169,8 @@ function EstClock() {
     <div style={{ position: "relative" }}>
       <div onClick={() => setShowPicker(p => !p)} style={{ display: "flex", alignItems: "center", gap: 5, cursor: "pointer", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 6, padding: "3px 8px" }}>
         <span style={{ fontSize: 11 }}>{tz.flag}</span>
-        <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", fontFamily: "'IBM Plex Mono', monospace" }}>{time}</span>
-        <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>{tz.label}</span>
+        <span style={{ fontSize: 9, fontWeight: 700, color: "#fff", fontFamily: "'IBM Plex Mono', monospace" }}>{time}</span>
+        <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)" }}>{tz.label}</span>
         <span style={{ fontSize: 10, color: "rgba(255,255,255,0.2)" }}>▼</span>
       </div>
       {showPicker && (
@@ -178,7 +178,7 @@ function EstClock() {
           {TIMEZONES.map((t, i) => (
             <div key={t.label} onClick={() => { setTzIndex(i); setShowPicker(false); }} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 12px", cursor: "pointer", background: i === tzIndex ? "rgba(0,255,136,0.08)" : "transparent", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
               <span style={{ fontSize: 13 }}>{t.flag}</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: i === tzIndex ? "#00ff88" : "#fff" }}>{t.label}</span>
+              <span style={{ fontSize: 9, fontWeight: 700, color: i === tzIndex ? "#00ff88" : "#fff" }}>{t.label}</span>
               <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginLeft: "auto" }}>{t.offset >= 0 ? "+" : ""}{t.offset}</span>
             </div>
           ))}
@@ -286,7 +286,7 @@ function ShockWarning({ shock }: { shock?: any }) {
       <div>
         <div style={{ fontSize: 10, fontWeight: 800, color: '#ffa500',
           letterSpacing: '0.1em', marginBottom: 4 }}>SECTOR SHOCK DETECTED</div>
-        <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.75)',
+        <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.75)',
           lineHeight: 1.5 }}>{shock.warning}</div>
         <div style={{ fontSize: 10, color: 'rgba(255,140,0,0.7)',
           marginTop: 4, fontWeight: 600 }}>
@@ -313,7 +313,7 @@ function MTFBar({ mtf, direction }: { mtf?: any, direction?: string }) {
     <div style={{ marginBottom: 14 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
         <span style={{ fontSize: 10, fontWeight: 800, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em' }}>MTF ALIGNMENT</span>
-        <span style={{ fontSize: 11, fontWeight: 700, color: barColor }}>{score}/4 timeframes bullish</span>
+        <span style={{ fontSize: 9, fontWeight: 700, color: barColor }}>{score}/4 timeframes bullish</span>
       </div>
       <div style={{ display: 'flex', gap: 3, marginBottom: 8 }}>
         {[0,1,2,3].map(i => (
@@ -457,14 +457,14 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
   const data = { total: trades.length, wins: wins.length, losses: losses.length, winRate, avgPnl, avgWin, avgLoss, buckets, byDir, symRecent, symTotal: sym.length, evStats, briefing };
 
   if (!trades.length) return (
-    <div style={{ padding: 20, textAlign: "center", color: "rgba(255,255,255,0.3)", fontSize: 11, fontFamily: mono }}>
+    <div style={{ padding: 20, textAlign: "center", color: "rgba(255,255,255,0.3)", fontSize: 9, fontFamily: mono }}>
       Loading track record...
     </div>
   );
 
 
   if (!data) return (
-    <div style={{ padding: 20, color: "#ff4466", fontSize: 11, fontFamily: mono }}>Failed to load</div>
+    <div style={{ padding: 20, color: "#ff4466", fontSize: 9, fontFamily: mono }}>Failed to load</div>
   );
 
   const statBox = (label: string, value: string, color: string) => (
@@ -478,7 +478,7 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
     <div style={{ padding: "14px 16px", fontFamily: mono, overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}>
 
       {/* Header */}
-      <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.12em", marginBottom: 12 }}>
+      <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.12em", marginBottom: 12 }}>
         SYSTEM TRACK RECORD — {data.total} TRADES
       </div>
 
@@ -489,7 +489,7 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
         {statBox("AVG WIN", `+${data.avgWin.toFixed(2)}%`, "#00ff88")}
         {statBox("AVG LOSS", `${data.avgLoss.toFixed(2)}%`, "#ff4466")}
       </div>
-      <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", marginBottom: 14, paddingLeft: 2 }}>
+      <div style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", marginBottom: 14, paddingLeft: 2 }}>
         {(data.winRate/100 * data.avgWin + (1-data.winRate/100) * data.avgLoss) >= 0
           ? "✓ Positive expectancy — system is profitable per trade on average"
           : "⚠ Negative expectancy — system needs more data or recalibration"}
@@ -501,7 +501,7 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
       </div>
 
       {/* By Direction */}
-      <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>BY DIRECTION</div>
+      <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>BY DIRECTION</div>
       <div style={{ display: "flex", gap: 8, marginBottom: 18 }}>
         {["BUY","SELL"].map(dir => {
           const d = data.byDir[dir];
@@ -523,7 +523,7 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
       </div>
 
       {/* By Probability Bucket */}
-      <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>WIN RATE BY PROBABILITY</div>
+      <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>WIN RATE BY PROBABILITY</div>
       <div style={{ marginBottom: 18 }}>
         {Object.entries(data.buckets).map(([label, b]: [string, any]) => {
           const total = b.tp + b.sl;
@@ -533,11 +533,11 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
           return (
             <div key={label} style={{ marginBottom: 8 }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.5)" }}>PROB {label}</span>
+                <span style={{ fontSize: 9, color: "rgba(255,255,255,0.5)" }}>PROB {label}</span>
                 <div style={{ display: "flex", gap: 10 }}>
-                  <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{total} trades</span>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: avgP >= 0 ? "#00ff88" : "#ff4466" }}>{avgP >= 0 ? "+" : ""}{avgP.toFixed(2)}%</span>
-                  <span style={{ fontSize: 11, fontWeight: 800, color: wr >= 50 ? "#00ff88" : "#ffd700" }}>{wr.toFixed(0)}% WR</span>
+                  <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{total} trades</span>
+                  <span style={{ fontSize: 9, fontWeight: 700, color: avgP >= 0 ? "#00ff88" : "#ff4466" }}>{avgP >= 0 ? "+" : ""}{avgP.toFixed(2)}%</span>
+                  <span style={{ fontSize: 9, fontWeight: 800, color: wr >= 50 ? "#00ff88" : "#ffd700" }}>{wr.toFixed(0)}% WR</span>
                 </div>
               </div>
               <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
@@ -549,7 +549,7 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
       </div>
 
       {/* Regime Performance Panel */}
-      <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>REGIME PERFORMANCE</div>
+      <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>REGIME PERFORMANCE</div>
       <div style={{ marginBottom: 18 }}>
         {data.evStats && data.evStats.map((ev: any, i: number) => {
           if (ev.ev === null) return null;
@@ -557,14 +557,14 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
           return (
             <div key={i} style={{ marginBottom: 8 }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.5)" }}>
+                <span style={{ fontSize: 9, color: "rgba(255,255,255,0.5)" }}>
                   <span style={{ color: ev.direction === "BUY" ? "#00ff88" : "#ff4466", fontWeight: 700 }}>{ev.direction}</span>
                   {" in "}{ev.regime.toUpperCase()}
                 </span>
                 <div style={{ display: "flex", gap: 10 }}>
-                  <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{ev.total_trades} trades</span>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: ev.ev >= 0 ? "#00ff88" : "#ff4466" }}>EV {ev.ev >= 0 ? "+" : ""}{ev.ev?.toFixed(2)}%</span>
-                  <span style={{ fontSize: 11, fontWeight: 800, color: wr >= 50 ? "#00ff88" : wr >= 35 ? "#ffd700" : "#ff4466" }}>{wr.toFixed(0)}% WR</span>
+                  <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{ev.total_trades} trades</span>
+                  <span style={{ fontSize: 9, fontWeight: 700, color: ev.ev >= 0 ? "#00ff88" : "#ff4466" }}>EV {ev.ev >= 0 ? "+" : ""}{ev.ev?.toFixed(2)}%</span>
+                  <span style={{ fontSize: 9, fontWeight: 800, color: wr >= 50 ? "#00ff88" : wr >= 35 ? "#ffd700" : "#ff4466" }}>{wr.toFixed(0)}% WR</span>
                 </div>
               </div>
               <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
@@ -574,7 +574,7 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
           );
         })}
         {(!data.evStats || data.evStats.length === 0) && (
-          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>No regime data yet</div>
+          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>No regime data yet</div>
         )}
       </div>
 
@@ -583,7 +583,7 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
       {/* This symbol's recent trades */}
       {data.symRecent.length > 0 && (
         <>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>
+          <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", marginBottom: 8 }}>
             {symbol} — LAST {data.symRecent.length} TRADES
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -593,7 +593,7 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
                   <span style={{ fontSize: 10, color: t.outcome === "TP_HIT" ? "#00ff88" : "#ff4466", fontWeight: 700 }}>
                     {t.outcome === "TP_HIT" ? "✓TP" : "✗SL"}
                   </span>
-                  <span style={{ fontSize: 11, color: t.direction === "BUY" ? "#00ff88" : "#ff4466", fontWeight: 700 }}>{t.direction}</span>
+                  <span style={{ fontSize: 9, color: t.direction === "BUY" ? "#00ff88" : "#ff4466", fontWeight: 700 }}>{t.direction}</span>
                   <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)" }}>{t.date}</span>
                 </div>
                 <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
@@ -606,12 +606,12 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
             ))}
           </div>
           {data.symTotal === 0 && (
-            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", textAlign: "center", padding: 12 }}>No trades for {symbol} yet</div>
+            <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", textAlign: "center", padding: 12 }}>No trades for {symbol} yet</div>
           )}
         </>
       )}
       {data.symRecent.length === 0 && (
-        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", textAlign: "center", padding: "12px 0" }}>
+        <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", textAlign: "center", padding: "12px 0" }}>
           No trades recorded for {symbol} yet — system stats above are across all {data.total} trades
         </div>
       )}
@@ -713,7 +713,7 @@ export default function Dashboard() {
     <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
       <div style={{ padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         <input value={search} onChange={e => setSearch(e.target.value)} placeholder="SEARCH..."
-          style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 4, padding: "6px 10px", color: "#e2e8f0", fontSize: 11, outline: "none", fontFamily: "inherit", boxSizing: "border-box" }} />
+          style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 4, padding: "6px 10px", color: "#e2e8f0", fontSize: 9, outline: "none", fontFamily: "inherit", boxSizing: "border-box" }} />
       </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 4, padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
         {TYPE_FILTERS.map(t => (
@@ -752,7 +752,7 @@ export default function Dashboard() {
                     border: `1px solid ${selected?.symbol === sig.symbol ? "rgba(0,255,136,0.3)" : "rgba(255,255,255,0.08)"}`,
                     borderRadius: 4, padding: "5px 4px", cursor: "pointer", fontFamily: "inherit", textAlign: "center"
                   }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: "#e2e8f0", marginBottom: 2 }}>{sig.display}</div>
+                    <div style={{ fontSize: 9, fontWeight: 700, color: "#e2e8f0", marginBottom: 2 }}>{sig.display}</div>
                     <div style={{ fontSize: 10, fontWeight: 800, color: sig.direction === "BUY" ? "#00ff88" : "#ff4466" }}>{sig.direction}</div>
                     <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>{(sig.probability * 100).toFixed(0)}%</div>
                   </button>
@@ -770,7 +770,7 @@ export default function Dashboard() {
               100% { opacity: 0.15; }
             }
           `}</style>
-          <div style={{ padding: "6px 12px", fontSize: 11, color: "rgba(0,255,136,0.5)", letterSpacing: "0.1em", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+          <div style={{ padding: "6px 12px", fontSize: 9, color: "rgba(0,255,136,0.5)", letterSpacing: "0.1em", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
             ⟳ LOADING SIGNALS...
           </div>
           {[...Array(15)].map((_, i) => (
@@ -916,9 +916,9 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             onChange={e => { setReplayDate(e.target.value); fetchReplay(e.target.value); }}
             style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 6, padding: "4px 10px", fontSize: 10, color: "#ffd700", outline: "none", fontFamily: "inherit" }} />
         )}
-        {replayLoading && <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>Loading...</span>}
+        {replayLoading && <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>Loading...</span>}
         {replayMode && replayData && (
-          <span style={{ fontSize: 11, fontWeight: 700, color: replayData.was_correct ? "#00ff88" : "#ff4466", marginLeft: "auto" }}>
+          <span style={{ fontSize: 9, fontWeight: 700, color: replayData.was_correct ? "#00ff88" : "#ff4466", marginLeft: "auto" }}>
             {replayData.was_correct ? "✓ CORRECT" : "✗ WRONG"} · 5d return: {replayData.actual_return_5d > 0 ? "+" : ""}{replayData.actual_return_5d}%
           </span>
         )}
@@ -927,9 +927,9 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       {/* Historical badge */}
       {replayMode && replayData && (
         <div style={{ background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.2)", borderRadius: 6, padding: "6px 12px", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#ffd700" }}>⏪ HISTORICAL SIGNAL — {replayDate}</span>
-          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>Price was {formatPrice(replayData.current_price, selected?.type, selected?.symbol)} · 5d later: {formatPrice(replayData.actual_price_5d, selected?.type, selected?.symbol)}</span>
-          <button onClick={fetchReplayAI} style={{ marginLeft: "auto", background: "rgba(255,215,0,0.15)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 5, padding: "3px 10px", fontSize: 11, fontWeight: 700, color: "#ffd700", cursor: "pointer", fontFamily: "inherit" }}>🤖 Explain</button>
+          <span style={{ fontSize: 9, fontWeight: 700, color: "#ffd700" }}>⏪ HISTORICAL SIGNAL — {replayDate}</span>
+          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)" }}>Price was {formatPrice(replayData.current_price, selected?.type, selected?.symbol)} · 5d later: {formatPrice(replayData.actual_price_5d, selected?.type, selected?.symbol)}</span>
+          <button onClick={fetchReplayAI} style={{ marginLeft: "auto", background: "rgba(255,215,0,0.15)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 5, padding: "3px 10px", fontSize: 9, fontWeight: 700, color: "#ffd700", cursor: "pointer", fontFamily: "inherit" }}>🤖 Explain</button>
         </div>
       )}
 
@@ -958,8 +958,8 @@ Give a punchy, honest explanation of why the model made this call, what the mark
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <div style={{ width: 28, height: 28, borderRadius: 8, background: "rgba(255,215,0,0.1)", border: "1px solid rgba(255,215,0,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🤖</div>
                 <div>
-                  <div style={{ fontSize: 11, fontWeight: 700, color: "#ffd700", letterSpacing: "0.08em" }}>AI REPLAY ANALYSIS</div>
-                  <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{replayData.symbol} · {replayDate} · {replayData.direction}</div>
+                  <div style={{ fontSize: 9, fontWeight: 700, color: "#ffd700", letterSpacing: "0.08em" }}>AI REPLAY ANALYSIS</div>
+                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{replayData.symbol} · {replayDate} · {replayData.direction}</div>
                 </div>
               </div>
               <button onClick={() => setShowReplayAI(false)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer", fontSize: 16, padding: 4 }}>✕</button>
@@ -979,10 +979,10 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             </div>
             {!replayAILoading && replayAIText && (
               <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: 11, color: replayData.was_correct ? "#00ff88" : "#ff4466", fontWeight: 700 }}>
+                <span style={{ fontSize: 9, color: replayData.was_correct ? "#00ff88" : "#ff4466", fontWeight: 700 }}>
                   {replayData.was_correct ? "✓ SIGNAL WAS CORRECT" : "✗ SIGNAL WAS WRONG"} · {replayData.actual_return_5d > 0 ? "+" : ""}{replayData.actual_return_5d}% in 5 days
                 </span>
-                <button onClick={() => setShowReplayAI(false)} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, padding: "4px 12px", fontSize: 11, color: "rgba(255,255,255,0.5)", cursor: "pointer", fontFamily: "inherit" }}>Close</button>
+                <button onClick={() => setShowReplayAI(false)} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, padding: "4px 12px", fontSize: 9, color: "rgba(255,255,255,0.5)", cursor: "pointer", fontFamily: "inherit" }}>Close</button>
               </div>
             )}
           </div>
@@ -1033,7 +1033,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
   const SidebarContent = () => (
     <div>
       <div style={{ marginBottom: 20 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.5)", marginBottom: 10, letterSpacing: "0.1em" }}>TRADE LEVELS</div>
+        <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", marginBottom: 10, letterSpacing: "0.1em" }}>TRADE LEVELS</div>
         {[
           { label: "TP", value: activeDetail.take_profit, color: "#00ff88", pct: "+" + Math.abs(((activeDetail.take_profit - activeDetail.current_price) / activeDetail.current_price) * 100).toFixed(1) },
           { label: "ENTRY", value: activeDetail.current_price, color: "#fff", pct: "0.0" },
@@ -1041,8 +1041,8 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         ].map(l => (
           <div key={l.label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", background: "rgba(255,255,255,0.02)", borderRadius: 5, border: "1px solid rgba(255,255,255,0.05)", marginBottom: 6 }}>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 800, color: l.color }}>{l.label}</div>
-              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", marginTop: 2 }}>{l.pct !== "0.0" ? `${l.pct}%` : "ENTRY"}</div>
+              <div style={{ fontSize: 9, fontWeight: 800, color: l.color }}>{l.label}</div>
+              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", marginTop: 2 }}>{l.pct !== "0.0" ? `${l.pct}%` : "ENTRY"}</div>
             </div>
             <span style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>${l.value?.toLocaleString()}</span>
           </div>
@@ -1086,7 +1086,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
               {activeDetail.context_text}
             </div>
             {activeDetail.conflict_detected && (
-              <div style={{ marginTop: 6, fontSize: 11, color: "#ffd700", display: "flex", alignItems: "center", gap: 4 }}>
+              <div style={{ marginTop: 6, fontSize: 9, color: "#ffd700", display: "flex", alignItems: "center", gap: 4 }}>
                 ⚠️ {activeDetail.conflict_reason || "Signal conflict detected — trade with caution"}
               </div>
             )}
@@ -1097,7 +1097,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         {activeDetail.regime && (
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
             <div style={{
-              fontSize: 11, fontWeight: 700, letterSpacing: "0.1em",
+              fontSize: 9, fontWeight: 700, letterSpacing: "0.1em",
               padding: "3px 8px", borderRadius: 4,
               background: activeDetail.regime === "bull" ? "rgba(0,255,136,0.1)" : activeDetail.regime === "bear" ? "rgba(255,68,102,0.1)" : "rgba(255,255,255,0.06)",
               border: `1px solid ${activeDetail.regime === "bull" ? "rgba(0,255,136,0.3)" : activeDetail.regime === "bear" ? "rgba(255,68,102,0.3)" : "rgba(255,255,255,0.1)"}`,
@@ -1136,28 +1136,28 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
         {/* Energy Implication */}
         {activeDetail.energy?.implication && activeDetail.energy.state !== "neutral" && activeDetail.energy.state !== "unknown" && (
-          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", fontStyle: "italic", marginBottom: 10, padding: "6px 8px", background: "rgba(255,255,255,0.02)", borderRadius: 4, borderLeft: `2px solid ${activeDetail.energy.state === "releasing" ? "rgba(0,255,136,0.3)" : activeDetail.energy.state === "coiled" ? "rgba(0,170,255,0.3)" : "rgba(255,68,102,0.3)"}` }}>
+          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", fontStyle: "italic", marginBottom: 10, padding: "6px 8px", background: "rgba(255,255,255,0.02)", borderRadius: 4, borderLeft: `2px solid ${activeDetail.energy.state === "releasing" ? "rgba(0,255,136,0.3)" : activeDetail.energy.state === "coiled" ? "rgba(0,170,255,0.3)" : "rgba(255,68,102,0.3)"}` }}>
             ⚡ {activeDetail.energy.implication}
           </div>
         )}
 
         {/* Signal Bias */}
         {activeDetail.signal_bias && (
-          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.35)", fontStyle: "italic", marginBottom: 10, padding: "6px 8px", background: "rgba(255,255,255,0.02)", borderRadius: 4, borderLeft: "2px solid rgba(255,215,0,0.3)" }}>
+          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", fontStyle: "italic", marginBottom: 10, padding: "6px 8px", background: "rgba(255,255,255,0.02)", borderRadius: 4, borderLeft: "2px solid rgba(255,215,0,0.3)" }}>
             {activeDetail.signal_bias}
           </div>
         )}
 
         {/* Final probability bar */}
         <div style={{ height: 20, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden", display: "flex", marginBottom: 6 }}>
-          <div style={{ width: `${activeDetail.probability * 100}%`, background: "linear-gradient(90deg, #00ff88, #00cc66)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, color: "#000" }}>
+          <div style={{ width: `${activeDetail.probability * 100}%`, background: "linear-gradient(90deg, #00ff88, #00cc66)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: "#000" }}>
             {(activeDetail.probability * 100).toFixed(0)}%
           </div>
-          <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#ff4466", fontWeight: 700 }}>
+          <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, color: "#ff4466", fontWeight: 700 }}>
             {((1 - activeDetail.probability) * 100).toFixed(0)}%
           </div>
         </div>
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, color: "rgba(255,255,255,0.3)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: "rgba(255,255,255,0.3)" }}>
           <span>BUY</span>
           <span>Agreement: {(activeDetail.model_agreement * 100).toFixed(0)}%</span>
           <span>SELL</span>
@@ -1165,22 +1165,22 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       </div>
       <div style={{ marginBottom: 20 }}>
             <div onClick={() => setShowFactors(o => !o)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: showFactors ? 10 : 0, cursor: "pointer" }}>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>9-FACTOR CONFLUENCE</div>
+              <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>9-FACTOR CONFLUENCE</div>
               <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "#00ff88", background: "rgba(0,255,136,0.1)", padding: "2px 6px", borderRadius: 3 }}>{activeDetail.confluence_score}</span>
+                <span style={{ fontSize: 9, fontWeight: 800, color: "#00ff88", background: "rgba(0,255,136,0.1)", padding: "2px 6px", borderRadius: 3 }}>{activeDetail.confluence_score}</span>
                 {activeDetail.volume_ratio >= 1.5 && (
-                  <span style={{ fontSize: 11, fontWeight: 800, color: activeDetail.volume_ratio >= 2.5 ? "#ff5252" : "#ffc107", background: activeDetail.volume_ratio >= 2.5 ? "rgba(255,82,82,0.1)" : "rgba(255,193,7,0.1)", padding: "2px 6px", borderRadius: 3 }}>
+                  <span style={{ fontSize: 9, fontWeight: 800, color: activeDetail.volume_ratio >= 2.5 ? "#ff5252" : "#ffc107", background: activeDetail.volume_ratio >= 2.5 ? "rgba(255,82,82,0.1)" : "rgba(255,193,7,0.1)", padding: "2px 6px", borderRadius: 3 }}>
                     ↑ {activeDetail.volume_ratio}x VOL
                   </span>
                 )}
-                <span style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", marginLeft: 2 }}>{showFactors ? "▲" : "▼"}</span>
+                <span style={{ fontSize: 9, color: "rgba(255,255,255,0.2)", marginLeft: 2 }}>{showFactors ? "▲" : "▼"}</span>
               </div>
             </div>
             {showFactors && activeDetail.confluence?.map((c: any) => (
               <div key={c.name} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
                 <div style={{ width: 4, height: 4, borderRadius: "50%", background: c.signal === "BULLISH" ? "#00ff88" : "#ff4466", flexShrink: 0 }} />
                 <span style={{ flex: 1, color: "rgba(255,255,255,0.4)", fontSize: 9 }}>{c.name}</span>
-                <span style={{ fontSize: 11, fontWeight: 700, color: c.signal === "BULLISH" ? "#00ff88" : "#ff4466" }}>{c.signal === "BULLISH" ? "BULL" : "BEAR"}</span>
+                <span style={{ fontSize: 9, fontWeight: 700, color: c.signal === "BULLISH" ? "#00ff88" : "#ff4466" }}>{c.signal === "BULLISH" ? "BULL" : "BEAR"}</span>
               </div>
             ))}
           </div>
@@ -1203,7 +1203,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       {activeDetail && (
         <div style={{ background: "rgba(0,255,136,0.04)", border: "1px solid rgba(0,255,136,0.12)", borderRadius: 6, padding: "10px 14px", marginBottom: 16 }}>
           <div style={{ fontSize: 10, fontWeight: 800, color: "rgba(0,255,136,0.5)", letterSpacing: "0.12em", marginBottom: 6 }}>IN PLAIN ENGLISH</div>
-          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.75)", lineHeight: 1.7 }}>
+          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.75)", lineHeight: 1.7 }}>
             {generateOneLiner(activeDetail)}
           </div>
         </div>
@@ -1258,7 +1258,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                   <span style={{ fontSize: 20 }}>{selected.icon}</span>
                   <div>
                     <div style={{ fontSize: 14, fontWeight: 800, color: "#fff" }}>{selected.display}</div>
-                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{selected.name}</div>
+                    <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{selected.name}</div>
                   </div>
                 </div>
                 <div style={{ textAlign: "right" }}>
@@ -1286,8 +1286,8 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         {canInstall && (
           <div style={{ background: "rgba(0,255,136,0.08)", borderTop: "1px solid rgba(0,255,136,0.2)", padding: "8px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: "#00ff88" }}>📲 Install QuantSignal</div>
-              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>Add to home screen for instant access</div>
+              <div style={{ fontSize: 9, fontWeight: 700, color: "#00ff88" }}>📲 Install QuantSignal</div>
+              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.4)" }}>Add to home screen for instant access</div>
             </div>
             <button onClick={install} style={{ background: "#00ff88", border: "none", borderRadius: 6, padding: "6px 12px", fontSize: 10, fontWeight: 800, color: "#000", cursor: "pointer", fontFamily: "inherit" }}>
               INSTALL
@@ -1301,7 +1301,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           {showMobileMenu && (
             <div style={{ position: "fixed", inset: 0, zIndex: 100 }} onClick={() => setShowMobileMenu(false)}>
               <div style={{ position: "absolute", bottom: 60, left: 0, right: 0, background: "#0e0f14", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px 16px 0 0", padding: "16px 0" }} onClick={e => e.stopPropagation()}>
-                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.2)", letterSpacing: "0.15em", padding: "0 20px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)", marginBottom: 8 }}>MORE</div>
+                <div style={{ fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: "0.15em", padding: "0 20px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)", marginBottom: 8 }}>MORE</div>
                 {[
                   { href: "/guardian", icon: "🛡️", label: "Trade Guardian", desc: "Risk check before entering" },
                   { href: "/performance", icon: "📈", label: "Performance", desc: "90-day signal track record" },
@@ -1376,7 +1376,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             {activeWindow ? `● ${activeWindow.label}` : "● MARKET CLOSED"}
           </span>
         </div>
-        <div style={{ display: "flex", gap: 24, fontSize: 11, alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 24, fontSize: 9, alignItems: "center" }}>
           <EstClock />
           {mood && <>
             <span>SIGNALS <span style={{ color: "#00ff88", fontWeight: 600 }}>86</span></span>
@@ -1396,7 +1396,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
         {/* Left panel — Analyst Sidebar */}
         <SmoothScroll style={{ width: 300, borderRight: "1px solid rgba(255,255,255,0.06)", background: "#0a0a0c", padding: "16px", flexShrink: 0, scrollbarWidth: "thin" as const }}>
-          {selected && detail ? <SidebarContent /> : <div style={{ color: "rgba(255,255,255,0.1)", fontSize: 11, marginTop: 60, textAlign: "center", letterSpacing: "0.12em" }}>SELECT AN ASSET</div>}
+          {selected && detail ? <SidebarContent /> : <div style={{ color: "rgba(255,255,255,0.1)", fontSize: 9, marginTop: 60, textAlign: "center", letterSpacing: "0.12em" }}>SELECT AN ASSET</div>}
         </SmoothScroll>
 
         {/* Center panel */}
@@ -1417,8 +1417,8 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                     <span style={{ fontSize: 12, color: "rgba(255,255,255,0.3)" }}>{selected.name}</span>
                   </div>
                   <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
-                    <span style={{ fontSize: 11, color: "#00ff88", background: "rgba(0,255,136,0.1)", padding: "2px 6px", borderRadius: 3, fontWeight: 700 }}>LIVE FEED</span>
-                    <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>{selected.type}</span>
+                    <span style={{ fontSize: 9, color: "#00ff88", background: "rgba(0,255,136,0.1)", padding: "2px 6px", borderRadius: 3, fontWeight: 700 }}>LIVE FEED</span>
+                    <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{selected.type}</span>
                   </div>
                 </div>
               </div>
@@ -1468,7 +1468,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                           <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(0,170,255,0.7)", letterSpacing: "0.12em", flex: 1 }}>
                             MORNING BRIEFING · {briefing.date}
                           </span>
-                          <span style={{ fontSize: 11, color: "rgba(255,255,255,0.25)", transform: briefingOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", display: "inline-block" }}>▼</span>
+                          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", transform: briefingOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform 0.2s", display: "inline-block" }}>▼</span>
                         </div>
                         {briefingOpen && (
                           <div style={{
