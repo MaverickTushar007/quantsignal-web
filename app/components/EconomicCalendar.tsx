@@ -225,7 +225,7 @@ export default function EconomicCalendar() {
           padding: isHero ? "18px 20px" : "14px 16px",
           cursor: "pointer",
           opacity: isPastEvent ? 0.75 : 1,
-          boxShadow: isHero && !isPastEvent ? "0 0 24px rgba(0,255,136,0.06)" : "none",
+          boxShadow: isHero && !isPastEvent ? "0 0 16px rgba(0,255,136,0.04)" : "none",
         }}>
 
         {/* Event header */}
@@ -252,27 +252,33 @@ export default function EconomicCalendar() {
             </div>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0, marginLeft: 10 }}>
-            {/* Affected asset chips — visible on collapsed row */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0, marginLeft: 10 }}>
+            {/* Affected asset chips */}
             {!isExpanded && event.affected_assets?.slice(0,2).map((a: string) => (
-              <span key={a} style={{ fontSize: 8, fontWeight: 700, color: "#00aaff", background: "rgba(0,170,255,0.08)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 3, padding: "1px 5px" }}>{a}</span>
+              <span key={a} style={{ fontSize: 8, fontWeight: 700, color: "#00aaff", background: "rgba(0,170,255,0.07)", border: "1px solid rgba(0,170,255,0.12)", borderRadius: 3, padding: "1px 5px" }}>{a}</span>
             ))}
-            {/* Countdown for upcoming events */}
+            {/* Countdown */}
             {!isPastEvent && (() => { const cd = getCountdown(event); return cd ? (
-              <div style={{ fontSize: 9, fontWeight: 700, color: event.impact === "High" ? "#ff4466" : "#ffd700", background: event.impact === "High" ? "rgba(255,68,102,0.08)" : "rgba(255,215,0,0.06)", border: `1px solid ${event.impact === "High" ? "rgba(255,68,102,0.2)" : "rgba(255,215,0,0.15)"}`, borderRadius: 4, padding: "2px 7px", letterSpacing: "0.05em" }}>
+              <div style={{ fontSize: 8, fontWeight: 700, color: event.impact === "High" ? "#ff4466" : "#ffd700", background: event.impact === "High" ? "rgba(255,68,102,0.07)" : "rgba(255,215,0,0.05)", border: `1px solid ${event.impact === "High" ? "rgba(255,68,102,0.15)" : "rgba(255,215,0,0.12)"}`, borderRadius: 4, padding: "2px 6px", letterSpacing: "0.05em" }}>
                 IN {cd}
               </div>
             ) : null; })()}
-            {event.forecast && (
-              <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>FCST</div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: beatsForecast ? "#00ff88" : "#ffd700" }}>{event.forecast}</div>
-              </div>
-            )}
-            {event.previous && (
-              <div style={{ textAlign: "right" }}>
-                <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>PREV</div>
-                <div style={{ fontSize: 11, color: "rgba(255,255,255,0.5)" }}>{event.previous}</div>
+            {/* FCST / PREV — grouped in one box */}
+            {(event.forecast || event.previous) && (
+              <div style={{ display: "flex", gap: 10, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 5, padding: "3px 8px" }}>
+                {event.forecast && (
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 8, color: "rgba(255,255,255,0.25)", letterSpacing: "0.06em" }}>FCST</div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: beatsForecast ? "#00ff88" : "#ffd700" }}>{event.forecast}</div>
+                  </div>
+                )}
+                {event.forecast && event.previous && <div style={{ width: 1, background: "rgba(255,255,255,0.06)", alignSelf: "stretch" }} />}
+                {event.previous && (
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 8, color: "rgba(255,255,255,0.25)", letterSpacing: "0.06em" }}>PREV</div>
+                    <div style={{ fontSize: 11, color: "rgba(255,255,255,0.45)" }}>{event.previous}</div>
+                  </div>
+                )}
               </div>
             )}
             <div style={{
@@ -431,7 +437,7 @@ export default function EconomicCalendar() {
               background: "#0f1117",
               border: "1px solid rgba(0,170,255,0.2)",
               borderRadius: 20,
-              padding: "28px 28px 32px",
+              padding: "24px 24px 28px",
               zIndex: 101,
               width: "min(580px, 90vw)",
               maxHeight: "80vh",
