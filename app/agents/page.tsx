@@ -334,9 +334,11 @@ export default function AgentsPage() {
 
                   {/* Insight line */}
                   <div style={{ fontSize: 10, color: pnl >= 0 ? "rgba(0,255,136,0.6)" : "rgba(255,255,255,0.35)", margin: "10px 0 4px", fontStyle: "italic" }}>
-                    {pnl >= 0
-                      ? "↑ Agent is profitable — strategy is working on live signals."
-                      : "↓ Currently losing — open positions may still recover. High-conviction strategies often underperform early."}
+                    {agent.total_trades === 0
+                      ? "● Scanning live signals — no qualifying trades yet. Trades open automatically when a signal crosses your confidence threshold."
+                      : pnl >= 0
+                        ? "↑ Agent is profitable — strategy is working on live signals."
+                        : "↓ Currently losing — open positions may still recover. High-conviction strategies often underperform early."}
                   </div>
 
                   {/* Open Positions */}
