@@ -1027,7 +1027,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
   const SidebarContent = () => (
     <div>
       <div style={{ marginBottom: 20 }}>
-        <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", marginBottom: 10, letterSpacing: "0.1em" }}>V1 TRADE LEVELS</div>
+        <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", marginBottom: 10, letterSpacing: "0.1em" }}>TRADE LEVELS</div>
         {[
           { label: "TP", value: activeDetail.take_profit, color: "#00ff88", pct: "+" + Math.abs(((activeDetail.take_profit - activeDetail.current_price) / activeDetail.current_price) * 100).toFixed(1) },
           { label: "ENTRY", value: activeDetail.current_price, color: "#fff", pct: "0.0" },
@@ -1374,7 +1374,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           <EstClock />
           {mood && <>
             <span>SIGNALS <span style={{ color: "#00ff88", fontWeight: 600 }}>86</span></span>
-            <span>BUY / SELL <span style={{ color: "#00ff88" }}>{mood.buy_count}</span> / <span style={{ color: "#ff4466" }}>{mood.sell_count}</span></span>
+
             <span>MOOD <span style={{ color: mood.mood === "BULLISH" ? "#00ff88" : mood.mood === "BEARISH" ? "#ff4466" : "#ffd700", fontWeight: 600 }}>{mood.mood}</span></span>
                     </>}
           {user ? (
