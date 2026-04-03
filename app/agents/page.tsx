@@ -341,7 +341,7 @@ export default function AgentsPage() {
 
                   {/* Open Positions */}
                   {(() => {
-                    const open = (agent.recent_trades || []).filter((t: any) => !t.outcome);
+                    const open = (agent.recent_trades || []).filter((t: any) => !t.outcome || t.outcome === "OPEN");
                     if (!open.length) return null;
                     return (
                       <div style={{ marginTop: 14, background: "rgba(0,170,255,0.03)", border: "1px solid rgba(0,170,255,0.1)", borderRadius: 8, padding: "10px 12px" }}>
