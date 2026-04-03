@@ -1010,7 +1010,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
       )}
       {activeDetail && (
         <>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr 1fr", gap: 10, marginBottom: 20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr 1fr 1fr", gap: 10, marginBottom: 20 }}>
             {[
               { label: "KELLY SIZE", value: `${activeDetail.kelly_size}%`, color: "#00aaff" },
               { label: "CONFLUENCE", value: activeDetail.confluence_score, color: "#00ff88" },
