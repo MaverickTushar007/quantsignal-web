@@ -341,7 +341,7 @@ export default function AgentsPage() {
 
                   {/* Open Positions */}
                   {(() => {
-                    const open = (agent.recent_trades || []).filter((t: any) => !t.outcome || t.outcome === "OPEN");
+                    const open = (agent.recent_trades || []).filter((t: any) => !t.outcome || t.outcome === "open" || t.outcome === "OPEN");
                     if (!open.length) return null;
                     return (
                       <div style={{ marginTop: 14, background: "rgba(0,170,255,0.03)", border: "1px solid rgba(0,170,255,0.1)", borderRadius: 8, padding: "10px 12px" }}>
@@ -385,7 +385,7 @@ export default function AgentsPage() {
                         LATEST ACTIVITY
                       </div>
                       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        {agent.recent_trades.filter((t: any) => t.outcome).slice(0, 3).map((t: any) => (
+                        {agent.recent_trades.filter((t: any) => t.outcome && t.outcome !== "open" && t.outcome !== "OPEN").slice(0, 3).map((t: any) => (
                           <div key={t.id} style={{ display: "flex",
                             justifyContent: "space-between", alignItems: "center",
                             padding: "6px 10px",
