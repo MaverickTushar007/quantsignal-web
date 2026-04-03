@@ -40,9 +40,11 @@ function parseVerdict(content: string): { action: string; conviction: string; wh
   const convLine = lines.find(l => /^\*{0,2}(conviction|confidence|strength)\*{0,2}\s*[:–]/i.test(l));
   const whyLine = lines.find(l => /^\*{0,2}(why|reason|because|key driver)\*{0,2}\s*[:–]/i.test(l));
   if (!actionLine) return null;
-  const action = actionLine.replace(/^\*{0,2}\w+\*{0,2}\s*[:–]\s*/i, "").trim().toUpperCase();
-  const conviction = convLine ? convLine.replace(/^\*{0,2}\w+\*{0,2}\s*[:–]\s*/i, "").trim() : "";
-  const why = whyLine ? whyLine.replace(/^\*{0,2}[\w\s]+\*{0,2}\s*[:–]\s*/i, "").trim() : "";
+  const clean = (s: string) => s.replace(/\*+/g, "").replace(/_{1,2}/g, "").trim();
+  const action = clean(actionLine.replace(/^\*{0,2}\w+\*{0,2}\s*[:–]\s*/i, "")).toUpperCase();
+  const convRaw = convLine ? clean(convLine.replace(/^\*{0,2}\w+\*{0,2}\s*[:–]\s*/i, "")) : "";
+  const conviction = convRaw.split(/[–—,.]/)[0].trim().slice(0, 20);
+  const why = whyLine ? clean(whyLine.replace(/^\*{0,2}[\w\s]+\*{0,2}\s*[:–]\s*/i, "")).slice(0, 90) : "";
   const color = action.includes("BUY") || action.includes("LONG") ? "#00ff88"
     : action.includes("SELL") || action.includes("SHORT") ? "#ff4466" : "#ffd700";
   return { action, conviction, why, color };
