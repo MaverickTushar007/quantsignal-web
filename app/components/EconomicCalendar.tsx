@@ -219,12 +219,13 @@ export default function EconomicCalendar() {
         whileTap={{ scale: 0.995 }}
         transition={{ duration: 0.18, ease: "easeOut" }}
         style={{
-          background: isPastEvent ? "rgba(255,255,255,0.01)" : "rgba(255,255,255,0.02)",
-          border: `1px solid ${isExpanded ? "rgba(0,255,136,0.25)" : "rgba(255,255,255,0.07)"}`,
+          background: isPastEvent ? "rgba(255,255,255,0.01)" : isHero ? "rgba(0,255,136,0.03)" : "rgba(255,255,255,0.02)",
+          border: isHero ? `1px solid ${isExpanded ? "rgba(0,255,136,0.4)" : "rgba(0,255,136,0.18)"}` : `1px solid ${isExpanded ? "rgba(0,255,136,0.25)" : "rgba(255,255,255,0.07)"}`,
           borderRadius: 10,
-          padding: "14px 16px",
+          padding: isHero ? "18px 20px" : "14px 16px",
           cursor: "pointer",
           opacity: isPastEvent ? 0.75 : 1,
+          boxShadow: isHero && !isPastEvent ? "0 0 24px rgba(0,255,136,0.06)" : "none",
         }}>
 
         {/* Event header */}
@@ -232,12 +233,22 @@ export default function EconomicCalendar() {
           <div style={{ display: "flex", alignItems: "center", gap: 10, flex: 1, minWidth: 0 }}>
             <span style={{ fontSize: 16, flexShrink: 0 }}>{event.flag}</span>
             <div style={{ minWidth: 0 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: isPastEvent ? "rgba(255,255,255,0.65)" : "#e2e8f0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+              <div style={{ fontSize: isHero ? 14 : 12, fontWeight: 700, color: isPastEvent ? "rgba(255,255,255,0.65)" : isHero ? "#fff" : "#e2e8f0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                 {event.title}
               </div>
               <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", marginTop: 2 }}>
                 {formatDate(event)} · {event.country}
               </div>
+              {isHero && event.why_it_matters && (
+                <div style={{ fontSize: 9, color: "rgba(0,255,136,0.6)", marginTop: 4, fontStyle: "italic" }}>
+                  ↳ {event.why_it_matters}
+                </div>
+              )}
+              {isHero && !event.why_it_matters && event.impact === "High" && (
+                <div style={{ fontSize: 9, color: "rgba(255,68,102,0.6)", marginTop: 4 }}>
+                  ↳ High-impact release — watch for sharp moves at print time
+                </div>
+              )}
             </div>
           </div>
 
@@ -390,7 +401,7 @@ export default function EconomicCalendar() {
             ))}
           </div>
           {upcoming.length > 0 && <div style={{ fontSize: 9, color: "#00ff88", letterSpacing: "0.15em", fontWeight: 700, padding: "4px 0 8px" }}>▶ UPCOMING EVENTS</div>}
-          {upcoming.map((event, i) => <EventRow key={i} event={event} index={i} />)}
+          {upcoming.map((event, i) => <EventRow key={i} event={event} index={i} isHero={i === 0} />)}
 
           {past.length > 0 && (
             <>
