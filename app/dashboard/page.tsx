@@ -1048,29 +1048,23 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         </ProGate>
       )}
       <div style={{ marginBottom: 20 }}>
-        <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", marginBottom: 10, letterSpacing: "0.1em" }}>ML PROBABILITY</div>
-
-        {/* Probability Waterfall: Raw → Regime → Final */}
-        {activeDetail.raw_probability && (
-          <div style={{ marginBottom: 12 }}>
-            {[
-              { label: "RAW MODEL", value: activeDetail.raw_probability, color: "#00aaff" },
-              { label: "REGIME ADJ", value: activeDetail.regime_adjusted_probability || activeDetail.probability, color: "#ffd700" },
-              { label: "FINAL", value: activeDetail.probability, color: activeDetail.probability >= 0.5 ? "#00ff88" : activeDetail.probability >= 0.35 ? "#ffd700" : "#ff4466" },
-            ].map(row => (
-              <div key={row.label} style={{ marginBottom: 6 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-                  <span style={{ fontSize: 8, color: "rgba(255,255,255,0.3)", letterSpacing: "0.08em" }}>{row.label}</span>
-                  <span style={{ fontSize: 9, fontWeight: 800, color: row.color }}>{(row.value * 100).toFixed(0)}%</span>
-                </div>
-                <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden" }}>
-                  <div style={{ width: `${row.value * 100}%`, height: "100%", background: row.color, borderRadius: 2, transition: "width 0.4s ease" }} />
-                </div>
+        {activeDetail.raw_probability && (() => {
+          const final = activeDetail.probability;
+          const color = final >= 0.5 ? "#00ff88" : final >= 0.35 ? "#ffd700" : "#ff4466";
+          const label = final >= 0.6 ? "HIGH CONFIDENCE" : final >= 0.45 ? "MODERATE" : "LOW CONFIDENCE";
+          return (
+            <div style={{ marginBottom: 12, padding: "10px 12px", background: "rgba(255,255,255,0.02)", borderRadius: 6, border: `1px solid ${color}20` }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                <span style={{ fontSize: 8, fontWeight: 700, color: "rgba(255,255,255,0.35)", letterSpacing: "0.12em" }}>SIGNAL CONFIDENCE</span>
+                <span style={{ fontSize: 16, fontWeight: 800, color, fontFamily: "monospace" }}>{(final * 100).toFixed(0)}%</span>
               </div>
-            ))}
-          </div>
-        )}
-
+              <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden", marginBottom: 6 }}>
+                <div style={{ width: `${final * 100}%`, height: "100%", background: color, borderRadius: 2, transition: "width 0.5s ease" }} />
+              </div>
+              <div style={{ fontSize: 8, color, letterSpacing: "0.1em", fontWeight: 700 }}>{label}</div>
+            </div>
+          );
+        })()}
         {/* Signal Reasoning */}
         {activeDetail.context_text && (
           <div style={{
