@@ -1,5 +1,6 @@
 "use client";
 import FeedbackWidget from "../components/FeedbackWidget";
+import OnboardingTour from "../components/OnboardingTour";
 import { usePushNotifications } from "../hooks/usePushNotifications";
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/useAuth";
