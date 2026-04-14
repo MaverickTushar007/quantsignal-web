@@ -1,3 +1,4 @@
+import { getUserId } from "../lib/api";
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { Send, Terminal, Cpu, Brain, Zap } from "lucide-react";
@@ -135,7 +136,8 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
           symbol,
           message: finalMsg,
           mode: quantMode ? "quant" : "simple",
-          history: GLOBAL_MEMORY.history.slice(-10).map(m => ({ role: m.role, content: m.content }))
+          history: GLOBAL_MEMORY.history.slice(-10).map(m => ({ role: m.role, content: m.content })),
+          user_id: getUserId(),
         }),
       });
 
@@ -156,7 +158,10 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
           if (line.startsWith("data: ")) {
             try {
               const data = JSON.parse(line.slice(6));
-              if (data.type === "status") {
+              if (data.type === "error") {
+                setMessages(prev => [...prev, { role: "assistant", content: `⚠️ ${data.message}` }]);
+                return;
+              } else if (data.type === "status") {
                 setCurrentStatus(prev => [...prev, data.message]);
               } else if (data.type === "token") {
                 assistantContent += data.content;
