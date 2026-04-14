@@ -129,25 +129,37 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
 
 [LIQUIDITY DATA: ${liquidityCtx}]` : contextualMsg;
 
-      const response = await fetch(`${API_BASE}/chat/${symbol}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          symbol,
-          message: finalMsg,
-          mode: quantMode ? "quant" : "simple",
-          history: GLOBAL_MEMORY.history.slice(-10).map(m => ({ role: m.role, content: m.content })),
-          user_id: getUserId(),
-        }),
-      });
-
-      if (!response.body) throw new Error("No response body");
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
       let assistantContent = "";
+      let attempts = 0;
+      const MAX_RETRIES = 2;
 
-      while (true) {
+      while (attempts <= MAX_RETRIES) {
+        attempts++;
+        let response: Response;
+        try {
+          response = await fetch(`${API_BASE}/chat/${symbol}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              symbol,
+              message: finalMsg,
+              mode: quantMode ? "quant" : "simple",
+              history: GLOBAL_MEMORY.history.slice(-10).map(m => ({ role: m.role, content: m.content })),
+              user_id: getUserId(),
+              partial: assistantContent || undefined,
+            }),
+          });
+        } catch (networkErr) {
+          if (attempts > MAX_RETRIES) throw networkErr;
+          await new Promise(r => setTimeout(r, 1500 * attempts));
+          continue;
+        }
+        if (!response.body) throw new Error("No response body");
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let streamOk = false;
+        try {
+          while (true) {
         const { value, done } = await reader.read();
         if (done) break;
 
@@ -176,8 +188,14 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
               }
             } catch (e) {}
           }
+        } catch (streamErr) {
+          if (attempts > MAX_RETRIES) throw streamErr;
+          await new Promise(r => setTimeout(r, 1500 * attempts));
+          continue;
         }
+        break;
       }
+
 
       // Save assistant response to global memory
       if (assistantContent) {
