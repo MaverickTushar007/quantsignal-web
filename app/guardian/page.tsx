@@ -2,7 +2,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { motion } from "framer-motion";
 
-const API = "https://quantsignal-api-production.up.railway.app/api/v1";
+const API = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 function getUserId(): string {
   if (typeof window === "undefined") return "anonymous";
   try {

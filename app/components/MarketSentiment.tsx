@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { TrendingUp, TrendingDown, Activity, AlertTriangle } from "lucide-react";
 
-const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
+const API_BASE = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 
 export default function MarketSentiment() {
   const [data, setData] = useState<any>(null);
