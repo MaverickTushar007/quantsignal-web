@@ -1,5 +1,5 @@
-import { getUserId } from "../lib/api";
 "use client";
+import { getUserId } from "../lib/api";
 import { useState, useEffect, useRef } from "react";
 import { Send, Terminal, Cpu, Brain, Zap } from "lucide-react";
 import ReactMarkdown from "react-markdown";
@@ -187,6 +187,8 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
                 });
               }
             } catch (e) {}
+          }
+        }
           }
         } catch (streamErr) {
           if (attempts > MAX_RETRIES) throw streamErr;
@@ -412,9 +414,6 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
-      `}</style>
     </div>
   );
 }
