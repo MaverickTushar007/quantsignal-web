@@ -296,7 +296,7 @@ export default function SignalDrawer({ symbol, onClose }: { symbol: string; onCl
                 <div className="text-sm text-red-400/60">Reasoning unavailable</div>
               )}
             </div>
-            <div className="text-xs text-white/20 text-center pb-4">Educational signals only — not financial advice</div>
+            <div className="text-xs text-white/20 text-center pb-4">Paper trading only — not financial advice · verify before live trading</div>
           </div>
         ) : (
           <div className="p-6 text-center text-white/30">Could not load signal</div>

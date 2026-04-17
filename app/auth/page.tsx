@@ -161,7 +161,7 @@ export default function AuthPage() {
             <div style={{fontSize:9,letterSpacing:"0.12em",color:"#3fb950",fontWeight:700,marginBottom:10}}>WHAT YOU GET</div>
             {[
               "Every signal explains its reasoning — no black box",
-              "Kelly-optimal position sizing on every trade",
+              "Kelly-optimal sizing for virtual portfolio positions",
               "Perseus AI analyst available 24/7 in SIMPLE or QUANT mode",
               "Guardian monitors your watchlist every 15 minutes autonomously",
             ].map((item, i) => (
@@ -251,7 +251,7 @@ export default function AuthPage() {
             </span>
           </div>
           <div style={{textAlign:"center",marginTop:10,fontSize:9,color:"#30363d",lineHeight:1.6}}>
-            Educational signals only · Not financial advice
+            Paper trading only · Not financial advice · Always verify before going live
           </div>
         </div>
       </div>

@@ -363,7 +363,7 @@ export default function PerformancePage() {
 
         {/* footer note */}
         <div style={{ textAlign: "center", padding: "20px 0", fontSize: 9, color: "rgba(255,255,255,0.15)" }}>
-          Educational signals only — not financial advice · QuantSignal © 2026
+          Paper trading only — not financial advice · verify before live trading · QuantSignal © 2026
         </div>
       </div>
     </div>
