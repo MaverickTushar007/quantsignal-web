@@ -6,11 +6,11 @@ const TICKERS = ["BTC/USD","ETH/USD","SOL/USD","NASDAQ","GOLD","AAPL","RELIANCE"
 const DIRECTIONS = ["BUY","BUY","SELL","BUY","HOLD","BUY","BUY","BUY","BUY","SELL","HOLD","BUY"];
 const PROBS = ["87%","71%","63%","78%","52%","81%","73%","82%","69%","61%","55%","70%"];
 const SIGNALS = [
-  { symbol:"RELIANCE", dir:"BUY",  prob:87, price:"₹2,847",  active:true  },
-  { symbol:"BTC/USD",  dir:"BUY",  prob:81, price:"$67,420", active:false },
-  { symbol:"TCS",      dir:"HOLD", prob:63, price:"₹3,921",  active:false },
-  { symbol:"NIFTY50",  dir:"BUY",  prob:78, price:"₹24,132", active:false },
-  { symbol:"AAPL",     dir:"SELL", prob:71, price:"$189.40", active:false },
+  { symbol:"RELIANCE", dir:"BUY",  prob:87, price:"₹1,247",  active:true  },
+  { symbol:"BTC/USD",  dir:"BUY",  prob:81, price:"$84,200", active:false },
+  { symbol:"TCS",      dir:"HOLD", prob:63, price:"₹3,310",  active:false },
+  { symbol:"NIFTY50",  dir:"BUY",  prob:78, price:"₹22,460", active:false },
+  { symbol:"AAPL",     dir:"SELL", prob:71, price:"$202.50", active:false },
 ];
 
 export default function Landing() {
@@ -306,7 +306,7 @@ export default function Landing() {
         <div style={{maxWidth:900,margin:"0 auto"}}>
           <div style={{textAlign:"center",marginBottom:52}}>
             <div style={{fontSize:10,fontWeight:700,color:"#4ade80",letterSpacing:".16em",fontFamily:"DM Mono,monospace",marginBottom:12}}>GET STARTED</div>
-            <h2 style={{fontSize:48,fontWeight:900,letterSpacing:"-1.5px",color:"#f0fdf4",lineHeight:1.05}}>Your financial partner<br/>in 3 easy steps.</h2>
+            <h2 style={{fontSize:48,fontWeight:900,letterSpacing:"-1.5px",color:"#f0fdf4",lineHeight:1.05}}>Up and running<br/>in 60 seconds.</h2>
           </div>
           <motion.div className="sg" initial="hidden" whileInView="visible" viewport={{once:true,amount:0.3}} variants={{visible:{transition:{staggerChildren:0.12}}}} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10}}>
             {[["01","Create your account","Sign up free. No credit card. Access 133 live signals across crypto, stocks and macro instantly."],["02","Set your strategy","Configure your risk profile. Let an AI agent trade for you, or follow signals manually."],["03","Track your edge","Monitor your virtual portfolio, win rate and P&L. Every trade tracked with full reasoning."]].map(([n,t,d])=>(
