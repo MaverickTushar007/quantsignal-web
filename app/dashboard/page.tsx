@@ -1535,7 +1535,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
         {/* Left panel — Analyst Sidebar */}
         <SmoothScroll style={{ width: 300, borderRight: "1px solid rgba(255,255,255,0.06)", background: "#0a0a0c", padding: "16px", flexShrink: 0, scrollbarWidth: "thin" as const }}>
-          {selected && detail ? <SidebarContent /> : <div style={{ color: "rgba(255,255,255,0.1)", fontSize: 9, marginTop: 60, textAlign: "center", letterSpacing: "0.12em" }}>SELECT AN ASSET</div>}
+          {selected ? (detail ? <SidebarContent /> : <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: 12 }}><div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 4 }}>TRADE LEVELS</div>{[{label:"TP",color:"#00ff88"},{label:"ENTRY",color:"#fff"},{label:"SL",color:"#ff4466"}].map(l=><div key={l.label} style={{height:36,background:"rgba(255,255,255,0.02)",borderRadius:5,border:"1px solid rgba(255,255,255,0.05)",animation:"pulse 1.5s ease infinite",marginBottom:4}}/>)}<style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}`}</style></div>) : <div style={{ color: "rgba(255,255,255,0.1)", fontSize: 9, marginTop: 60, textAlign: "center", letterSpacing: "0.12em" }}>SELECT AN ASSET</div>}
         </SmoothScroll>
 
         {/* Center panel */}
