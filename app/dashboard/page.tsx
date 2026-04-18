@@ -356,6 +356,39 @@ function EarningsBadge({ flag }: { flag?: any }) {
   );
 }
 
+function StaleBadge({ sig }: { sig?: any }) {
+  if (!sig?.is_stale) return null;
+  return (
+    <span style={{
+      fontSize: 10, fontWeight: 800, padding: "2px 5px", borderRadius: 3,
+      background: "rgba(150,150,150,0.1)",
+      border: "1px solid rgba(150,150,150,0.3)",
+      color: "rgba(180,180,180,0.7)",
+      letterSpacing: "0.05em", whiteSpace: "nowrap", flexShrink: 0,
+    }}>
+      ⏱ {sig.signal_age_hours}h OLD
+    </span>
+  );
+}
+
+function MarketStatusBadge({ sig }: { sig?: any }) {
+  if (sig?.market_open === undefined) return null;
+  if (sig.market_open) return (
+    <span style={{
+      fontSize: 10, fontWeight: 800, padding: "2px 5px", borderRadius: 3,
+      background: "rgba(0,255,136,0.08)", border: "1px solid rgba(0,255,136,0.25)",
+      color: "rgba(0,255,136,0.7)", letterSpacing: "0.05em", whiteSpace: "nowrap", flexShrink: 0,
+    }}>● LIVE</span>
+  );
+  return (
+    <span style={{
+      fontSize: 10, fontWeight: 800, padding: "2px 5px", borderRadius: 3,
+      background: "rgba(100,100,100,0.1)", border: "1px solid rgba(100,100,100,0.3)",
+      color: "rgba(150,150,150,0.8)", letterSpacing: "0.05em", whiteSpace: "nowrap", flexShrink: 0,
+    }}>MARKET CLOSED</span>
+  );
+}
+
 function generateOneLiner(sig: any): string {
   if (!sig) return "";
   const dir = sig.direction;
@@ -668,6 +701,14 @@ function TrackRecordTab({ symbol, allTrades, evStats, briefing }: { symbol: stri
 }
 
 
+
+const DEMO_SIGNALS = [
+  { symbol: "RELIANCE", name: "Reliance Industries", dir: "BUY",  prob: 87, price: "₹1,247" },
+  { symbol: "NIFTY50",  name: "Nifty 50 Index",      dir: "BUY",  prob: 81, price: "₹22,460" },
+  { symbol: "BTC-USD",  name: "Bitcoin",              dir: "SELL", prob: 74, price: "$84,200" },
+  { symbol: "AAPL",     name: "Apple Inc.",           dir: "BUY",  prob: 69, price: "$202.50" },
+  { symbol: "GOLD",     name: "Gold Futures",         dir: "BUY",  prob: 66, price: "$3,310" },
+];
 export default function Dashboard() {
   const [upgradeError, setUpgradeError] = useState<{kind:"signals"|"perseus",used:number,limit:number}|null>(null);
   const [signals, setSignals] = useState<any[]>([]);
@@ -857,6 +898,8 @@ export default function Dashboard() {
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: isMobile ? 13 : 10, color: "rgba(255,255,255,0.4)", alignItems: "center" }}>
               <span>{formatPrice(sig.current_price, sig.type, sig.symbol)}</span>
               <EarningsBadge flag={sig.earnings_flag} />
+              <StaleBadge sig={sig} />
+              <MarketStatusBadge sig={sig} />
               <AlertBell symbol={sig.symbol} />
               <span style={{ color: dirColor(sig.direction), fontWeight: 600 }}>{(sig.probability * 100).toFixed(0)}%</span>
             </div>
@@ -1233,6 +1276,8 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             ))}
           </div>
       <EarningsBadge flag={activeDetail.earnings_flag} />
+      <StaleBadge sig={activeDetail} />
+      <MarketStatusBadge sig={activeDetail} />
       <MTFBar mtf={activeDetail?.mtf} direction={activeDetail?.direction} />
       <ShockWarning shock={activeDetail?.shock_warning} />
       {activeDetail?.insider?.available && activeDetail.insider.trades?.length > 0 && (
@@ -1321,7 +1366,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                 {mobilePanel === "NEWS" && selected && <NewsTab symbol={selected.symbol} />}
                 {mobilePanel === "CHAT" && (
                   <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", padding: "0 16px 16px" }}>
-                    <AgentChat symbol={selected.symbol} userId={user?.id} />
+                    <AgentChat symbol={selected.symbol} userId={user?.id} onUpgradeError={(kind, used, limit) => setUpgradeError({kind, used, limit})} />
                   </div>
                 )}
                 {mobilePanel === "CALENDAR" && <EconomicCalendar />}
@@ -1351,8 +1396,6 @@ Give a punchy, honest explanation of why the model made this call, what the mark
               <div style={{ position: "absolute", bottom: 60, left: 0, right: 0, background: "#0e0f14", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "16px 16px 0 0", padding: "16px 0" }} onClick={e => e.stopPropagation()}>
                 <div style={{ fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: "0.15em", padding: "0 20px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)", marginBottom: 8 }}>MORE</div>
                 {[
-                  { href: "/guardian", icon: "🛡️", label: "Trade Guardian", desc: "Risk check before entering" },
-                  { href: "/performance", icon: "📈", label: "Performance", desc: "90-day signal track record" },
                   { href: "/agents", icon: "🤖", label: "Agents", desc: "Virtual paper trading" },
 
                   { id: "NEWS", icon: "📰", label: "News Feed", desc: "Live market news" },
@@ -1401,6 +1444,53 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           </button>
         </div>
         <TutorialModal />
+      </div>
+    );
+  }
+
+
+  // ── DEMO GATE (unauthenticated) ────────────────────────────────
+  if (mounted && !user) {
+    return (
+      <div style={{ minHeight: "100vh", background: "#0d1117", fontFamily: "'IBM Plex Mono', monospace", display: "flex", flexDirection: "column" }}>
+        <div style={{ padding: "14px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "#00ff88", letterSpacing: "0.1em" }}>● QUANT SIGNALS</span>
+          <a href="/auth" style={{ fontSize: 11, color: "#4ade80", textDecoration: "none", border: "1px solid rgba(74,222,128,0.3)", borderRadius: 6, padding: "6px 14px", letterSpacing: "0.05em" }}>SIGN IN →</a>
+        </div>
+        <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
+          <div style={{ width: 260, borderRight: "1px solid rgba(255,255,255,0.06)", overflowY: "auto", padding: "12px 0" }}>
+            <div style={{ padding: "8px 16px 12px", fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em" }}>LIVE SIGNALS — PREVIEW</div>
+            {DEMO_SIGNALS.map((s, i) => (
+              <div key={i} style={{ padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.04)", opacity: i >= 2 ? 0.35 : 1, filter: i >= 2 ? "blur(1.5px)" : "none" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "#fff" }}>{s.symbol}</span>
+                  <span style={{ fontSize: 10, color: s.dir === "BUY" ? "#4ade80" : "#ff4466", border: `1px solid ${s.dir === "BUY" ? "rgba(74,222,128,0.3)" : "rgba(255,68,102,0.3)"}`, borderRadius: 4, padding: "1px 6px" }}>{s.dir}</span>
+                </div>
+                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)", marginBottom: 4 }}>{s.name}</div>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: 10, color: "rgba(255,255,255,0.25)" }}>{s.price}</span>
+                  <span style={{ fontSize: 10, color: "#4ade80" }}>{s.prob}% conf.</span>
+                </div>
+              </div>
+            ))}
+            <div style={{ padding: "14px 16px", textAlign: "center", fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: "0.06em" }}>+ 81 MORE ASSETS LOCKED</div>
+          </div>
+          <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", inset: 0, filter: "blur(10px)", opacity: 0.25, padding: 48, pointerEvents: "none" }}>
+              <div style={{ height: 220, background: "rgba(74,222,128,0.12)", borderRadius: 12, marginBottom: 16 }} />
+              <div style={{ height: 70, background: "rgba(255,255,255,0.05)", borderRadius: 8, marginBottom: 8 }} />
+              <div style={{ height: 70, background: "rgba(255,255,255,0.05)", borderRadius: 8, marginBottom: 8 }} />
+              <div style={{ height: 70, background: "rgba(255,255,255,0.05)", borderRadius: 8 }} />
+            </div>
+            <div style={{ position: "relative", zIndex: 10, textAlign: "center", maxWidth: 380, padding: "0 24px" }}>
+              <div style={{ width: 56, height: 56, borderRadius: "50%", background: "rgba(74,222,128,0.1)", border: "1px solid rgba(74,222,128,0.25)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", fontSize: 22 }}>🔒</div>
+              <div style={{ fontSize: 18, fontWeight: 700, color: "#fff", marginBottom: 10, letterSpacing: "-0.02em" }}>ML-Powered Trading Signals</div>
+              <div style={{ fontSize: 12, color: "rgba(255,255,255,0.45)", lineHeight: 1.7, marginBottom: 28 }}>86 assets · XGBoost + LightGBM ensemble · Perseus AI reasoning · Live track record</div>
+              <a href="/auth?mode=signup&ref=demo" style={{ display: "inline-block", background: "#4ade80", color: "#0d1117", fontSize: 12, fontWeight: 700, padding: "12px 32px", borderRadius: 8, textDecoration: "none", letterSpacing: "0.06em", marginBottom: 14 }}>GET FREE ACCESS →</a>
+              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.25)" }}>Already have an account? <a href="/auth" style={{ color: "#4ade80", textDecoration: "none" }}>Sign in</a></div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -1535,7 +1625,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
                     </div>
                   )}
                   <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", padding: "0 24px 24px" }}>
-                    <AgentChat symbol={selected.symbol} />
+                    <AgentChat symbol={selected.symbol} onUpgradeError={(kind, used, limit) => setUpgradeError({kind, used, limit})} />
                   </div>
                 </>
               )}
