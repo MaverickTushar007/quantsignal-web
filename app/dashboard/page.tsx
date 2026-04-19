@@ -1,3 +1,4 @@
+import { PerseusStream } from "@/app/components/PerseusStream";
 "use client";
 import FeedbackWidget from "../components/FeedbackWidget";
 import { usePushNotifications } from "../hooks/usePushNotifications";
@@ -1571,6 +1572,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <div style={{ display: "flex", background: "#0c0c0f", borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "0 24px" }}>
               {[
                 { id: "SIGNAL", label: "SIGNAL ANALYSIS", icon: LayoutDashboard },
+                { id: "GENERATE", label: "GENERATE SIGNAL", icon: MessageSquare },
                 { id: "CHAT", label: "PERSEUS ENGINE", icon: MessageSquare },
                 { id: "CALENDAR", label: "ECON CALENDAR", icon: Calendar },
                 { id: "NEWS", label: "NEWS", icon: Newspaper },
@@ -1587,6 +1589,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             {/* Tab content */}
             <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
               {activeTab === "SIGNAL" && <SignalTab />}
+              {activeTab === "GENERATE" && selected && <div style={{ padding: "24px", overflowY: "auto", flex: 1 }}><PerseusStream symbol={selected.symbol} onComplete={(sig) => console.log("signal", sig)} /></div>}
               {activeTab === "CHAT" && (
                 <>
                   {/* Floating Morning Briefing pill — overlays engine, never pushes content */}
