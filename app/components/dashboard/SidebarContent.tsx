@@ -289,6 +289,9 @@ export default function SidebarContent({ activeDetail, selected, isPro, user, is
                 <div style={{ fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: "0.15em", padding: "0 20px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)", marginBottom: 8 }}>MORE</div>
                 {[
                   { href: "/agents", icon: "🤖", label: "Agents", desc: "Virtual paper trading" },
+                  { href: "/research", icon: "🔬", label: "Research", desc: "Evidence-grounded intelligence" },
+                  { href: "/documents", icon: "📄", label: "Documents", desc: "PDF & screenshot analysis" },
+                  { href: "/xray", icon: "🩻", label: "Portfolio X-Ray", desc: "Concentration & regime fit" },
 
                   { id: "NEWS", icon: "📰", label: "News Feed", desc: "Live market news" },
                   { id: "ANALYSIS", icon: "📈", label: "Signal Analysis", desc: "Full ML breakdown" },

@@ -194,11 +194,65 @@ export default function ResearchPage() {
             </div>
           )}
 
-          {/* Trust footer */}
-          <div className="flex items-center gap-4 text-xs text-slate-600 pt-2">
-            <span>Model: {data.model_used || "ensemble_v2"}</span>
-            <span>Citation coverage: {((data.citation_coverage || 0) * 100).toFixed(0)}%</span>
-            <span>Claims verified: {data.claims_verified ? "✓" : "—"}</span>
+          {/* Trust banner */}
+          <div className="bg-[#0d1520] border border-slate-700/50 rounded-xl p-4">
+            <div className="text-xs font-semibold text-slate-500 mb-3 tracking-wider">TRUST SIGNALS</div>
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+              {/* Freshness */}
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-slate-500">Freshness</span>
+                <span className={`text-xs font-semibold ${
+                  (data.freshness_seconds || 9999) < 120 ? "text-emerald-400" :
+                  (data.freshness_seconds || 9999) < 3600 ? "text-amber-400" : "text-red-400"
+                }`}>
+                  {(data.freshness_seconds || 0) < 120 ? "● Live" :
+                   (data.freshness_seconds || 0) < 3600 ? `● ${Math.round((data.freshness_seconds||0)/60)}m old` :
+                   `● ${Math.round((data.freshness_seconds||0)/3600)}h old`}
+                </span>
+              </div>
+              {/* Verifier */}
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-slate-500">Verifier</span>
+                <span className={`text-xs font-semibold ${
+                  data.verification?.passed ? "text-emerald-400" : "text-amber-400"
+                }`}>
+                  {data.verification?.passed ? "✓ Passed" : "⚠ Review"}
+                  {" "}({((data.verification?.score || 0) * 100).toFixed(0)}%)
+                </span>
+              </div>
+              {/* Citation coverage */}
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-slate-500">Citations</span>
+                <span className="text-xs font-semibold text-slate-300">
+                  {((data.verification?.citation_coverage || 0) * 100).toFixed(0)}% covered
+                </span>
+              </div>
+              {/* Model */}
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-slate-500">Model</span>
+                <span className="text-xs font-semibold text-slate-300 truncate">
+                  {data.model_used || "ensemble_v2"}
+                </span>
+              </div>
+              {/* Issues */}
+              <div className="flex flex-col gap-1">
+                <span className="text-xs text-slate-500">Issues</span>
+                <span className={`text-xs font-semibold ${
+                  (data.verification?.issues?.length || 0) === 0 ? "text-emerald-400" : "text-amber-400"
+                }`}>
+                  {(data.verification?.issues?.length || 0) === 0
+                    ? "None"
+                    : data.verification.issues.join(", ")}
+                </span>
+              </div>
+            </div>
+            {/* Stale warning */}
+            {(data.freshness_seconds || 0) > 14400 && (
+              <div className="mt-3 flex items-center gap-2 text-xs text-amber-300 bg-amber-500/10 border border-amber-500/20 rounded-lg px-3 py-2">
+                <span>⚠</span>
+                <span>Data is {Math.round((data.freshness_seconds||0)/3600)}h old — confidence may be reduced</span>
+              </div>
+            )}
           </div>
         </div>
       )}
