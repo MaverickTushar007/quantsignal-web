@@ -347,7 +347,6 @@ Give a punchy, honest explanation of why the model made this call, what the mark
     setReplayData(null);
     try {
       const data = await fetchReplay(selected.symbol, d);
-      console.log("replay data:", data.direction);
       setReplayData(data);
     } catch {}
     finally { setReplayLoading(false); }
@@ -957,7 +956,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             {/* Tab content */}
             <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
               {activeTab === "SIGNAL" && <SignalTab />}
-              {activeTab === "GENERATE" && selected && <div style={{ padding: "24px", overflowY: "auto", flex: 1 }}><PerseusStream symbol={selected.symbol} onComplete={(sig) => console.log("signal", sig)} /></div>}
+              {activeTab === "GENERATE" && selected && <div style={{ padding: "24px", overflowY: "auto", flex: 1 }}><PerseusStream symbol={selected.symbol} onComplete={() => {}} /></div>}
               {activeTab === "CHAT" && (
                 <>
                   {/* Floating Morning Briefing pill — overlays engine, never pushes content */}
