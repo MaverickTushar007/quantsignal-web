@@ -1,4 +1,8 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
+const API_BASE = (() => {
+  const url = process.env.NEXT_PUBLIC_API_URL;
+  if (!url) throw new Error("NEXT_PUBLIC_API_URL is not set — check your deployment environment variables.");
+  return url;
+})();
 
 export class UpgradeRequiredError extends Error {
   used: number; limit: number; kind: string;
