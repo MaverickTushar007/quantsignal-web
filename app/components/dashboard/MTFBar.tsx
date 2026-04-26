@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 
 function MTFBar({ mtf, direction }: { mtf?: any, direction?: string }) {
   if (!mtf) return null;
@@ -42,3 +41,5 @@ function MTFBar({ mtf, direction }: { mtf?: any, direction?: string }) {
     </div>
   );
 }
+
+export default MTFBar;

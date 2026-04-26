@@ -1,6 +1,9 @@
 "use client";
 
-import React from "react";
+import { useState } from "react";
+
+const API_BASE = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
+
 
 function AlertBell({ symbol }: { symbol: string }) {
   const [state, setState] = useState<"idle"|"input"|"loading"|"done">("idle");
@@ -57,3 +60,5 @@ function AlertBell({ symbol }: { symbol: string }) {
     </button>
   );
 }
+
+export default AlertBell;

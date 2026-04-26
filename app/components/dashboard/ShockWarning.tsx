@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 
 function ShockWarning({ shock }: { shock?: any }) {
   if (!shock) return null;
@@ -29,3 +28,5 @@ function ShockWarning({ shock }: { shock?: any }) {
     </div>
   );
 }
+
+export default ShockWarning;

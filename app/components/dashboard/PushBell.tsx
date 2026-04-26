@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import { usePushNotifications } from "../../hooks/usePushNotifications";
+
 
 function PushBell() {
   const { supported, subscribed, loading, subscribe, unsubscribe } = usePushNotifications();
@@ -34,3 +35,5 @@ function PushBell() {
 
 // ── Track Record Component ────────────────────────────────────────────────
 const API_BASE_TR = "https://quantsignal-api-production.up.railway.app/api/v1";
+
+export default PushBell;
