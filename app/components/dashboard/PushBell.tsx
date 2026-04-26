@@ -34,6 +34,6 @@ function PushBell() {
 
 
 // ── Track Record Component ────────────────────────────────────────────────
-const API_BASE_TR = "https://quantsignal-api-production.up.railway.app/api/v1";
+const API_BASE_TR = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 
 export default PushBell;
