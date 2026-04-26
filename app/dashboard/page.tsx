@@ -1,5 +1,5 @@
-import { PerseusStream } from "@/app/components/PerseusStream";
 "use client";
+import { PerseusStream } from "@/app/components/PerseusStream";
 import FeedbackWidget from "../components/FeedbackWidget";
 import { usePushNotifications } from "../hooks/usePushNotifications";
 import { useEffect, useState } from "react";
