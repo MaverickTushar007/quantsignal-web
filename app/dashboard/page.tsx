@@ -26,6 +26,9 @@ import PushBell from "../components/dashboard/PushBell";
 import TrackRecordTab from "../components/dashboard/TrackRecordTab";
 import { formatPrice, TYPE_FILTERS, dirColor, badge, getExecutionWindows, TIMEZONES } from "../lib/utils";
 import { StaleBadge, MarketStatusBadge, generateOneLiner } from "../components/dashboard/SignalHelpers";
+import AssetList from "../components/dashboard/AssetList";
+import SignalTab from "../components/dashboard/SignalTab";
+import SidebarContent from "../components/dashboard/SidebarContent";
 
 
 
@@ -173,121 +176,6 @@ export default function Dashboard() {
 
   // ── SHARED COMPONENTS ──────────────────────────────────────────
 
-  const AssetList = () => (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
-      <div style={{ padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="SEARCH..."
-          style={{ width: "100%", background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 4, padding: "6px 10px", color: "#cbd5e1", fontSize: 9, outline: "none", fontFamily: "inherit", boxSizing: "border-box" }} />
-      </div>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 4, padding: "8px 12px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        {TYPE_FILTERS.map(t => (
-          <button key={t} onClick={() => setFilter(t)}
-            style={{ background: filter === t ? "rgba(0,255,136,0.15)" : "transparent", border: `1px solid ${filter === t ? "rgba(0,255,136,0.3)" : "rgba(255,255,255,0.08)"}`, borderRadius: 3, padding: "3px 8px", color: filter === t ? "#00ff88" : "rgba(255,255,255,0.4)", fontSize: 10, cursor: "pointer", fontFamily: "inherit" }}>
-            {t}
-          </button>
-        ))}
-      </div>
-      <div style={{ flex: 1, overflowY: "auto" }}>
-        {/* Skeleton while loading */}
-        {loading && Array.from({length: 8}).map((_, i) => (
-          <div key={i} style={{ padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.04)", display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 32, height: 32, borderRadius: 6, background: "rgba(255,255,255,0.04)", flexShrink: 0 }} />
-            <div style={{ flex: 1 }}>
-              <div style={{ width: "60%", height: 9, borderRadius: 3, background: "rgba(255,255,255,0.06)", marginBottom: 5 }} />
-              <div style={{ width: "40%", height: 7, borderRadius: 3, background: "rgba(255,255,255,0.03)" }} />
-            </div>
-            <div style={{ width: 36, height: 18, borderRadius: 3, background: "rgba(255,255,255,0.04)" }} />
-          </div>
-        ))}
-        {/* TOP SIGNALS — pinned, highest confidence BUY/SELL */}
-        {!loading && signals.length > 0 && filter === "ALL" && (() => {
-          const top = [...signals]
-            .filter(s => s.direction !== "HOLD")
-            .sort((a, b) => b.probability - a.probability)
-            .slice(0, 3);
-          if (!top.length) return null;
-          return (
-            <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", padding: "8px 12px 6px" }}>
-              <div style={{ fontSize: 10, color: "rgba(0,255,136,0.5)", letterSpacing: "0.15em", fontWeight: 700, marginBottom: 6 }}>⚡ TOP SIGNALS</div>
-              <div style={{ display: "flex", gap: 4 }}>
-                {top.map(sig => (
-                  <button key={sig.symbol} onClick={() => selectAsset(sig)} style={{
-                    flex: 1, background: selected?.symbol === sig.symbol ? "rgba(0,255,136,0.1)" : "rgba(255,255,255,0.03)",
-                    border: `1px solid ${selected?.symbol === sig.symbol ? "rgba(0,255,136,0.3)" : "rgba(255,255,255,0.08)"}`,
-                    borderRadius: 4, padding: "5px 4px", cursor: "pointer", fontFamily: "inherit", textAlign: "center"
-                  }}>
-                    <div style={{ fontSize: 9, fontWeight: 700, color: "#cbd5e1", marginBottom: 2 }}>{sig.display}</div>
-                    <div style={{ fontSize: 10, fontWeight: 800, color: sig.direction === "BUY" ? "#00ff88" : "#ff4466" }}>{sig.direction}</div>
-                    <div style={{ fontSize: 10, color: "rgba(255,255,255,0.4)" }}>{(sig.probability * 100).toFixed(0)}%</div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          );
-        })()}
-        {loading ? (
-          <>
-          <style>{`
-            @keyframes shimmer {
-              0% { opacity: 0.15; }
-              50% { opacity: 0.4; }
-              100% { opacity: 0.15; }
-            }
-          `}</style>
-          <div style={{ padding: "6px 12px", fontSize: 9, color: "rgba(0,255,136,0.5)", letterSpacing: "0.1em", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
-            ⟳ LOADING SIGNALS...
-          </div>
-          {[...Array(15)].map((_, i) => (
-            <div key={i} style={{ padding: "10px 12px", borderBottom: "1px solid rgba(255,255,255,0.03)", animation: `shimmer ${1.2 + (i % 3) * 0.2}s ease-in-out infinite`, animationDelay: `${i * 0.05}s` }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, alignItems: "center" }}>
-                <div style={{ height: 9, background: "rgba(255,255,255,0.12)", borderRadius: 2, width: `${50 + (i % 4) * 12}px` }} />
-                <div style={{ height: 9, background: "rgba(0,255,136,0.08)", borderRadius: 2, width: "28px" }} />
-              </div>
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div style={{ height: 7, background: "rgba(255,255,255,0.05)", borderRadius: 2, width: `${40 + (i % 3) * 15}px` }} />
-                <div style={{ height: 7, background: "rgba(255,255,255,0.04)", borderRadius: 2, width: "30px" }} />
-              </div>
-            </div>
-          ))}
-          </>
-        ) : (() => (
-          <StaggerList>
-            {filtered.map(sig => (
-          <StaggerItem key={sig.symbol}>
-          <div key={sig.symbol} onClick={() => selectAsset(sig)} 
-            style={{ padding: isMobile ? "12px 16px" : "7px 12px", borderBottom: "1px solid rgba(255,255,255,0.04)", cursor: "pointer", background: selected?.symbol === sig.symbol ? "rgba(0,255,136,0.05)" : "transparent", borderLeft: selected?.symbol === sig.symbol ? "3px solid #00ff88" : "3px solid transparent" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 3 }}>
-              <span style={{ fontSize: isMobile ? 15 : 11, fontWeight: 700, color: selected?.symbol === sig.symbol ? "#00ff88" : "#cbd5e1" }}>{sig.display}</span>
-              <span style={badge(sig.direction)}>{sig.direction}</span>
-              {outcomeMap[sig.symbol] && (
-                <span style={{
-                  fontSize: 10, fontWeight: 800, padding: "1px 5px", borderRadius: 3,
-                  background: outcomeMap[sig.symbol].outcome === "TP_HIT" ? "rgba(0,255,136,0.15)" : "rgba(255,68,102,0.15)",
-                  color: outcomeMap[sig.symbol].outcome === "TP_HIT" ? "#00ff88" : "#ff4466",
-                  marginLeft: 4,
-                }}>
-                  {outcomeMap[sig.symbol].outcome === "TP_HIT" ? "✓" : "✗"}{outcomeMap[sig.symbol].pnl >= 0 ? "+" : ""}{outcomeMap[sig.symbol].pnl?.toFixed(1)}%
-                </span>
-              )}
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: isMobile ? 13 : 10, color: "rgba(255,255,255,0.4)", alignItems: "center" }}>
-              <span>{formatPrice(sig.current_price, sig.type, sig.symbol)}</span>
-              <EarningsBadge flag={sig.earnings_flag} />
-              <StaleBadge sig={sig} />
-              <MarketStatusBadge sig={sig} />
-              <AlertBell symbol={sig.symbol} />
-              <span style={{ color: dirColor(sig.direction), fontWeight: 600 }}>{(sig.probability * 100).toFixed(0)}%</span>
-            </div>
-          </div>
-          </StaggerItem>
-            ))}
-          </StaggerList>
-        ))()
-        }
-      </div>
-    </div>
-  );
-
   const [replayMode, setReplayMode] = useState(false);
   const [guardianSignal, setGuardianSignal] = useState<any>(null);
   const [showReplayAI, setShowReplayAI] = useState(false);
@@ -354,335 +242,6 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
   const activeDetail = replayMode && replayData ? replayData : detail;
 
-  const SignalTab = () => (
-    <div style={{ flex: 1, overflowY: "auto", padding: isMobile ? "16px" : "20px 24px", background: "#0d1117" }}>
-      {/* LIVE / REPLAY toggle */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16, padding: "8px 0", borderBottom: "1px solid rgba(0,255,136,0.15)", minHeight: 36, background: "rgba(0,255,136,0.03)", flexWrap: "wrap" }}>
-        <button onClick={() => { setReplayMode(false); setReplayData(null); }} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "none", background: !replayMode ? "#00ff88" : "rgba(255,255,255,0.06)", color: !replayMode ? "#000" : "rgba(255,255,255,0.4)" }}>● LIVE</button>
-        {(isPro || true) ? (
-          <button onClick={() => setReplayMode(true)} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "none", background: replayMode ? "#ffd700" : "rgba(255,255,255,0.06)", color: replayMode ? "#000" : "rgba(255,255,255,0.4)" }}>⏪ REPLAY</button>
-        ) : (
-          <button onClick={async () => {
-            if (!user) { window.location.href = "/auth"; return; }
-            const d = await createCheckout(user.email, user.id);
-            if (d.checkout_url) window.location.href = d.checkout_url;
-          }} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "1px solid rgba(255,215,0,0.3)", background: "rgba(255,215,0,0.08)", color: "#ffd700" }}>🔒 REPLAY · PRO</button>
-        )}
-        {replayMode && (
-          <input type="date" value={replayDate}
-            max={new Date(Date.now() - 86400000).toISOString().split("T")[0]}
-            min={new Date(Date.now() - 175 * 86400000).toISOString().split("T")[0]}
-            onChange={e => { setReplayDate(e.target.value); fetchReplay(e.target.value); }}
-            style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 6, padding: "4px 10px", fontSize: 10, color: "#ffd700", outline: "none", fontFamily: "inherit" }} />
-        )}
-        {replayLoading && <span style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>Loading...</span>}
-        {replayMode && replayData && (
-          <span style={{ fontSize: 9, fontWeight: 700, color: replayData.was_correct ? "#00ff88" : "#ff4466", marginLeft: "auto" }}>
-            {replayData.was_correct ? "✓ CORRECT" : "✗ WRONG"} · 5d return: {replayData.actual_return_5d > 0 ? "+" : ""}{replayData.actual_return_5d}%
-          </span>
-        )}
-      </div>
-
-      {/* Historical badge */}
-      {replayMode && replayData && (
-        <div style={{ background: "rgba(255,215,0,0.08)", border: "1px solid rgba(255,215,0,0.2)", borderRadius: 6, padding: "6px 12px", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 9, fontWeight: 700, color: "#ffd700" }}>⏪ HISTORICAL SIGNAL — {replayDate}</span>
-          <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)" }}>Price was {formatPrice(replayData.current_price, selected?.type, selected?.symbol)} · 5d later: {formatPrice(replayData.actual_price_5d, selected?.type, selected?.symbol)}</span>
-          <button onClick={fetchReplayAI} style={{ marginLeft: "auto", background: "rgba(255,215,0,0.15)", border: "1px solid rgba(255,215,0,0.3)", borderRadius: 5, padding: "3px 10px", fontSize: 9, fontWeight: 700, color: "#ffd700", cursor: "pointer", fontFamily: "inherit" }}>🤖 Explain</button>
-        </div>
-      )}
-
-      {/* AI Explanation Modal */}
-      {showReplayAI && (
-        <>
-          <div onClick={() => setShowReplayAI(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", backdropFilter: "blur(8px)", zIndex: 200, animation: "fadeIn 0.2s ease" }} />
-          <div style={{
-            position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
-            width: "min(520px, 90vw)",
-            background: "rgba(12,14,20,0.85)",
-            backdropFilter: "blur(24px)",
-            border: "1px solid rgba(255,215,0,0.2)",
-            borderRadius: 16,
-            padding: 24,
-            zIndex: 201,
-            boxShadow: "0 0 60px rgba(255,215,0,0.08), 0 24px 80px rgba(0,0,0,0.6)",
-            animation: "slideUp 0.25s cubic-bezier(0.34,1.56,0.64,1)",
-          }}>
-            <style>{`
-              @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-              @keyframes slideUp { from { opacity: 0; transform: translate(-50%, calc(-50% + 20px)); } to { opacity: 1; transform: translate(-50%, -50%); } }
-              @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-            `}</style>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <div style={{ width: 28, height: 28, borderRadius: 8, background: "rgba(255,215,0,0.1)", border: "1px solid rgba(255,215,0,0.2)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🤖</div>
-                <div>
-                  <div style={{ fontSize: 9, fontWeight: 700, color: "#ffd700", letterSpacing: "0.08em" }}>AI REPLAY ANALYSIS</div>
-                  <div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)" }}>{replayData.symbol} · {replayDate} · {replayData.direction}</div>
-                </div>
-              </div>
-              <button onClick={() => setShowReplayAI(false)} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.3)", cursor: "pointer", fontSize: 16, padding: 4 }}>✕</button>
-            </div>
-            <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 16 }}>
-              {replayAILoading && !replayAIText ? (
-                <div style={{ display: "flex", gap: 6, alignItems: "center", padding: "20px 0" }}>
-                  {[0,1,2].map(i => <div key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: "#ffd700", animation: `pulse 1.2s ease ${i*0.2}s infinite` }} />)}
-                  <span style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginLeft: 4 }}>Analyzing signal...</span>
-                </div>
-              ) : (
-                <div style={{ fontSize: 12, color: "rgba(255,255,255,0.75)", lineHeight: 1.8, fontFamily: "inherit", animation: "fadeIn 0.4s ease" }}>
-                  {replayAIText}
-                  {replayAILoading && <span style={{ animation: "pulse 1s infinite", opacity: 0.6 }}>▊</span>}
-                </div>
-              )}
-            </div>
-            {!replayAILoading && replayAIText && (
-              <div style={{ marginTop: 16, paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ fontSize: 9, color: replayData.was_correct ? "#00ff88" : "#ff4466", fontWeight: 700 }}>
-                  {replayData.was_correct ? "✓ SIGNAL WAS CORRECT" : "✗ SIGNAL WAS WRONG"} · {replayData.actual_return_5d > 0 ? "+" : ""}{replayData.actual_return_5d}% in 5 days
-                </span>
-                <button onClick={() => setShowReplayAI(false)} style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 6, padding: "4px 12px", fontSize: 9, color: "rgba(255,255,255,0.5)", cursor: "pointer", fontFamily: "inherit" }}>Close</button>
-              </div>
-            )}
-          </div>
-        </>
-      )}
-
-
-      <div style={{ marginBottom: 16, display: "flex", alignItems: "center", gap: 6, padding: "6px 10px", background: "rgba(255,255,255,0.02)", borderRadius: 6, border: "1px solid rgba(255,255,255,0.05)" }}>
-        {windows.map((w, i) => (
-          <div key={w.label} style={{ display: "flex", alignItems: "center", gap: 5, flex: 1 }}>
-            {i > 0 && <div style={{ width: 1, height: 10, background: "rgba(255,255,255,0.07)", marginRight: 2 }} />}
-            <div style={{ width: 5, height: 5, borderRadius: "50%", background: w.active ? w.color : "rgba(255,255,255,0.12)", flexShrink: 0 }} />
-            <div style={{ fontSize: 10, fontWeight: w.active ? 700 : 400, color: w.active ? w.color : "rgba(255,255,255,0.25)", letterSpacing: "0.08em", whiteSpace: "nowrap" }}>{w.label}</div>
-          </div>
-        ))}
-      </div>
-      {!isMobile ? (
-        <div style={{ height: 420, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", marginBottom: 20 }}>
-          <TradingChart symbol={selected.symbol} />
-        </div>
-      ) : (
-        <div style={{ height: 260, borderRadius: 8, overflow: "hidden", border: "1px solid rgba(255,255,255,0.08)", marginBottom: 20, position: "relative" }}>
-          <TradingChart symbol={selected.symbol} />
-        </div>
-      )}
-      {activeDetail && (
-        <>
-          <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr 1fr 1fr 1fr", gap: 10, marginBottom: 20 }}>
-            {[
-              { label: "KELLY SIZE", value: `${activeDetail.kelly_size}%`, color: "#00aaff" },
-              { label: "CONFLUENCE", value: activeDetail.confluence_score, color: "#00ff88" },
-              { label: "RISK/REWARD", value: `${activeDetail.risk_reward}:1`, color: "#ffd700" },
-              { label: "VOLUME", value: activeDetail.volume_ratio ? `${activeDetail.volume_ratio}x` : "—", color: activeDetail.volume_ratio >= 2.0 ? "#ff5252" : activeDetail.volume_ratio >= 1.5 ? "#ffc107" : "rgba(255,255,255,0.5)" },
-            ].map(b => (
-              <div key={b.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 6, padding: "12px 10px" }}>
-                <div style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginBottom: 6, letterSpacing: "0.1em" }}>{b.label}</div>
-                <div style={{ fontSize: isMobile ? 14 : 18, fontWeight: 800, color: b.color }}>{b.value}</div>
-              </div>
-            ))}
-          </div>
-          {/* On mobile, show sidebar content inline under signal tab */}
-          {isMobile && <SidebarContent />}
-        </>
-      )}
-    </div>
-  );
-
-  const SidebarContent = () => (
-    <div>
-      <div style={{ marginBottom: 20 }}>
-        <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.5)", marginBottom: 10, letterSpacing: "0.1em" }}>TRADE LEVELS</div>
-        {[
-          { label: "TP", value: activeDetail.take_profit, color: "#00ff88", pct: "+" + Math.abs(((activeDetail.take_profit - activeDetail.current_price) / activeDetail.current_price) * 100).toFixed(1) },
-          { label: "ENTRY", value: activeDetail.current_price, color: "#fff", pct: "0.0" },
-          { label: "SL", value: activeDetail.stop_loss, color: "#ff4466", pct: "-" + Math.abs(((activeDetail.stop_loss - activeDetail.current_price) / activeDetail.current_price) * 100).toFixed(1) },
-        ].map(l => (
-          <div key={l.label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", background: "rgba(255,255,255,0.02)", borderRadius: 5, border: "1px solid rgba(255,255,255,0.05)", marginBottom: 6 }}>
-            <div>
-              <div style={{ fontSize: 9, fontWeight: 800, color: l.color }}>{l.label}</div>
-              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.25)", marginTop: 2 }}>{l.pct !== "0.0" ? `${l.pct}%` : "ENTRY"}</div>
-            </div>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "#fff" }}>${l.value?.toLocaleString()}</span>
-          </div>
-        ))}
-      </div>
-      {/* Liquidity Levels Card */}
-      {selected && ["BTC-USD","ETH-USD","SOL-USD","BNB-USD","XRP-USD","DOGE-USD","ADA-USD","AVAX-USD","DOT-USD","LINK-USD"].includes(selected.symbol) && (
-        <ProGate isPro={isPro} user={user} featureName="Liquidity Levels">
-          <LiquidityCard symbol={selected.symbol} />
-        </ProGate>
-      )}
-      <div style={{ marginBottom: 20 }}>
-        {activeDetail.raw_probability && (() => {
-          const final = activeDetail.probability;
-          const color = final >= 0.5 ? "#00ff88" : final >= 0.35 ? "#ffd700" : "#ff4466";
-          const label = final >= 0.6 ? "HIGH CONFIDENCE" : final >= 0.45 ? "MODERATE" : "LOW CONFIDENCE";
-          return (
-            <div style={{ marginBottom: 12, padding: "10px 12px", background: "rgba(255,255,255,0.02)", borderRadius: 6, border: `1px solid ${color}20` }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                <span style={{ fontSize: 10, fontWeight: 700, color: "rgba(255,255,255,0.35)", letterSpacing: "0.12em" }}>SIGNAL CONFIDENCE</span>
-                <span style={{ fontSize: 16, fontWeight: 800, color, fontFamily: "monospace" }}>{(final * 100).toFixed(0)}%</span>
-              </div>
-              <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, overflow: "hidden", marginBottom: 6 }}>
-                <div style={{ width: `${final * 100}%`, height: "100%", background: color, borderRadius: 2, transition: "width 0.5s ease" }} />
-              </div>
-              <div style={{ fontSize: 10, color, letterSpacing: "0.1em", fontWeight: 700 }}>{label}</div>
-            </div>
-          );
-        })()}
-        {/* Signal Reasoning */}
-        {activeDetail.context_text && (
-          <div style={{
-            marginBottom: 12, padding: "10px 12px", borderRadius: 6,
-            background: "rgba(0,170,255,0.06)",
-            border: "1px solid rgba(0,170,255,0.15)",
-          }}>
-            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.1em", color: "#00aaff", marginBottom: 6 }}>
-              💡 SIGNAL REASONING
-            </div>
-            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.7)", lineHeight: 1.6 }}>
-              {activeDetail.context_text}
-            </div>
-            {activeDetail.conflict_detected && (
-              <div style={{ marginTop: 6, fontSize: 9, color: "#ffd700", display: "flex", alignItems: "center", gap: 4 }}>
-                ⚠️ {activeDetail.conflict_reason || "Signal conflict detected — trade with caution"}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Regime Badge */}
-        {activeDetail.regime && (
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-            <div style={{
-              fontSize: 9, fontWeight: 700, letterSpacing: "0.1em",
-              padding: "3px 8px", borderRadius: 4,
-              background: activeDetail.regime === "bull" ? "rgba(0,255,136,0.1)" : activeDetail.regime === "bear" ? "rgba(255,68,102,0.1)" : "rgba(255,255,255,0.06)",
-              border: `1px solid ${activeDetail.regime === "bull" ? "rgba(0,255,136,0.3)" : activeDetail.regime === "bear" ? "rgba(255,68,102,0.3)" : "rgba(255,255,255,0.1)"}`,
-              color: activeDetail.regime === "bull" ? "#00ff88" : activeDetail.regime === "bear" ? "#ff4466" : "rgba(255,255,255,0.4)",
-            }}>
-              {activeDetail.regime === "bull" ? "🐂" : activeDetail.regime === "bear" ? "🐻" : "↔"} {activeDetail.regime?.toUpperCase()} REGIME
-            </div>
-            {activeDetail.regime_suppressed && (
-              <span style={{ fontSize: 10, color: "#ffd700", background: "rgba(255,215,0,0.1)", border: "1px solid rgba(255,215,0,0.2)", padding: "2px 6px", borderRadius: 3 }}>
-                SUPPRESSED
-              </span>
-            )}
-            {activeDetail.energy && (
-              <span style={{
-                fontSize: 10, padding: "2px 6px", borderRadius: 3, fontWeight: 700,
-                background: activeDetail.energy.state === "releasing" ? "rgba(0,255,136,0.1)" :
-                            activeDetail.energy.state === "coiled"    ? "rgba(0,170,255,0.1)" :
-                            activeDetail.energy.state === "exhausted" ? "rgba(255,68,102,0.1)" :
-                            "rgba(255,255,255,0.05)",
-                border: `1px solid ${activeDetail.energy.state === "releasing" ? "rgba(0,255,136,0.3)" :
-                                     activeDetail.energy.state === "coiled"    ? "rgba(0,170,255,0.3)" :
-                                     activeDetail.energy.state === "exhausted" ? "rgba(255,68,102,0.3)" :
-                                     "rgba(255,255,255,0.1)"}`,
-                color: activeDetail.energy.state === "releasing" ? "#00ff88" :
-                       activeDetail.energy.state === "coiled"    ? "#00aaff" :
-                       activeDetail.energy.state === "exhausted" ? "#ff4466" :
-                       "rgba(255,255,255,0.4)",
-              }}>
-                {activeDetail.energy.state === "releasing" ? "⚡" :
-                 activeDetail.energy.state === "coiled"    ? "🌀" :
-                 activeDetail.energy.state === "exhausted" ? "💤" : "〰"} {activeDetail.energy.state?.toUpperCase()}
-              </span>
-            )}
-          </div>
-        )}
-
-        {/* Energy Implication */}
-        {activeDetail.energy?.implication && activeDetail.energy.state !== "neutral" && activeDetail.energy.state !== "unknown" && (
-          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", fontStyle: "italic", marginBottom: 10, padding: "6px 8px", background: "rgba(255,255,255,0.02)", borderRadius: 4, borderLeft: `2px solid ${activeDetail.energy.state === "releasing" ? "rgba(0,255,136,0.3)" : activeDetail.energy.state === "coiled" ? "rgba(0,170,255,0.3)" : "rgba(255,68,102,0.3)"}` }}>
-            ⚡ {activeDetail.energy.implication}
-          </div>
-        )}
-
-        {/* Signal Bias */}
-        {activeDetail.signal_bias && (
-          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", fontStyle: "italic", marginBottom: 10, padding: "6px 8px", background: "rgba(255,255,255,0.02)", borderRadius: 4, borderLeft: "2px solid rgba(255,215,0,0.3)" }}>
-            {activeDetail.signal_bias}
-          </div>
-        )}
-
-        {/* Final probability bar */}
-        <div style={{ height: 20, background: "rgba(255,255,255,0.06)", borderRadius: 4, overflow: "hidden", display: "flex", marginBottom: 6 }}>
-          <div style={{ width: `${activeDetail.probability * 100}%`, background: "linear-gradient(90deg, #00ff88, #00cc66)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 700, color: "#000" }}>
-            {(activeDetail.probability * 100).toFixed(0)}%
-          </div>
-          <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, color: "#ff4466", fontWeight: 700 }}>
-            {((1 - activeDetail.probability) * 100).toFixed(0)}%
-          </div>
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 9, color: "rgba(255,255,255,0.3)" }}>
-          <span>BUY</span>
-          <span>Agreement: {(activeDetail.model_agreement * 100).toFixed(0)}%</span>
-          <span>SELL</span>
-        </div>
-      </div>
-      <div style={{ marginBottom: 20 }}>
-            <div onClick={() => setShowFactors(o => !o)} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: showFactors ? 10 : 0, cursor: "pointer" }}>
-              <div style={{ fontSize: 9, fontWeight: 700, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>9-FACTOR CONFLUENCE</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                <span style={{ fontSize: 9, fontWeight: 800, color: "#00ff88", background: "rgba(0,255,136,0.1)", padding: "2px 6px", borderRadius: 3 }}>{activeDetail.confluence_score}</span>
-                {activeDetail.volume_ratio >= 1.5 && (
-                  <span style={{ fontSize: 9, fontWeight: 800, color: activeDetail.volume_ratio >= 2.5 ? "#ff5252" : "#ffc107", background: activeDetail.volume_ratio >= 2.5 ? "rgba(255,82,82,0.1)" : "rgba(255,193,7,0.1)", padding: "2px 6px", borderRadius: 3 }}>
-                    ↑ {activeDetail.volume_ratio}x VOL
-                  </span>
-                )}
-                <span style={{ fontSize: 9, color: "rgba(255,255,255,0.2)", marginLeft: 2 }}>{showFactors ? "▲" : "▼"}</span>
-              </div>
-            </div>
-            {showFactors && activeDetail.confluence?.map((c: any) => (
-              <div key={c.name} style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                <div style={{ width: 4, height: 4, borderRadius: "50%", background: c.signal === "BULLISH" ? "#00ff88" : "#ff4466", flexShrink: 0 }} />
-                <span style={{ flex: 1, color: "rgba(255,255,255,0.4)", fontSize: 9 }}>{c.name}</span>
-                <span style={{ fontSize: 9, fontWeight: 700, color: c.signal === "BULLISH" ? "#00ff88" : "#ff4466" }}>{c.signal === "BULLISH" ? "BULL" : "BEAR"}</span>
-              </div>
-            ))}
-          </div>
-      <EarningsBadge flag={activeDetail.earnings_flag} />
-      <StaleBadge sig={activeDetail} />
-      <MarketStatusBadge sig={activeDetail} />
-      <MTFBar mtf={activeDetail?.mtf} direction={activeDetail?.direction} />
-      <ShockWarning shock={activeDetail?.shock_warning} />
-      {activeDetail?.insider?.available && activeDetail.insider.trades?.length > 0 && (
-        <div style={{ background: "rgba(255,193,7,0.05)", border: "1px solid rgba(255,193,7,0.2)", borderRadius: 6, padding: "10px 14px", marginBottom: 12 }}>
-          <div style={{ fontSize: 10, fontWeight: 800, color: "rgba(255,193,7,0.7)", letterSpacing: "0.12em", marginBottom: 6 }}>
-            INSIDER ACTIVITY · SEC FORM 4 · {activeDetail.insider.summary}
-          </div>
-          {activeDetail.insider.trades.slice(0, 3).map((t: any, i: number) => (
-            <div key={i} style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", marginBottom: 3 }}>
-              <span style={{ color: "rgba(255,193,7,0.8)", fontWeight: 700 }}>{t.filer}</span>
-              <span style={{ color: "rgba(255,255,255,0.3)" }}> · Form {t.form} · {t.date}</span>
-            </div>
-          ))}
-        </div>
-      )}
-      {activeDetail && (
-        <div style={{ background: "rgba(0,255,136,0.04)", border: "1px solid rgba(0,255,136,0.12)", borderRadius: 6, padding: "10px 14px", marginBottom: 16 }}>
-          <div style={{ fontSize: 10, fontWeight: 800, color: "rgba(0,255,136,0.5)", letterSpacing: "0.12em", marginBottom: 6 }}>IN PLAIN ENGLISH</div>
-          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.75)", lineHeight: 1.7 }}>
-            {generateOneLiner(activeDetail)}
-          </div>
-        </div>
-      )}
-      {activeDetail.reasoning && (
-        <div style={{ background: "rgba(0,170,255,0.05)", border: "1px solid rgba(0,170,255,0.15)", borderRadius: 6, padding: 12 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-            <Database size={10} color="#00aaff" />
-            <span style={{ fontSize: 10, fontWeight: 800, color: "#00aaff", letterSpacing: "0.1em" }}>QUANT RAG REASONING</span>
-          </div>
-          <div style={{ fontSize: 10, color: "rgba(255,255,255,0.5)", lineHeight: 1.7, fontStyle: "italic" }}>
-            "{activeDetail.reasoning.slice(0, 180)}..."
-          </div>
-        </div>
-      )}
-    </div>
-  );
-
   // ── MOBILE LAYOUT ──────────────────────────────────────────────
   if (isMobile && !mounted) return <div style={{ background: "#0d1117", height: "100dvh" }} />;
   if (isMobile) {
@@ -709,7 +268,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
         {/* Mobile content area */}
         <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column" }}>
-          {mobilePanel === "LIST" && <AssetList />}
+          {mobilePanel === "LIST" && <AssetList signals={signals} loading={loading} filter={filter} setFilter={setFilter} search={search} setSearch={setSearch} selected={selected} selectAsset={selectAsset} outcomeMap={outcomeMap} isMobile={isMobile} filtered={filtered} />}
 
           {mobilePanel !== "LIST" && selected && (
             <>
@@ -730,7 +289,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
               {/* Tab content */}
               <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column" }}>
-                {mobilePanel === "SIGNAL" && <SignalTab />}
+                {mobilePanel === "SIGNAL" && <SignalTab activeDetail={activeDetail} selected={selected} isMobile={isMobile} isPro={isPro} user={user} replayMode={replayMode} setReplayMode={setReplayMode} replayData={replayData} setReplayData={setReplayData} replayDate={replayDate} setReplayDate={setReplayDate} replayLoading={replayLoading} replayAIText={replayAIText} replayAILoading={replayAILoading} showReplayAI={showReplayAI} fetchReplayAI={fetchReplayAI} />}
                 {mobilePanel === "NEWS" && selected && <NewsTab symbol={selected.symbol} />}
                 {mobilePanel === "CHAT" && (
                   <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", padding: "0 16px 16px" }}>
@@ -903,7 +462,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             <div style={{ display: "flex", flex: 1, overflow: "hidden" }}>
         {/* Left panel — Analyst Sidebar */}
         <SmoothScroll style={{ width: 300, borderRight: "1px solid rgba(255,255,255,0.06)", background: "#0a0a0c", padding: "16px", flexShrink: 0, scrollbarWidth: "thin" as const }}>
-          {selected ? (detail ? <SidebarContent /> : <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: 12 }}><div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 4 }}>TRADE LEVELS</div>{[{label:"TP",color:"#00ff88"},{label:"ENTRY",color:"#fff"},{label:"SL",color:"#ff4466"}].map(l=><div key={l.label} style={{height:36,background:"rgba(255,255,255,0.02)",borderRadius:5,border:"1px solid rgba(255,255,255,0.05)",animation:"pulse 1.5s ease infinite",marginBottom:4}}/>)}<style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}`}</style></div>) : <div style={{ color: "rgba(255,255,255,0.1)", fontSize: 9, marginTop: 60, textAlign: "center", letterSpacing: "0.12em" }}>SELECT AN ASSET</div>}
+          {selected ? (detail ? <SidebarContent activeDetail={activeDetail} selected={selected} isPro={isPro} user={user} isMobile={isMobile} showFactors={showFactors} setShowFactors={setShowFactors} /> : <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: 12 }}><div style={{ fontSize: 9, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", marginBottom: 4 }}>TRADE LEVELS</div>{[{label:"TP",color:"#00ff88"},{label:"ENTRY",color:"#fff"},{label:"SL",color:"#ff4466"}].map(l=><div key={l.label} style={{height:36,background:"rgba(255,255,255,0.02)",borderRadius:5,border:"1px solid rgba(255,255,255,0.05)",animation:"pulse 1.5s ease infinite",marginBottom:4}}/>)}<style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}`}</style></div>) : <div style={{ color: "rgba(255,255,255,0.1)", fontSize: 9, marginTop: 60, textAlign: "center", letterSpacing: "0.12em" }}>SELECT AN ASSET</div>}
         </SmoothScroll>
 
         {/* Center panel */}
@@ -955,7 +514,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
 
             {/* Tab content */}
             <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0 }}>
-              {activeTab === "SIGNAL" && <SignalTab />}
+              {activeTab === "SIGNAL" && <SignalTab activeDetail={activeDetail} selected={selected} isMobile={isMobile} isPro={isPro} user={user} replayMode={replayMode} setReplayMode={setReplayMode} replayData={replayData} setReplayData={setReplayData} replayDate={replayDate} setReplayDate={setReplayDate} replayLoading={replayLoading} replayAIText={replayAIText} replayAILoading={replayAILoading} showReplayAI={showReplayAI} fetchReplayAI={fetchReplayAI} />}
               {activeTab === "GENERATE" && selected && <div style={{ padding: "24px", overflowY: "auto", flex: 1 }}><PerseusStream symbol={selected.symbol} onComplete={() => {}} /></div>}
               {activeTab === "CHAT" && (
                 <>
@@ -1037,7 +596,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
             transition: "width 0.25s ease",
             flexShrink: 0,
           }}>
-            <AssetList />
+            <AssetList signals={signals} loading={loading} filter={filter} setFilter={setFilter} search={search} setSearch={setSearch} selected={selected} selectAsset={selectAsset} outcomeMap={outcomeMap} isMobile={isMobile} filtered={filtered} />
           </div>
         </div>
       </div>
