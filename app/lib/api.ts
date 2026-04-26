@@ -62,3 +62,51 @@ export async function fetchAllSignals(type?: string) {
 export async function fetchMarketMood() {
   return apiFetch(`${API_BASE}/market/mood`);
 }
+
+export async function subscribeAlert(email: string, symbol: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_BASE}/alerts/subscribe`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, symbols: [symbol] }),
+    });
+    return res.ok;
+  } catch { return false; }
+}
+
+export async function fetchTradeHistory(): Promise<any> {
+  return fetch(`${API_BASE}/history/trades?limit=500`).then(r => r.json());
+}
+
+export async function fetchEvStats(): Promise<any> {
+  return fetch(`${API_BASE}/system/ev-stats`).then(r => r.json());
+}
+
+export async function fetchMorningBriefing(): Promise<any> {
+  return fetch(`${API_BASE}/system/morning-briefing`).then(r => r.json());
+}
+
+export async function fetchReplay(symbol: string, replayDate: string): Promise<any> {
+  const res = await fetch(`${API_BASE}/signals/${symbol}/replay?replay_date=${replayDate}`);
+  if (!res.ok) throw new Error(`Replay error ${res.status}`);
+  return res.json();
+}
+
+export async function explainReplay(payload: Record<string, any>): Promise<any> {
+  const res = await fetch(`${API_BASE}/replay/explain`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error(`Explain error ${res.status}`);
+  return res.json();
+}
+
+export async function createCheckout(email: string, userId: string): Promise<{ checkout_url?: string }> {
+  const res = await fetch(`${API_BASE}/payments/checkout`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, user_id: userId }),
+  });
+  return res.json();
+}

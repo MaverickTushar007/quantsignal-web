@@ -5,7 +5,7 @@ import { usePushNotifications } from "../hooks/usePushNotifications";
 import { useEffect, useState } from "react";
 import { useAuth } from "../lib/useAuth";
 import ProGate from "../components/ProGate";
-import { fetchAllSignals, fetchMarketMood, fetchSignal, UpgradeRequiredError } from "../lib/api";
+import { fetchAllSignals, fetchMarketMood, fetchSignal, UpgradeRequiredError, subscribeAlert, fetchTradeHistory, fetchEvStats, fetchMorningBriefing, fetchReplay, explainReplay, createCheckout } from "../lib/api";
 import TradingChart from "../components/TradingChart";
 import TutorialModal from "../components/TutorialModal";
 import AgentChat from "../components/AgentChat";
@@ -26,18 +26,8 @@ import PushBell from "../components/dashboard/PushBell";
 import TrackRecordTab from "../components/dashboard/TrackRecordTab";
 
 
-const API_BASE = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 
-async function subscribeAlert(email: string, symbol: string): Promise<boolean> {
-  try {
-    const res = await fetch(`${API_BASE}/alerts/subscribe`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, symbols: [symbol] }),
-    });
-    return res.ok;
-  } catch { return false; }
-}
+
 
 function formatPrice(price: number, type: string, symbol: string): string {
   if (type === "IN_STOCK" || symbol?.endsWith(".NS") || symbol?.endsWith(".BO")) {
@@ -228,9 +218,9 @@ export default function Dashboard() {
   // Fetch outcome map — shows ✓/✗ badges on signal list
   useEffect(() => {
     Promise.allSettled([
-      fetch(`${API_BASE}/history/trades?limit=500`).then(r => r.json()),
-      fetch(`${API_BASE}/system/ev-stats`).then(r => r.json()),
-      fetch(`${API_BASE}/system/morning-briefing`).then(r => r.json()),
+      fetchTradeHistory(),
+      fetchEvStats(),
+      fetchMorningBriefing(),
     ]).then(([tradesRes, evRes, briefingRes]) => {
       if (tradesRes.status === "fulfilled") {
         const trades = tradesRes.value?.trades || [];
@@ -419,10 +409,7 @@ Top indicators at the time: ${replayData.confluence?.map((c: any) => c.name + ':
 
 Give a punchy, honest explanation of why the model made this call, what the market was doing, and what a trader should learn from this.`;
 
-      const res = await fetch(`${API_BASE}/replay/explain`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const data = await explainReplay({
           symbol: replayData.symbol,
           replay_date: replayData.replay_date,
           direction: replayData.direction,
@@ -434,9 +421,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
           was_correct: replayData.was_correct,
           confluence_score: replayData.confluence_score,
           confluence: replayData.confluence,
-        })
-      });
-      const data = await res.json();
+        });
       const text = data.explanation || "Could not generate explanation.";
       // Smooth reveal — just set text directly, no typewriter flicker
       setReplayAIText(text);
@@ -456,9 +441,9 @@ Give a punchy, honest explanation of why the model made this call, what the mark
     setReplayLoading(true);
     setReplayData(null);
     try {
-      const res = await fetch(`${API_BASE}/signals/${selected.symbol}/replay?replay_date=${d}`);
-      console.log("replay res status:", res.status);
-      if (res.ok) { const data = await res.json(); console.log("replay data:", data.direction); setReplayData(data); }
+      const data = await fetchReplay(selected.symbol, d);
+      console.log("replay data:", data.direction);
+      setReplayData(data);
     } catch {}
     finally { setReplayLoading(false); }
   };
@@ -475,8 +460,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         ) : (
           <button onClick={async () => {
             if (!user) { window.location.href = "/auth"; return; }
-            const res = await fetch(`${API_BASE}/payments/checkout`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: user.email, user_id: user.id }) });
-            const d = await res.json();
+            const d = await createCheckout(user.email, user.id);
             if (d.checkout_url) window.location.href = d.checkout_url;
           }} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "1px solid rgba(255,215,0,0.3)", background: "rgba(255,215,0,0.08)", color: "#ffd700" }}>🔒 REPLAY · PRO</button>
         )}
