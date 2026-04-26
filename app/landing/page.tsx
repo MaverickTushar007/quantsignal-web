@@ -65,12 +65,14 @@ export default function LandingPage() {
         {/* CTA */}
         <div className="flex gap-4 justify-center">
           
+            <a
             href="/dashboard"
             className="bg-emerald-500 hover:bg-emerald-400 text-black font-semibold px-6 py-3 rounded-lg transition"
           >
             View Live Signals →
           </a>
           
+            <a
             href="/pricing"
             className="border border-zinc-700 hover:border-zinc-500 text-zinc-300 font-semibold px-6 py-3 rounded-lg transition"
           >
