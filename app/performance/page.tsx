@@ -6,7 +6,7 @@ import {
   ResponsiveContainer, BarChart, Bar, Cell, ReferenceLine,
 } from "recharts";
 
-const API = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
+const API = process.env.NEXT_PUBLIC_API_URL || "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 
 // ── types ──────────────────────────────────────────────────────
 interface Trade {

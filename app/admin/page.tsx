@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const API = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
+const API = process.env.NEXT_PUBLIC_API_URL || "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 
 function fmt(n: number) {
   if (n >= 1000000) return (n / 1000000).toFixed(1) + "M";

@@ -4,7 +4,7 @@ import { X, TrendingUp, TrendingDown, Minus, ExternalLink, Zap, RefreshCw } from
 import { fetchSignal } from "../lib/api";
 import TradingChart from "./TradingChart";
 
-const API_BASE = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 
 const dirColor = (d: string) =>
   d === "BUY" ? "text-emerald-400" : d === "SELL" ? "text-red-400" : "text-yellow-400";
