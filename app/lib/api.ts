@@ -114,3 +114,40 @@ export async function createCheckout(email: string, userId: string): Promise<{ c
   });
   return res.json();
 }
+
+// ── Phase 7 — Intelligence endpoints ─────────────────────────────────────────
+
+export async function fetchResearch(symbol: string) {
+  return apiFetch(`${API_BASE}/research/${symbol}`);
+}
+
+export async function fetchResearchSummary(symbol: string) {
+  return apiFetch(`${API_BASE}/research/${symbol}/summary`);
+}
+
+export async function analyzeDocument(file: File, symbol?: string, question?: string) {
+  const userId = getUserId();
+  const form = new FormData();
+  form.append("file", file);
+  if (symbol)   form.append("symbol", symbol);
+  if (question) form.append("question", question);
+  const res = await fetch(`${API_BASE}/documents/analyze`, {
+    method: "POST",
+    headers: { "x-user-id": userId },
+    body: form,
+  });
+  if (!res.ok) throw new Error(`Document analysis error ${res.status}`);
+  return res.json();
+}
+
+export async function fetchPortfolioXRay(holdings: Array<{symbol: string; value: number; side?: string; sector?: string}>, fetchSignals = false) {
+  return apiFetch(`${API_BASE}/portfolio/xray`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ holdings, fetch_signals: fetchSignals }),
+  });
+}
+
+export async function fetchRegimeFit(symbols: string[]) {
+  return apiFetch(`${API_BASE}/portfolio/regime-fit?symbols=${symbols.join(",")}`);
+}
