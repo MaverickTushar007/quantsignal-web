@@ -5,15 +5,16 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 const SIGNALS = [
-  { symbol:"RELIANCE", dir:"BUY",  prob:87, price:"₹2,847"  },
-  { symbol:"BTC/USD",  dir:"BUY",  prob:81, price:"$67,420" },
-  { symbol:"TCS",      dir:"HOLD", prob:63, price:"₹3,921"  },
-  { symbol:"NIFTY50",  dir:"BUY",  prob:78, price:"₹24,132" },
-  { symbol:"AAPL",     dir:"SELL", prob:71, price:"$189.40" },
+  { symbol:"RELIANCE", dir:"BUY",  prob:87, price:"₹1,247"  },
+  { symbol:"BTC/USD",  dir:"BUY",  prob:81, price:"$85,000" },
+  { symbol:"TCS",      dir:"HOLD", prob:63, price:"₹3,310"  },
+  { symbol:"NIFTY50",  dir:"BUY",  prob:78, price:"₹22,460" },
+  { symbol:"AAPL",     dir:"SELL", prob:71, price:"$202.50" },
 ];
 
 export default function AuthPage() {
   const [mode, setMode]         = useState<"login"|"signup">("login");
+  const [refDemo, setRefDemo]   = useState(false);
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading]   = useState(false);
@@ -26,6 +27,9 @@ export default function AuthPage() {
 
   useEffect(() => {
     const t = setInterval(() => setTick(p => p + 1), 2000);
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("mode") === "signup") setMode("signup");
+    if (params.get("ref") === "demo") { setMode("signup"); setRefDemo(true); }
     const check = () => setIsMobile(window.innerWidth < 900);
     check();
     window.addEventListener("resize", check);
@@ -56,7 +60,7 @@ export default function AuthPage() {
   }
 
   async function handleGoogle() {
-    await supabase.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: window.location.origin+"/dashboard" } });
+    await supabase.auth.signInWithOAuth({ provider:"google", options:{ redirectTo: window.location.origin+"/onboarding" } });
   }
 
   const dc = (d: string) => d==="BUY"?"#3fb950":d==="SELL"?"#f85149":"#e3b341";
@@ -109,7 +113,7 @@ export default function AuthPage() {
 
           {/* Stats — 3 colors */}
           <div style={{position:"relative",zIndex:1,display:"flex",gap:0,marginBottom:32,background:"#161b22",borderRadius:10,border:"1px solid #21262d",overflow:"hidden"}}>
-            {[["133","Live assets","#3fb950"],["96%","Model agreement","#58a6ff"],["2:1","Avg risk/reward","#e3b341"]].map(([v,l,c],i)=>(
+            {[["186","Live assets","#3fb950"],["9-factor","ML confluence","#58a6ff"],["2:1","Avg risk/reward","#e3b341"]].map(([v,l,c],i)=>(
               <div key={l} style={{flex:1,padding:"16px 12px",borderRight:i<2?"1px solid #21262d":"none",textAlign:"center"}}>
                 <div style={{fontSize:22,fontWeight:800,color:c,letterSpacing:"-.5px",fontFamily:"Sora,sans-serif"}}>{v}</div>
                 <div style={{fontSize:10,color:"#8b949e",marginTop:3}}>{l}</div>
@@ -124,8 +128,8 @@ export default function AuthPage() {
               <div style={{padding:"10px 14px",borderBottom:"1px solid #21262d",display:"flex",alignItems:"center",justifyContent:"space-between",background:"#0d1117"}}>
                 <div style={{display:"flex",gap:5}}>{[.18,.12,.08].map((o,i)=><div key={i} style={{width:8,height:8,borderRadius:"50%",background:`rgba(255,255,255,${o})`}}/>)}</div>
                 <div style={{fontSize:9,color:"#484f58",fontFamily:"monospace"}}>quantsignal.app/dashboard</div>
-                <div style={{display:"flex",alignItems:"center",gap:4,fontSize:8,color:"#3fb950",fontWeight:600}}>
-                  <span style={{width:4,height:4,borderRadius:"50%",background:"#3fb950",display:"inline-block",animation:"gp 1.5s infinite"}}/>LIVE
+                <div style={{display:"flex",alignItems:"center",gap:4,fontSize:8,color:"#e3b341",fontWeight:600}}>
+                  SAMPLE DATA
                 </div>
               </div>
               {/* Col headers */}
@@ -158,12 +162,12 @@ export default function AuthPage() {
 
           {/* What you get */}
           <div style={{position:"relative",zIndex:1,marginTop:24,padding:"14px 18px",borderRadius:10,background:"#161b22",border:"1px solid #21262d"}}>
-            <div style={{fontSize:9,letterSpacing:"0.12em",color:"#3fb950",fontWeight:700,marginBottom:10}}>WHAT YOU GET</div>
+            <div style={{fontSize:9,letterSpacing:"0.12em",color:"#3fb950",fontWeight:700,marginBottom:10}}>WHAT PERSEUS UNLOCKS</div>
             {[
-              "Every signal explains its reasoning — no black box",
-              "Kelly-optimal sizing for virtual portfolio positions",
-              "Perseus AI analyst available 24/7 in SIMPLE or QUANT mode",
-              "Guardian monitors your watchlist every 15 minutes autonomously",
+              "Perseus answers in SIMPLE or QUANT mode — plain English or full factor decomposition",
+              "Every signal shows its reasoning: RSI, MACD, volume, sentiment — not a black box",
+              "Kelly-optimal sizing so position size always matches conviction level",
+              "Guardian watches your watchlist every 15 min and alerts on regime shifts",
             ].map((item, i) => (
               <div key={i} style={{display:"flex",alignItems:"flex-start",gap:8,marginBottom:6}}>
                 <span style={{color:"#3fb950",fontSize:11,marginTop:1}}>✓</span>
@@ -193,7 +197,7 @@ export default function AuthPage() {
               {mode==="login"?"Welcome back":"Create account"}
             </h2>
             <p style={{fontSize:12,color:"#8b949e",marginBottom:24,lineHeight:1.6}}>
-              {mode==="login"?"Sign in to access your signals and portfolio.":"Free forever. No credit card required."}
+              {mode==="login" ? "Sign in to access your signals and portfolio." : refDemo ? "Your Perseus session is waiting. Free forever, no card required." : "Free forever. No credit card required."}
             </p>
 
             {/* Tabs */}
@@ -252,6 +256,9 @@ export default function AuthPage() {
           </div>
           <div style={{textAlign:"center",marginTop:10,fontSize:9,color:"#30363d",lineHeight:1.6}}>
             Paper trading only · Not financial advice · Always verify before going live
+          </div>
+          <div style={{textAlign:"center",marginTop:8,fontSize:10,color:"#484f58"}}>
+            <a href="/pricing" style={{color:"#58a6ff",textDecoration:"none"}}>View pricing →</a>
           </div>
         </div>
       </div>

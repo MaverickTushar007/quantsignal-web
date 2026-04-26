@@ -31,7 +31,10 @@ export default function AgentsPage() {
 
   const fetchAgents = async () => {
     try {
-      const r = await fetch(`${API}/agents/${USER_ID}`);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      const r = await fetch(`${API}/agents/${USER_ID}`, { signal: controller.signal });
+      clearTimeout(timeout);
       const d = await r.json();
       setAgents(d.agents || []);
     } catch { setAgents([]); }
@@ -242,9 +245,18 @@ export default function AgentsPage() {
             <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 8 }}>
               No agents yet
             </div>
-            <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)" }}>
+            <div style={{ fontSize: 13, color: "rgba(255,255,255,0.35)", marginBottom: 24 }}>
               Create a virtual agent to paper trade automatically on live signals
             </div>
+            <button
+              onClick={() => setShowForm(true)}
+              style={{
+                background: "rgba(0,230,118,0.1)", border: "1px solid rgba(0,230,118,0.3)",
+                color: "#00e676", borderRadius: 8, padding: "10px 24px",
+                cursor: "pointer", fontSize: 13, fontWeight: 700,
+              }}>
+              🚀 Launch your first agent →
+            </button>
           </div>
         ) : (
           <motion.div initial="hidden" animate="visible" variants={{visible:{transition:{staggerChildren:0.08}}}} style={{ display: "flex", flexDirection: "column", gap: 16 }}>

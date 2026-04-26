@@ -59,7 +59,7 @@ function stripVerdictBlock(content: string): string {
   return idx === -1 ? content : content.slice(0, idx).trim();
 }
 
-export default function AgentChat({ symbol, userId }: { symbol: string; userId?: string }) {
+export default function AgentChat({ symbol, userId, onUpgradeError }: { symbol: string; userId?: string; onUpgradeError?: (kind: "perseus", used: number, limit: number) => void }) {
   const [messages, setMessages] = useState<Message[]>(GLOBAL_MEMORY.history);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -154,6 +154,15 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
           await new Promise(r => setTimeout(r, 1500 * attempts));
           continue;
         }
+        if (response.status === 429) {
+          let detail: any = {};
+          try { detail = await response.json(); } catch {}
+          const used  = detail.used  ?? 5;
+          const limit = detail.limit ?? 5;
+          if (onUpgradeError) { onUpgradeError("perseus", used, limit); }
+          else { setMessages(prev => [...prev, { role: "assistant", content: `⚠️ Perseus limit reached (${used}/${limit} today). Upgrade to Pro for unlimited access.` }]); }
+          return;
+        }
         if (!response.body) throw new Error("No response body");
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
@@ -171,7 +180,12 @@ export default function AgentChat({ symbol, userId }: { symbol: string; userId?:
             try {
               const data = JSON.parse(line.slice(6));
               if (data.type === "error") {
-                setMessages(prev => [...prev, { role: "assistant", content: `⚠️ ${data.message}` }]);
+                if (data.message === "token_limit") {
+                  if (onUpgradeError) { onUpgradeError("perseus", data.used, data.limit); }
+                  else { setMessages(prev => [...prev, { role: "assistant", content: `⚠️ Message too long for free plan. Upgrade to Pro for unlimited.` }]); }
+                } else {
+                  setMessages(prev => [...prev, { role: "assistant", content: `⚠️ ${data.message}` }]);
+                }
                 return;
               } else if (data.type === "status") {
                 setCurrentStatus(prev => [...prev, data.message]);

@@ -34,7 +34,12 @@ export default function Onboarding() {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
-        await (supabase.from("profiles") as any).upsert({ id: session.user.id, email: session.user.email });
+        await (supabase.from("profiles") as any).upsert({
+          id: session.user.id,
+          email: session.user.email,
+          preferred_markets: selected,
+          onboarded_at: new Date().toISOString(),
+        });
       }
     } catch {}
     setStep(1);

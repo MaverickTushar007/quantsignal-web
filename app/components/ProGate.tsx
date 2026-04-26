@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 
-const BETA_MODE = true;
+const BETA_MODE = false;
 
 const API_BASE = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 
@@ -24,13 +24,30 @@ export default function ProGate({
       return;
     }
     try {
-      const res = await fetch(`${API_BASE}/payments/checkout`, {
+      // Load Razorpay script
+      await new Promise<void>(resolve => {
+        if (document.getElementById("rzp-js")) { resolve(); return; }
+        const s = document.createElement("script");
+        s.id = "rzp-js"; s.src = "https://checkout.razorpay.com/v1/checkout.js";
+        s.onload = () => resolve(); document.body.appendChild(s);
+      });
+      const res = await fetch(`${API_BASE}/billing/create-subscription`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: user.email, user_id: user.id }),
+        headers: { "Content-Type": "application/json", "x-user-id": user.id },
+        body: JSON.stringify({ tier: "pro", email: user.email }),
       });
       const data = await res.json();
-      if (data.checkout_url) window.location.href = data.checkout_url;
+      const rzp = new (window as any).Razorpay({
+        key: data.key_id,
+        subscription_id: data.subscription_id,
+        name: "QuantSignal",
+        description: "Pro — ₹999/month",
+        prefill: { email: user.email },
+        notes: { user_id: user.id },
+        theme: { color: "#00ff88" },
+        handler: () => { window.location.href = "/dashboard?upgraded=pro"; },
+      });
+      rzp.open();
     } catch {
       alert("Failed to create checkout. Please try again.");
     }
