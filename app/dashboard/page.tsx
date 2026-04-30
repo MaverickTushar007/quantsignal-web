@@ -15,7 +15,7 @@ import MarketSentiment from "../components/MarketSentiment";
 import UpgradeModal from "../components/UpgradeModal";
 
 
-const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
+const API_BASE = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 
 async function subscribeAlert(email: string, symbol: string): Promise<boolean> {
   try {
@@ -411,7 +411,7 @@ function PushBell() {
 
 
 // ── Track Record Component ────────────────────────────────────────────────
-const API_BASE_TR = "https://quantsignal-api-production.up.railway.app/api/v1";
+const API_BASE_TR = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 
 function TrackRecordTab({ symbol }: { symbol: string }) {
   const [data, setData] = useState<any>(null);
@@ -852,7 +852,7 @@ Top indicators at the time: ${replayData.confluence?.map((c: any) => c.name + ':
 
 Give a punchy, honest explanation of why the model made this call, what the market was doing, and what a trader should learn from this.`;
 
-      const res = await fetch("https://quantsignal-api-production.up.railway.app/api/v1/replay/explain", {
+      const res = await fetch("https://quantsignal-api-production-a5e1.up.railway.app/api/v1/replay/explain", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -889,7 +889,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
     setReplayLoading(true);
     setReplayData(null);
     try {
-      const res = await fetch(`https://quantsignal-api-production.up.railway.app/api/v1/signals/${selected.symbol}/replay?replay_date=${d}`);
+      const res = await fetch(`https://quantsignal-api-production-a5e1.up.railway.app/api/v1/signals/${selected.symbol}/replay?replay_date=${d}`);
       console.log("replay res status:", res.status);
       if (res.ok) { const data = await res.json(); console.log("replay data:", data.direction); setReplayData(data); }
     } catch {}
@@ -908,7 +908,7 @@ Give a punchy, honest explanation of why the model made this call, what the mark
         ) : (
           <button onClick={async () => {
             if (!user) { window.location.href = "/auth"; return; }
-            const res = await fetch("https://quantsignal-api-production.up.railway.app/api/v1/payments/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: user.email, user_id: user.id }) });
+            const res = await fetch("https://quantsignal-api-production-a5e1.up.railway.app/api/v1/payments/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: user.email, user_id: user.id }) });
             const d = await res.json();
             if (d.checkout_url) window.location.href = d.checkout_url;
           }} style={{ padding: "5px 14px", borderRadius: 6, fontSize: 10, fontWeight: 700, cursor: "pointer", border: "1px solid rgba(255,215,0,0.3)", background: "rgba(255,215,0,0.08)", color: "#ffd700" }}>🔒 REPLAY · PRO</button>

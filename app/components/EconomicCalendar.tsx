@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Calendar, TrendingUp, TrendingDown, RefreshCw, Bell, BellOff, X } from "lucide-react";
 
-const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
+const API_BASE = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 
 function formatDate(event: any) {
   const date = event.date_display || "";

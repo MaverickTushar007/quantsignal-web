@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-const API_BASE = "https://quantsignal-api-production.up.railway.app/api/v1";
+const API_BASE = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 
 export default function TradeGuardian({ signal, onClose }: { signal: any; onClose: () => void }) {
   const [amount, setAmount] = useState("");
