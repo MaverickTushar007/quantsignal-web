@@ -1,4 +1,4 @@
-const API_BASE = "quantsignal-api-production-a5e1.up.railway.app";
+const API_BASE = "https://quantsignal-api-production-a5e1.up.railway.app";
 
 export class UpgradeRequiredError extends Error {
   used: number; limit: number; kind: string;
