@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 const VAPID_PUBLIC = "BLyTAmlOorAbbCuSH67CuKW04Efp8Lr5RJgqrEobQBKQYM3UrrSi-PesbgyzTwl8mDdXKbaIIbEgTJOABEkCH6w=";
-const API = process.env.NEXT_PUBLIC_API_URL || "https://quantsignal-api-production.up.railway.app/api/v1";
+const API = process.env.NEXT_PUBLIC_API_URL || "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
