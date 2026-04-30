@@ -44,3 +44,16 @@ next-env.d.ts
 .netlify
 .open-next/
 .open-next/
+__pycache__/
+*.pyc
+*.pyo
+*.pkl
+*.db
+*.log
+/api/
+/core/
+/data/
+/ml/
+/logs/
+*.py
+!next.config.ts
