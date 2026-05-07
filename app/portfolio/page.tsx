@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const API_BASE = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
+const API_BASE = "https://quantsignal-api.onrender.com/api/v1";
 
 const TYPE_COLORS: Record<string, string> = {
   CRYPTO: "#f7931a", STOCK: "#00aaff", INDEX: "#aa88ff",

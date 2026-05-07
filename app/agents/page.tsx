@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 
-const API = "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
+const API = "https://quantsignal-api.onrender.com/api/v1";
 const USER_ID = "demo_user"; // Replace with real auth later
 
 const STRATEGY_OPTIONS = [
