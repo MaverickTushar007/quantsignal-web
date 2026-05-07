@@ -262,19 +262,56 @@ export default function SignalDrawer({ symbol, onClose }: { symbol: string; onCl
             {/* Liquidity Levels Card — real-time, crypto only */}
             <LiquidityCard symbol={symbol} />
 
-            {signal.news?.length > 0 && (
+            {/* Econ Risk Banner */}
+            {signal.econ_risk_window?.active && (
+              <div style={{
+                background: signal.econ_risk_window.risk_level === "HIGH" ? "rgba(255,68,102,0.08)" : "rgba(245,158,11,0.08)",
+                border: `1px solid ${signal.econ_risk_window.risk_level === "HIGH" ? "rgba(255,68,102,0.3)" : "rgba(245,158,11,0.3)"}`,
+                borderRadius: 12, padding: "10px 14px",
+                display: "flex", alignItems: "flex-start", gap: 10,
+              }}>
+                <span style={{ fontSize: 14, lineHeight: 1 }}>⚠️</span>
+                <div>
+                  <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.08em",
+                    color: signal.econ_risk_window.risk_level === "HIGH" ? "#ff4466" : "#f59e0b",
+                    marginBottom: 2,
+                  }}>
+                    MACRO EVENT · {signal.econ_risk_window.risk_level} RISK
+                  </div>
+                  <div style={{ fontSize: 11, color: "rgba(255,255,255,0.6)", lineHeight: 1.4 }}>
+                    {signal.econ_risk_window.event_title}
+                    {" "}
+                    <span style={{ color: "rgba(255,255,255,0.3)" }}>
+                      ({signal.econ_risk_window.hours_away > 0
+                        ? `in ${signal.econ_risk_window.hours_away}h`
+                        : `${Math.abs(signal.econ_risk_window.hours_away)}h ago`
+                      } · {signal.econ_risk_window.country})
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* News — use news_headlines (enriched) with fallback to signal.news */}
+            {((signal.news_headlines?.length > 0) || (signal.news?.length > 0)) && (
               <div className="bg-white/5 rounded-2xl p-4">
                 <div className="text-sm text-white/50 mb-3">Latest News</div>
                 <div className="space-y-3">
-                  {signal.news.map((n: any, i: number) => (
+                  {(signal.news_headlines?.length > 0 ? signal.news_headlines : signal.news).map((n: any, i: number) => (
                     <div key={i} className="border-b border-white/5 pb-3 last:border-0">
                       <div className="flex gap-2">
                         <div className="text-xs text-white/80 leading-relaxed flex-1">{n.title}</div>
                         {n.url && <a href={n.url} target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white/60"><ExternalLink size={12}/></a>}
                       </div>
-                      <div className="flex gap-2 mt-1">
+                      <div className="flex gap-2 mt-1 items-center">
                         <span className="text-white/30 text-xs">{n.source}</span>
-                        <span className={`text-xs ${n.sentiment === "BULLISH" ? "text-emerald-400" : n.sentiment === "BEARISH" ? "text-red-400" : "text-white/30"}`}>{n.sentiment}</span>
+                        {n.sentiment && (
+                          <span style={{
+                            fontSize: 9, fontWeight: 700, padding: "1px 6px", borderRadius: 4,
+                            background: n.sentiment === "BULLISH" ? "rgba(0,255,136,0.12)" : n.sentiment === "BEARISH" ? "rgba(255,68,102,0.12)" : "rgba(255,255,255,0.06)",
+                            color: n.sentiment === "BULLISH" ? "#00ff88" : n.sentiment === "BEARISH" ? "#ff4466" : "rgba(255,255,255,0.3)",
+                          }}>{n.sentiment}</span>
+                        )}
                       </div>
                     </div>
                   ))}
