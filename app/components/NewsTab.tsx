@@ -14,6 +14,14 @@ export default function NewsTab({ symbol }: { symbol: string }) {
   const [news, setNews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [sourceWeights, setSourceWeights] = useState<Record<string, { weight: number; accuracy: number; confidence_tier: string }>>({});
+
+  useEffect(() => {
+    fetch(`${API}/news/backtest-summary`)
+      .then(r => r.json())
+      .then(d => { if (d.by_source) setSourceWeights(d.by_source); })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (!symbol) return;
@@ -35,6 +43,23 @@ export default function NewsTab({ symbol }: { symbol: string }) {
   const bearish = news.filter(n => n.sentiment === "BEARISH").length;
   const neutral = news.filter(n => n.sentiment === "NEUTRAL").length;
   const total = news.length;
+
+  const CredibilityDot = ({ source }: { source: string }) => {
+    const data = sourceWeights[source];
+    if (!data) return null;
+    const tier = data.confidence_tier;
+    const acc = data.accuracy;
+    const color = acc >= 0.6 ? "#00ff88" : acc >= 0.4 ? "#f59e0b" : "#ff4466";
+    const label = `${source}: ${Math.round(acc * 100)}% accuracy (${tier} confidence)`;
+    return (
+      <span title={label} style={{
+        display: "inline-block", width: 6, height: 6, borderRadius: "50%",
+        background: color, marginLeft: 5, verticalAlign: "middle",
+        boxShadow: `0 0 4px ${color}88`, flexShrink: 0,
+        cursor: "help",
+      }} />
+    );
+  };
 
   return (
     <div style={{ padding: "20px 24px", color: "#e2e8f0", height: "100%", overflowY: "auto" }}>
@@ -156,8 +181,9 @@ export default function NewsTab({ symbol }: { symbol: string }) {
                     </div>
                     {/* Source */}
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <span style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", fontWeight: 600 }}>
+                      <span style={{ fontSize: 9, color: "rgba(255,255,255,0.5)", fontWeight: 600, display: "flex", alignItems: "center" }}>
                         {item.source}
+                        <CredibilityDot source={item.source} />
                       </span>
                       <span style={{ fontSize: 9, color: "rgba(255,255,255,0.35)" }}>↗ READ</span>
                     </div>
