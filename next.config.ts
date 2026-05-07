@@ -14,7 +14,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https:",
-      "connect-src 'self' https://quantsignal-api-production-a5e1.up.railway.app https://*.supabase.co wss://*.supabase.co https://stream.binance.com wss://stream.binance.com",
+      "connect-src 'self' https://quantsignal-api.onrender.com https://*.supabase.co wss://*.supabase.co https://stream.binance.com wss://stream.binance.com",
       "frame-src https://s.tradingview.com https://www.tradingview.com",
       "worker-src blob:",
     ].join("; "),

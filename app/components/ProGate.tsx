@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 
 const BETA_MODE = false;
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://quantsignal-api-production-a5e1.up.railway.app/api/v1";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://quantsignal-api.onrender.com/api/v1";
 
 export default function ProGate({
   children,
